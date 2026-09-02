@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react';
 import type { Meal, StatCardProps } from '../interfaces/dashboard.interfaces'
 import { getMeals } from '../actions/get-meals-action';
+import { useNavigate } from 'react-router';
+import { Header } from '../../components/ui/Header';
 
 // ---- Data ----
 // const meals: Meal[] = [
@@ -35,35 +37,35 @@ import { getMeals } from '../actions/get-meals-action';
 // ];
 
 // ---- Header ----
-const Header = () => (
-  <header className="fixed top-0 w-full z-50 bg-surface/80 backdrop-blur-xl shadow-[0_1px_8px_rgba(0,0,0,0.04)]">
-    <div className="h-20 max-w-container-max mx-auto px-gutter flex items-center justify-between">
-      <div className="flex items-center gap-md">
-        <img
-          alt="HomeChef Brand Logo"
-          className="h-8 w-auto object-contain"
-          src="https://lh3.googleusercontent.com/aida-public/AB6AXuCEp5F3PQluY3sI8yOE17jt35i3m56n30cQZyPEEg0mZQumqAkFNc20mYunAb5asXRKuw4p6AyFgfdfvoPzExfWq3_RD1AiU8JE6kqFz4spHgyg2vZ3TTzaTA5z1r0rHHplRj0GdosDezJVF3KNGiKbFKPLEz7wH7C-5P-tnYRpCmOM7zZKPgNEFv4t4g6P_NEpy_O8ysKsv7xhzX2hJKGSBlVHF886yevrgUlT7FKZk2GOxswsSDa0gg"
-        />
-        <span className="font-headline-md text-headline-md text-primary tracking-tight">HomeChef</span>
-      </div>
-      <nav className="hidden md:flex items-center gap-lg">
-        <a className="font-label-md text-label-md text-on-surface-variant hover:text-on-surface transition-colors" href="#">Discover Meals</a>
-        <a className="font-label-md text-label-md text-on-surface-variant hover:text-on-surface transition-colors" href="#">My Orders 123</a>
-        <a aria-current="page" className="transition-colors text-primary font-bold" href="#">My Kitchen X</a>
-        <a className="font-label-md text-label-md text-on-surface-variant hover:text-on-surface transition-colors" href="#">Orders Received</a>
-      </nav>
-      <div className="flex items-center gap-sm">
-        <span className="material-symbols-outlined text-on-surface-variant cursor-pointer hover:text-primary transition-colors">shopping_basket</span>
-        <div className="h-8 w-[1px] bg-outline-variant mx-xs" />
-        <img
-          alt="Profile"
-          className="w-10 h-10 rounded-full object-cover border-2 border-surface-container-highest cursor-pointer"
-          src="https://lh3.googleusercontent.com/aida-public/AB6AXuDnMr86kBgT5PxszzeoBKBppSbaDLa-ABRKzTeMjMkbYozZQNq_UGyMQdxZKW_P1muYM95AwVqEJHEgeNp7Xbrpve3EQqKHxJNmxo_vScP3Vtea4IGZbgzyw-6KJLuX8WjRsYyjoVVQI65luYrFmuzymALmW5lhTr5sBuSr7c4rXw1v6IA6Diuq6q6ahAugAkceZ5t_sR6DJjW1DsAd0r652aTwzwBdieHgQFucMNwu2BHvFgHmWk2kow"
-        />
-      </div>
-    </div>
-  </header>
-);
+// const Header = () => (
+//   <header className="fixed top-0 w-full z-50 bg-surface/80 backdrop-blur-xl shadow-[0_1px_8px_rgba(0,0,0,0.04)]">
+//     <div className="h-20 max-w-container-max mx-auto px-gutter flex items-center justify-between">
+//       <div className="flex items-center gap-md">
+//         <img
+//           alt="HomeChef Brand Logo"
+//           className="h-8 w-auto object-contain"
+//           src="https://lh3.googleusercontent.com/aida-public/AB6AXuCEp5F3PQluY3sI8yOE17jt35i3m56n30cQZyPEEg0mZQumqAkFNc20mYunAb5asXRKuw4p6AyFgfdfvoPzExfWq3_RD1AiU8JE6kqFz4spHgyg2vZ3TTzaTA5z1r0rHHplRj0GdosDezJVF3KNGiKbFKPLEz7wH7C-5P-tnYRpCmOM7zZKPgNEFv4t4g6P_NEpy_O8ysKsv7xhzX2hJKGSBlVHF886yevrgUlT7FKZk2GOxswsSDa0gg"
+//         />
+//         <span className="font-headline-md text-headline-md text-primary tracking-tight">HomeChef</span>
+//       </div>
+//       <nav className="hidden md:flex items-center gap-lg">
+//         <a className="font-label-md text-label-md text-on-surface-variant hover:text-on-surface transition-colors" href="#">Discover Meals</a>
+//         <a className="font-label-md text-label-md text-on-surface-variant hover:text-on-surface transition-colors" href="#">My Orders 123</a>
+//         <a aria-current="page" className="transition-colors text-primary font-bold" href="#">My Kitchen X</a>
+//         <a className="font-label-md text-label-md text-on-surface-variant hover:text-on-surface transition-colors" href="#">Orders Received</a>
+//       </nav>
+//       <div className="flex items-center gap-sm">
+//         <span className="material-symbols-outlined text-on-surface-variant cursor-pointer hover:text-primary transition-colors">shopping_basket</span>
+//         <div className="h-8 w-[1px] bg-outline-variant mx-xs" />
+//         <img
+//           alt="Profile"
+//           className="w-10 h-10 rounded-full object-cover border-2 border-surface-container-highest cursor-pointer"
+//           src="https://lh3.googleusercontent.com/aida-public/AB6AXuDnMr86kBgT5PxszzeoBKBppSbaDLa-ABRKzTeMjMkbYozZQNq_UGyMQdxZKW_P1muYM95AwVqEJHEgeNp7Xbrpve3EQqKHxJNmxo_vScP3Vtea4IGZbgzyw-6KJLuX8WjRsYyjoVVQI65luYrFmuzymALmW5lhTr5sBuSr7c4rXw1v6IA6Diuq6q6ahAugAkceZ5t_sR6DJjW1DsAd0r652aTwzwBdieHgQFucMNwu2BHvFgHmWk2kow"
+//         />
+//       </div>
+//     </div>
+//   </header>
+// );
 
 
 const StatCard = ({ icon, value, label, colorClass, bgClass }: StatCardProps) => (
@@ -160,44 +162,10 @@ const MealItem = ({ meal, onToggle }: MealItemProps) => {
   );
 };
 
-// ---- Footer ----
-const Footer = () => (
-  <footer className="bg-surface-container py-xl border-t border-outline-variant/20">
-    <div className="max-w-container-max mx-auto px-gutter">
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-lg mb-lg">
-        <div className="col-span-1 md:col-span-1">
-          <img
-            alt="HomeChef Logo"
-            className="h-6 w-auto mb-md grayscale opacity-80"
-            src="https://lh3.googleusercontent.com/aida-public/AB6AXuCEp5F3PQluY3sI8yOE17jt35i3m56n30cQZyPEEg0mZQumqAkFNc20mYunAb5asXRKuw4p6AyFgfdfvoPzExfWq3_RD1AiU8JE6kqFz4spHgyg2vZ3TTzaTA5z1r0rHHplRj0GdosDezJVF3KNGiKbFKPLEz7wH7C-5P-tnYRpCmOM7zZKPgNEFv4t4g6P_NEpy_O8ysKsv7xhzX2hJKGSBlVHF886yevrgUlT7FKZk2GOxswsSDa0gg"
-          />
-          <p className="text-body-sm font-body-sm text-on-surface-variant">Connecting home cooks with hungry neighbors through the love of shared meals.</p>
-        </div>
-        {[
-          { title: 'Marketplace', links: ['Browse All', 'Chef Spotlight', 'Gift Cards'] },
-          { title: 'Support', links: ['Help Center', 'Trust & Safety', 'Terms'] },
-          { title: 'Kitchen', links: ['Become a Chef', 'Kitchen Tools', 'Earnings'] },
-        ].map(({ title, links }) => (
-          <div key={title}>
-            <h4 className="font-label-md text-label-md text-on-surface mb-md">{title}</h4>
-            <ul className="space-y-xs">
-              {links.map((link) => (
-                <li key={link} className="text-body-sm font-body-sm text-on-surface-variant">{link}</li>
-              ))}
-            </ul>
-          </div>
-        ))}
-      </div>
-      <div className="text-center border-t border-outline-variant/30 pt-md text-body-sm font-body-sm text-on-surface-variant">
-        © 2024 HomeChef. All rights reserved. Made with love for the community.
-      </div>
-    </div>
-  </footer>
-);
-
 // ---- Main Page ----
 export const DashboardPage = () => {
   const [mealList, setMealList] = useState<Meal[]>([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
     getMeals().then( meals => {
@@ -216,11 +184,9 @@ export const DashboardPage = () => {
   };
 
   return (
-    <body className="bg-background font-body-md text-on-background">
-      <Header />
+    <>
       <main className="w-full pt-20">
         <div className="flex flex-col w-full px-gutter pb-xl max-w-container-max mx-auto">
-
           {/* Page Header */}
           <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-lg mt-lg gap-sm">
             <div className="flex flex-col gap-xs">
@@ -230,9 +196,10 @@ export const DashboardPage = () => {
                 Control your active listings, adjust availability, and introduce new culinary creations to your neighbors.
               </p>
             </div>
-            <button className="bg-primary text-on-primary font-label-md text-label-md px-md h-12 rounded-full flex items-center justify-center gap-xs hover:bg-primary-container hover:text-on-primary-container transition-colors shadow-sm hover:shadow-md shrink-0 w-full md:w-auto mt-sm md:mt-0">
-              <span className="material-symbols-outlined text-[18px]">add</span>
-              Add New Meal
+            <button 
+              onClick = { () => navigate('/add-meal') }
+              className="bg-primary text-on-primary font-label-md text-label-md px-md h-12 rounded-full flex items-center justify-center gap-xs hover:bg-primary-container hover:text-on-primary-container transition-colors shadow-sm hover:shadow-md shrink-0 w-full md:w-auto mt-sm md:mt-0">
+              <span className="material-symbols-outlined text-[18px]">Add New Meal</span>
             </button>
           </div>
 
@@ -266,7 +233,6 @@ export const DashboardPage = () => {
           </div>
         </div>
       </main>
-      <Footer />
-    </body>
+      </>
   );
 };
