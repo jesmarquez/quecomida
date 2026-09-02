@@ -1,0 +1,32 @@
+{
+  "meals": [
+    {
+      "id": 1,
+      "name": "Rustic Beef Bourguignon",
+      "description": "Slow-cooked for 8 hours with red wine, pearl onions, and tender mushrooms. A neighborhood favorite for chilly evenings.",
+      "price": "$18.50",
+      "status": "active",
+      "image": "https://lh3.googleusercontent.com/aida-public/AB6AXuAE27NIFIO36dVcUA1XnQCB2mcBy8iqdXIZPO4SORT5wkRkUJKO38ZxKVH8mg4eQ9L3TVgzLTKlmV4JMheLmXYvJcfiJA5lm6PeviG1UI9LH9O4evEtWnB9zV2upGdk6eYEKGu6OZtbeCLPnHe1_3DzLnGQ_FAW78MgftC8xfYaadLDth0yGaTd9dFuJ-8MHyC9PrAZm9VwFT9eCtnyIgG-eZLxbb1GWfhPvVN7YJx5BCPeIoaWSycEsQ",
+      "tags": ["Gluten-Free", "Contains Dairy"]
+    },
+    {
+      "id": 2,
+      "name": "Heirloom Tomato Caprese",
+      "description": "Fresh from the garden tomatoes, local mozzarella, and home-grown basil with a 12-year aged balsamic drizzle.",
+      "price": "$12.00",
+      "status": "paused",
+      "image": "https://lh3.googleusercontent.com/aida-public/AB6AXuDFr7LyKwvX706Xb5xSQbbYUBQ5WbITSUybJSLDCB4xFDtcH2tT0q04mDP8mcLpBLh-3wo-la81pG01rk2VnatHUlhyDyhllFAt1N9JhIy03WZ2nXrHQCLT23LJbzGBJTFPhDAGhzo0vnZ0e1u8D36bJfxLMLBH7NYm0bIPz02d8cdjg4vGA3E7swDD9Hw_enJnApoiWjBk2ENDPPprT5jfj9tF530qM1lgWevEJZvzH2CzqImN6mHWPA",
+      "tags": ["Vegetarian"]
+    },
+    {
+      "id": 3,
+      "name": "Handmade Squash Ravioli",
+      "description": "Labor of love ravioli stuffed with roasted butternut squash, bathed in a rich brown butter and crisp sage sauce.",
+      "price": "$22.01",
+      "status": "active",
+      "image": "https://lh3.googleusercontent.com/aida-public/AB6AXuDST01nVMs8aH4kYE2NyaMqIdUCHAA-PACBHil2Z13N0jpGMfLiP4crhHZjNuejkYJdXt-TNXDGkqRNhEOdee0DzecmYb_xDFu0cKB4Jp0SPMsw_1NU38mYyLPP--mMCIaFigeAdWRlTqLCifAjWOSG8tmtM7wiiQeUX0xQXElqdgzqwp0zxdgLZMx12ej7QoLTxOY0h4jwkIlEEAxztX1bTnqK7BXOCj55g5NEygsVRh8z8HSszenQgg",
+      "tags": ["Vegetarian", "Contains Nuts"],
+      "isNew": true
+    }
+  ]
+}
