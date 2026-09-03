@@ -1,5 +1,33 @@
 @import "tailwindcss";
 
+
+@layer base {
+  html, body, #root {
+    height: 100%;
+  }
+  html, body {
+    margin: 0;
+    padding: 0;
+  }
+  body {
+    overscroll-behavior: none;
+  }
+  main > :first-child {
+    margin-top: 0 !important;
+  }
+  ::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.hide-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
 @theme {
   /* Colors */
   --color-surface-dim: #e5d8ca;
@@ -115,4 +143,9 @@
   --text-body-md: 16px;
   --text-body-md--line-height: 24px;
   --text-body-md--font-weight: 400;
+
+/* add these separately so max-w-* isn't hijacked */
+  --container-sm: 24rem;
+  --container-md: 28rem;
+  --container-lg: 32rem;
 }

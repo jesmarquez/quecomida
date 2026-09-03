@@ -1,6 +1,6 @@
 import { createBrowserRouter } from 'react-router';
 import { DashboardPage } from '../vendors/page/DashboardPage';
-import { LoginPage } from '../auth/pages/loginPage';
+import { LoginPage } from '../auth/pages/LoginPage';
 import { AddMealPage } from '../vendors/page/AddMealPage';
 import { MainLayout } from '../components/layouts/MainLayout';
 

@@ -4,10 +4,10 @@ import { Footer } from "../ui/Footer"
 
 export const MainLayout = () => {
   return (
-    <body className="bg-background font-body-md text-on-background">
+    <div className="bg-background font-body-md text-on-background min-h-screen">
       <Header/>
       <Outlet/>
       <Footer/>
-    </body>
+    </div>
   )
 }
