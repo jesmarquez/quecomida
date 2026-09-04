@@ -1,5 +1,14 @@
+import { useNavigate } from "react-router";
 
 export const LoginPage = () => {
+  const navigate = useNavigate();
+
+  const handleLogin = () => {
+
+    navigate('dashboard');
+    return;
+  }
+  
   return (
     <div className="flex flex-col w-full h-full items-center justify-center min-h-screen py-lg bg-background">
 
@@ -30,7 +39,7 @@ export const LoginPage = () => {
                 <div className="flex justify-end mt-xs">
                     <a className="font-body-sm text-body-sm text-primary hover:text-primary-container transition-colors" href="#">Forgot Password?</a>
                 </div>
-                <button className="mt-md w-full bg-primary text-on-primary font-label-md text-label-md uppercase tracking-widest py-sm rounded-lg hover:bg-on-primary-fixed-variant transition-colors shadow-sm min-h-[48px]" type="submit">
+                <button onClick={ handleLogin } className="mt-md w-full bg-primary text-on-primary font-label-md text-label-md uppercase tracking-widest py-sm rounded-lg hover:bg-on-primary-fixed-variant transition-colors shadow-sm min-h-[48px]" type="submit">
                     Sign In
                 </button>
             </form>
