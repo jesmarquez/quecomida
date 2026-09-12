@@ -5,6 +5,8 @@ import { AddMealPage } from '../vendors/page/AddMealPage';
 import { MainLayout } from '../components/layouts/MainLayout';
 import { MealsPage } from '../customers/pages/MealsPage';
 import { OrdersPage } from '../vendors/page/OrdersPage';
+import { PlaceOrderPage } from '../customers/pages/PlaceOrderPage';
+import { OrderConfirmedPage } from '../customers/pages/OrderConfirmedPage';
 
 export const appRouter = createBrowserRouter([
   {
@@ -26,7 +28,17 @@ export const appRouter = createBrowserRouter([
       {
         path: "add-meal",
         element: <AddMealPage />
-      }]
+      },
+      {
+        path: "place-order",
+        element: <PlaceOrderPage/>
+      },
+      {
+        path: "order-confirmed",
+        element: <OrderConfirmedPage/>
+      }
+
+    ]
   },
   {
     path: "auth",

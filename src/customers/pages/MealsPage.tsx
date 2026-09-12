@@ -1,5 +1,9 @@
+import { useNavigate } from 'react-router';
 
 export const MealsPage = () => {
+    const navigate = useNavigate();
+
+    
   return (
     <main className="w-full pt-20">
         <div className="flex flex-col w-full relative">
@@ -36,7 +40,7 @@ export const MealsPage = () => {
             <div className="max-w-container-max mx-auto px-gutter w-full pb-xl">
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-md gap-y-xl">
                     {/* Meal Card 1 */}
-                    <article onClick={() => navigate('/review-order')} className="group relative cursor-pointer flex flex-col h-full bg-surface-container-lowest rounded-2xl overflow-hidden shadow-[0_4px_20px_rgba(74,66,56,0.04)] hover:shadow-[0_8px_30px_rgba(74,66,56,0.08)] transition-shadow duration-300">
+                    <article onClick={() => navigate('/place-order')} className="group relative cursor-pointer flex flex-col h-full bg-surface-container-lowest rounded-2xl overflow-hidden shadow-[0_4px_20px_rgba(74,66,56,0.04)] hover:shadow-[0_8px_30px_rgba(74,66,56,0.08)] transition-shadow duration-300">
                         <div className="relative w-full aspect-[4/3] overflow-hidden">
                             <img className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCayJiiIb2PpfEDsfxx-VQPLMFR-j5voA9nbWlQgiO4vftLsiVu5vQqSp952605CpR1sUKjMFMOlMuQct37kmhnVb6ngNwqalk-t2ghBOsdGu6puTJX-V_BbiZ1xFkORjaYzLQ7m4B4V_gSrGQaBIuQHHpx9cyjypOrTPOMZ3qKnLZdpI1zFoJP79lI3XPMpsF4VQe-5chmKULmGiVAyRCz5eTm0XZEhHMkiFxE45pXv4I8_d7-YZ5gtw"/>
                             <div className="absolute top-sm left-sm flex gap-xs">
