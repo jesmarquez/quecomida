@@ -1,11 +1,25 @@
+import type { FormEvent } from "react";
 import { useNavigate } from "react-router";
+import { loginAction } from "../actions/loginAction";
 
 export const LoginPage = () => {
   const navigate = useNavigate();
 
-  const handleLogin = () => {
+  const handleLogin = async (event: FormEvent<HTMLFormEvent>) => {
+    event.preventDefault();
 
-    navigate('dashboard');
+    const formData = new FormData(event.target as HTMLFormElement);
+    const email = formData.get('email') as string;
+    const password = formData.get('password') as string;
+
+    const isValid = await loginAction(email, password);
+
+    if (isValid) {
+        navigate('/dashboard');
+    } else {
+        console.log('handle login', email, password, isValid);
+    }
+    // navigate('dashboard'); 
     return;
   }
   
@@ -19,27 +33,27 @@ export const LoginPage = () => {
                 <p className="font-body-md text-body-md text-on-surface-variant text-center mt-xs">A neighborhood of flavor.</p>
             </div>
             <form className="w-full flex flex-col bg-surface-container rounded-xl shadow-md p-md gap-sm relative overflow-hidden" 
-                  onSubmit={(e) => {e.preventDefault(); navigate('/');}}>
+                  onSubmit={(e) => { handleLogin(e) }}>
                 <div className="absolute top-0 right-0 w-32 h-32 bg-primary-fixed/20 rounded-full blur-2xl -mr-16 -mt-16 pointer-events-none"></div>
                 <h2 className="font-headline-sm text-headline-sm text-on-surface mb-sm">Sign In</h2>
                 <div className="flex flex-col gap-xs">
                     <label className="font-label-md text-label-md text-on-surface-variant uppercase" htmlFor="email">Email</label>
                     <div className="relative">
                         <span className="material-symbols-outlined absolute left-sm top-1/2 -translate-y-1/2 text-on-surface-variant/50">mail</span>
-                        <input className="w-full bg-tertiary-fixed text-on-surface font-body-md text-body-md rounded-lg py-sm pl-xl pr-sm focus:outline-none focus:ring-1 focus:ring-primary transition-shadow" id="email" placeholder="you@example.com" required type="email"/>
+                        <input className="w-full bg-tertiary-fixed text-on-surface font-body-md text-body-md rounded-lg py-sm pl-xl pr-sm focus:outline-none focus:ring-1 focus:ring-primary transition-shadow" id="email" placeholder="you@example.com" required type="email" name="email"/>
                     </div>
                 </div>
                 <div className="flex flex-col gap-xs mt-sm">
                     <label className="font-label-md text-label-md text-on-surface-variant uppercase" htmlFor="password">Password</label>
                     <div className="relative">
                         <span className="material-symbols-outlined absolute left-sm top-1/2 -translate-y-1/2 text-on-surface-variant/50">lock</span>
-                        <input className="w-full bg-tertiary-fixed text-on-surface font-body-md text-body-md rounded-lg py-sm pl-xl pr-sm focus:outline-none focus:ring-1 focus:ring-primary transition-shadow" id="password" placeholder="••••••••" required type="password"/>
+                        <input className="w-full bg-tertiary-fixed text-on-surface font-body-md text-body-md rounded-lg py-sm pl-xl pr-sm focus:outline-none focus:ring-1 focus:ring-primary transition-shadow" id="password" placeholder="••••••••" required type="password" name="password"/>
                     </div>
                 </div>
                 <div className="flex justify-end mt-xs">
                     <a className="font-body-sm text-body-sm text-primary hover:text-primary-container transition-colors" href="#">Forgot Password?</a>
                 </div>
-                <button onClick={ handleLogin } className="mt-md w-full bg-primary text-on-primary font-label-md text-label-md uppercase tracking-widest py-sm rounded-lg hover:bg-on-primary-fixed-variant transition-colors shadow-sm min-h-[48px]" type="submit">
+                <button type="submit" className="mt-md w-full bg-primary text-on-primary font-label-md text-label-md uppercase tracking-widest py-sm rounded-lg hover:bg-on-primary-fixed-variant transition-colors shadow-sm min-h-[48px]">
                     Sign In
                 </button>
             </form>
