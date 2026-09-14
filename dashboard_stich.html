@@ -1,3 +1,4 @@
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="utf-8" />
@@ -146,11 +147,11 @@
       };
     </script>
     <link
-      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
       rel="stylesheet"
     />
     <link
-      href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@100..900&family=Source+Sans+3:wght@100..900&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@100..900&amp;family=Source+Sans+3:wght@100..900&amp;display=swap"
       rel="stylesheet"
     />
   </head>
@@ -204,11 +205,36 @@
             >shopping_basket</span
           >
           <div class="h-8 w-[1px] bg-outline-variant mx-xs"></div>
-          <img
-            alt="Profile"
-            class="w-10 h-10 rounded-full object-cover border-2 border-surface-container-highest cursor-pointer"
-            src="https://lh3.googleusercontent.com/aida-public/AB6AXuDnMr86kBgT5PxszzeoBKBppSbaDLa-ABRKzTeMjMkbYozZQNq_UGyMQdxZKW_P1muYM95AwVqEJHEgeNp7Xbrpve3EQqKHxJNmxo_vScP3Vtea4IGZbgzyw-6KJLuX8WjRsYyjoVVQI65luYrFmuzymALmW5lhTr5sBuSr7c4rXw1v6IA6Diuq6q6ahAugAkceZ5t_sR6DJjW1DsAd0r652aTwzwBdieHgQFucMNwu2BHvFgHmWk2kow"
-          />
+          <div class="relative">
+            <img
+              alt="Profile"
+              class="w-10 h-10 rounded-full object-cover border-2 border-primary cursor-pointer"
+              src="https://lh3.googleusercontent.com/aida-public/AB6AXuDnMr86kBgT5PxszzeoBKBppSbaDLa-ABRKzTeMjMkbYozZQNq_UGyMQdxZKW_P1muYM95AwVqEJHEgeNp7Xbrpve3EQqKHxJNmxo_vScP3Vtea4IGZbgzyw-6KJLuX8WjRsYyjoVVQI65luYrFmuzymALmW5lhTr5sBuSr7c4rXw1v6IA6Diuq6q6ahAugAkceZ5t_sR6DJjW1DsAd0r652aTwzwBdieHgQFucMNwu2BHvFgHmWk2kow"
+            />
+            <div
+              class="absolute right-0 top-full mt-2 w-48 bg-surface rounded-xl shadow-md border border-outline-variant/30 py-1 z-50"
+            >
+              <div class="px-md py-sm border-b border-outline-variant/20">
+                <div
+                  class="font-label-md text-label-md text-on-surface font-bold truncate"
+                >
+                  Chef Maria L.
+                </div>
+                <div
+                  class="font-body-sm text-[10px] text-on-surface-variant truncate"
+                >
+                  maria.l@homechef.com
+                </div>
+              </div>
+              <a
+                href="#"
+                class="flex items-center gap-2 px-md py-sm font-label-md text-label-md text-error hover:bg-error-container/20 transition-colors cursor-pointer"
+                ><span class="material-symbols-outlined text-[18px]"
+                  >logout</span
+                ><span class="">Log Out</span></a
+              >
+            </div>
+          </div>
         </div>
       </div>
     </header>
@@ -699,7 +725,7 @@
                 Help Center
               </li>
               <li class="text-body-sm font-body-sm text-on-surface-variant">
-                Trust & Safety
+                Trust &amp; Safety
               </li>
               <li class="text-body-sm font-body-sm text-on-surface-variant">
                 Terms

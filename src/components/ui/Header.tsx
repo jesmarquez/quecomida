@@ -1,6 +1,15 @@
+import { useState } from "react";
 import { Link } from "react-router";
 
-export const Header = () => (
+export const Header = () => {
+
+  const [isOpen, setOpen ] = useState(false);
+
+  const toggleDropDown = () => {
+    console.log('toggle');
+    setOpen(!isOpen);
+  }
+  return (
   <header className="fixed top-0 w-full z-50 bg-surface/80 backdrop-blur-xl shadow-[0_1px_8px_rgba(0,0,0,0.04)]">
     <div className="h-20 max-w-container-max mx-auto px-gutter flex items-center justify-between">
       <div className="flex items-center gap-md">
@@ -26,12 +35,43 @@ export const Header = () => (
       <div className="flex items-center gap-sm">
         <span className="material-symbols-outlined text-on-surface-variant cursor-pointer hover:text-primary transition-colors">shopping_basket</span>
         <div className="h-8 w-[1px] bg-outline-variant mx-xs" />
-        <img
-          alt="Profile"
-          className="w-10 h-10 rounded-full object-cover border-2 border-surface-container-highest cursor-pointer"
-          src="https://lh3.googleusercontent.com/aida-public/AB6AXuDnMr86kBgT5PxszzeoBKBppSbaDLa-ABRKzTeMjMkbYozZQNq_UGyMQdxZKW_P1muYM95AwVqEJHEgeNp7Xbrpve3EQqKHxJNmxo_vScP3Vtea4IGZbgzyw-6KJLuX8WjRsYyjoVVQI65luYrFmuzymALmW5lhTr5sBuSr7c4rXw1v6IA6Diuq6q6ahAugAkceZ5t_sR6DJjW1DsAd0r652aTwzwBdieHgQFucMNwu2BHvFgHmWk2kow"
-        />
+          <div className="relative">
+            <img onClick={toggleDropDown}
+              alt="Profile"
+              className="w-10 h-10 rounded-full object-cover border-2 border-primary cursor-pointer"
+              src="https://lh3.googleusercontent.com/aida-public/AB6AXuDnMr86kBgT5PxszzeoBKBppSbaDLa-ABRKzTeMjMkbYozZQNq_UGyMQdxZKW_P1muYM95AwVqEJHEgeNp7Xbrpve3EQqKHxJNmxo_vScP3Vtea4IGZbgzyw-6KJLuX8WjRsYyjoVVQI65luYrFmuzymALmW5lhTr5sBuSr7c4rXw1v6IA6Diuq6q6ahAugAkceZ5t_sR6DJjW1DsAd0r652aTwzwBdieHgQFucMNwu2BHvFgHmWk2kow"
+            />
+            
+
+            { isOpen && ( 
+            <div
+              className="absolute right-0 top-full mt-2 w-48 bg-surface rounded-xl shadow-md border border-outline-variant/30 py-1 z-50"
+            >
+              <div className="px-md py-sm border-b border-outline-variant/20">
+                <div
+                  className="font-label-md text-label-md text-on-surface font-bold truncate"
+                >
+                  Chef Maria L.
+                </div>
+                <div
+                  className="font-body-sm text-[10px] text-on-surface-variant truncate"
+                >
+                  maria.l@homechef.com
+                </div>
+              </div>
+              <a
+                href="#"
+                className="flex items-center gap-2 px-md py-sm font-label-md text-label-md text-error hover:bg-error-container/20 transition-colors cursor-pointer"
+                ><span className="material-symbols-outlined text-[18px]"
+                  >logout</span
+                ><span className="">Log Out</span></a
+              >
+            </div>)
+            }
+          </div>
       </div>
     </div>
   </header>
-);
+  )
+}
+

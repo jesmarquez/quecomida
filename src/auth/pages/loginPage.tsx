@@ -1,6 +1,7 @@
 import type { FormEvent } from "react";
 import { useNavigate } from "react-router";
 import { loginAction } from "../actions/loginAction";
+import { toast } from "sonner";
 
 export const LoginPage = () => {
   const navigate = useNavigate();
@@ -17,6 +18,8 @@ export const LoginPage = () => {
     if (isValid) {
         navigate('/dashboard');
     } else {
+        toast.error('Email or password invalid');
+
         console.log('handle login', email, password, isValid);
     }
     // navigate('dashboard'); 
