@@ -1,18 +1,22 @@
 
 import { qcApi } from '../../api/qcApi'
+import type { AuthResponse } from '../interfaces/auth.response';
 
-export const loginAction = async(email: string, password: string ) => {
+export const loginAction = async(email: string, password: string ):Promise<AuthResponse> => {
+
   try {
-    console.log(import.meta.env.VITE_QC_API_URL);
-    const { data } = await qcApi.post('/vendors/login', {
+    const { data } = await qcApi.post<AuthResponse>('/vendors/login', {
       email: email,
       password: password
     });
-    console.log( data );
+    
+    localStorage.setItem('username', email);
+    localStorage.setItem('token', data.token);
+
     return data;
   } catch (error)
    {
     console.log({ error });
-    return false;
+    throw error;
   }
 }

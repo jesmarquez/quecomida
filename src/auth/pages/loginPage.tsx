@@ -2,9 +2,11 @@ import type { FormEvent } from "react";
 import { useNavigate } from "react-router";
 import { loginAction } from "../actions/loginAction";
 import { toast } from "sonner";
+import { useAuth } from "../store/useAuth";
 
 export const LoginPage = () => {
   const navigate = useNavigate();
+  const { setAuthentication } = useAuth();
 
   const handleLogin = async (event: FormEvent<HTMLFormEvent>) => {
     event.preventDefault();
@@ -13,14 +15,13 @@ export const LoginPage = () => {
     const email = formData.get('email') as string;
     const password = formData.get('password') as string;
 
-    const isValid = await loginAction(email, password);
-
-    if (isValid) {
-        navigate('/dashboard');
+    const dataAuth = await loginAction(email, password);
+    
+    if (dataAuth.token) {
+      setAuthentication(dataAuth);
+      navigate('/dashboard');
     } else {
         toast.error('Email or password invalid');
-
-        console.log('handle login', email, password, isValid);
     }
     // navigate('dashboard'); 
     return;

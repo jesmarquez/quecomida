@@ -1,14 +1,28 @@
 import { useState } from "react";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
+import { useAuth } from "../../auth/store/useAuth";
 
 export const Header = () => {
-
   const [isOpen, setOpen ] = useState(false);
+  const { isAuthenticated, logout } = useAuth();
+  const navigate = useNavigate();
+  
 
+  // const authData = getAuthentication();
+  // console.log('authData', authData);
+  // if (authData.username !== null && authData.token !== null ) setAuthenticated(true);
+  // console.log(authenticated);
   const toggleDropDown = () => {
     console.log('toggle');
     setOpen(!isOpen);
   }
+
+  const handleLogout = () => {
+    logout();
+    navigate('/auth?login');
+
+  }
+
   return (
   <header className="fixed top-0 w-full z-50 bg-surface/80 backdrop-blur-xl shadow-[0_1px_8px_rgba(0,0,0,0.04)]">
     <div className="h-20 max-w-container-max mx-auto px-gutter flex items-center justify-between">
@@ -21,16 +35,20 @@ export const Header = () => {
         <span className="font-headline-md text-headline-md text-primary tracking-tight">HomeChef</span>
       </div>
       <nav className="hidden md:flex items-center gap-lg">
-        <Link to="/">
-          <a className="font-label-md text-label-md text-on-surface-variant hover:text-on-surface transition-colors" href="#">Discover Meals</a>
+        <Link className="font-label-md text-label-md text-on-surface-variant hover:text-on-surface transition-colors" to="/">
+          Discover Meals
         </Link>
-        <a className="font-label-md text-label-md text-on-surface-variant hover:text-on-surface transition-colors" href="#">My Orders</a>
-        <Link to="dashboard">
-          <a aria-current="page" className="transition-colors text-primary font-bold" href="#">My Kitchen</a>
-        </Link>
-        <Link to="orders">
-          <a className="font-label-md text-label-md text-on-surface-variant hover:text-on-surface transition-colors" href="#">Orders Received</a>
-        </Link>
+        { isAuthenticated() && (
+          <>
+          <Link className="font-label-md text-label-md text-on-surface-variant hover:text-on-surface transition-colors" href="#">My Orders</Link>
+          <Link aria-current="page" className="transition-colors text-primary font-bold" to="dashboard">
+            My Kitchen
+          </Link>
+          <Link className="font-label-md text-label-md text-on-surface-variant hover:text-on-surface transition-colors" to="orders">
+            Orders Received
+          </Link>
+          </>)
+        }
       </nav>
       <div className="flex items-center gap-sm">
         <span className="material-symbols-outlined text-on-surface-variant cursor-pointer hover:text-primary transition-colors">shopping_basket</span>
@@ -59,8 +77,9 @@ export const Header = () => {
                   maria.l@homechef.com
                 </div>
               </div>
-              <a
+              <a 
                 href="#"
+                onClick={ handleLogout }
                 className="flex items-center gap-2 px-md py-sm font-label-md text-label-md text-error hover:bg-error-container/20 transition-colors cursor-pointer"
                 ><span className="material-symbols-outlined text-[18px]"
                   >logout</span

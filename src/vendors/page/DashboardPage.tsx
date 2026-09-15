@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import type { Meal, StatCardProps } from '../interfaces/dashboard.interfaces'
 import { getMeals } from '../actions/get-meals-action';
 import { useNavigate } from 'react-router';
-
+import { useAuth } from '../../auth/store/useAuth';
 
 const StatCard = ({ icon, value, label, colorClass, bgClass }: StatCardProps) => (
   <div className="bg-surface-container rounded-xl p-md flex flex-col justify-between h-32 relative overflow-hidden group hover:shadow-sm transition-shadow">
@@ -102,12 +102,15 @@ const MealItem = ({ meal, onToggle }: MealItemProps) => {
 export const DashboardPage = () => {
   const [mealList, setMealList] = useState<Meal[]>([]);
   const navigate = useNavigate();
+  const { isAuthenticated } = useAuth();
 
+  if (!isAuthenticated()) navigate('/auth/login');
+  
   useEffect(() => {
     getMeals().then( meals => {
       setMealList(meals);
     });
-  }, [mealList]);
+  }, []);
 
   const handleToggle = (id: number) => {
     setMealList((prev) =>
@@ -118,6 +121,10 @@ export const DashboardPage = () => {
       )
     );
   };
+
+  // const user = getAuthentication();
+
+  // console.log('authstate');
 
   return (
     <>
