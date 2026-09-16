@@ -9,9 +9,6 @@ export const loginAction = async(email: string, password: string ):Promise<AuthR
       email: email,
       password: password
     });
-    
-    localStorage.setItem('username', email);
-    localStorage.setItem('token', data.token);
 
     return data;
   } catch (error)
