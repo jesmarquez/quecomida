@@ -1,0 +1,291 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <style>
+      @layer base {
+        html,
+        body {
+          margin: 0;
+          padding: 0;
+        }
+        body {
+          overscroll-behavior: none;
+        }
+        main > :first-child {
+          margin-top: 0 !important;
+        }
+        main > :last-child {
+          margin-bottom: 0 !important;
+        }
+      }
+      ::-webkit-scrollbar {
+        display: none;
+      }
+    </style>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script id="tailwind-config">
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              "surface-dim": "#e5d8ca",
+              "surface-container": "#f9ecde",
+              "surface-tint": "#9f402d",
+              "secondary-fixed-dim": "#bacbb8",
+              "tertiary-fixed-dim": "#c9c6c1",
+              "on-background": "#211b12",
+              "surface-container-highest": "#eee0d2",
+              "on-primary-fixed": "#3e0500",
+              "outline-variant": "#ddc0ba",
+              "error-container": "#ffdad6",
+              "surface-container-high": "#f3e6d8",
+              "on-tertiary-fixed": "#1c1c18",
+              "surface-bright": "#fff8f3",
+              "on-surface": "#211b12",
+              "on-primary-fixed-variant": "#802918",
+              "on-primary": "#ffffff",
+              "on-tertiary-fixed-variant": "#474743",
+              "inverse-surface": "#362f26",
+              "primary-fixed": "#ffdad3",
+              "primary-container": "#e2725b",
+              "on-secondary-container": "#576757",
+              "inverse-on-surface": "#fcefe0",
+              tertiary: "#5f5e5a",
+              surface: "#fff8f3",
+              "tertiary-fixed": "#e5e2dc",
+              "secondary-fixed": "#d6e7d4",
+              "on-tertiary": "#ffffff",
+              primary: "#9f402d",
+              "on-error": "#ffffff",
+              outline: "#89726d",
+              "surface-variant": "#eee0d2",
+              "surface-container-low": "#fff1e3",
+              error: "#ba1a1a",
+              "on-primary-container": "#5a0d02",
+              "on-secondary": "#ffffff",
+              "inverse-primary": "#ffb4a5",
+              "primary-fixed-dim": "#ffb4a5",
+              "surface-container-lowest": "#ffffff",
+              "secondary-container": "#d3e4d1",
+              "on-secondary-fixed": "#111f13",
+              secondary: "#536253",
+              "on-error-container": "#93000a",
+              "on-surface-variant": "#56423e",
+              "on-tertiary-container": "#2c2c28",
+              background: "#fff8f3",
+              "tertiary-container": "#94938e",
+              "on-secondary-fixed-variant": "#3c4a3c",
+            },
+            borderRadius: {
+              DEFAULT: "0.25rem",
+              lg: "0.5rem",
+              xl: "0.75rem",
+              full: "9999px",
+            },
+            spacing: {
+              md: "24px",
+              base: "8px",
+              gutter: "24px",
+              sm: "12px",
+              lg: "48px",
+              xl: "80px",
+              "container-max": "1280px",
+              xs: "4px",
+            },
+            fontFamily: {
+              "headline-sm": ["Playfair Display"],
+              "headline-lg-mobile": ["Playfair Display"],
+              "headline-lg": ["Playfair Display"],
+              "headline-md": ["Playfair Display"],
+              "body-lg": ['"Source Sans 3"'],
+              "label-md": ['"Source Sans 3"'],
+              "display-lg": ["Playfair Display"],
+              "body-sm": ['"Source Sans 3"'],
+              "body-md": ['"Source Sans 3"'],
+            },
+            fontSize: {
+              "headline-sm": [
+                "20px",
+                { lineHeight: "28px", fontWeight: "500" },
+              ],
+              "headline-lg-mobile": [
+                "28px",
+                { lineHeight: "36px", fontWeight: "600" },
+              ],
+              "headline-lg": [
+                "32px",
+                { lineHeight: "40px", fontWeight: "600" },
+              ],
+              "headline-md": [
+                "24px",
+                { lineHeight: "32px", fontWeight: "600" },
+              ],
+              "body-lg": ["18px", { lineHeight: "28px", fontWeight: "400" }],
+              "label-md": [
+                "14px",
+                {
+                  lineHeight: "16px",
+                  letterSpacing: "0.05em",
+                  fontWeight: "600",
+                },
+              ],
+              "display-lg": [
+                "48px",
+                {
+                  lineHeight: "56px",
+                  letterSpacing: "-0.02em",
+                  fontWeight: "700",
+                },
+              ],
+              "body-sm": ["14px", { lineHeight: "20px", fontWeight: "400" }],
+              "body-md": ["16px", { lineHeight: "24px", fontWeight: "400" }],
+            },
+          },
+        },
+      };
+    </script>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@100..900&amp;family=Source+Sans+3:wght@100..900&amp;display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body
+    class="bg-background font-body-md text-on-background flex items-center justify-center min-h-screen"
+  >
+    <main class="w-full max-w-md mx-auto">
+      <div
+        class="flex flex-col w-full h-full items-center justify-center min-h-[calc(100vh-64px)] py-lg"
+      >
+        <div class="w-full max-w-sm flex flex-col items-center">
+          <div class="mb-lg flex flex-col items-center">
+            <span
+              class="material-symbols-outlined text-primary text-5xl mb-sm"
+              style="font-variation-settings: &quot;FILL&quot; 1"
+              >skillet</span
+            >
+            <h1
+              class="font-headline-lg text-headline-lg text-on-background text-center"
+            >
+              HomeChef
+            </h1>
+            <p
+              class="font-body-md text-body-md text-on-surface-variant text-center mt-xs"
+            >
+              A neighborhood of flavor.
+            </p>
+          </div>
+          <form
+            class="w-full flex flex-col bg-surface-container rounded-xl shadow-md p-md gap-sm relative overflow-hidden"
+          >
+            <div
+              class="absolute top-0 right-0 w-32 h-32 bg-primary-fixed/20 rounded-full blur-2xl -mr-16 -mt-16 pointer-events-none"
+            ></div>
+            <h2 class="font-headline-sm text-headline-sm text-on-surface mb-sm">
+              Sign In
+            </h2>
+            <div class="flex flex-col gap-xs">
+              <label
+                class="font-label-md text-label-md text-on-surface-variant uppercase"
+                for="email"
+                >Email</label
+              >
+              <div class="relative">
+                <span
+                  class="material-symbols-outlined absolute left-sm top-1/2 -translate-y-1/2 text-error"
+                  >mail</span
+                >
+                <input
+                  class="w-full 
+                  bg-error-container/30 
+                  text-on-surface 
+                  font-body-md 
+                  text-body-md 
+                  rounded-lg 
+                  py-sm 
+                  pl-xl 
+                  pr-sm 
+                  border
+                  border-error 
+                  focus:outline-none 
+                  focus:ring-1 focus:ring-error transition-shadow"
+                  id="email"
+                  placeholder="you@example.com"
+                  required=""
+                  type="email"
+                  value="wrong-email-format"
+                />
+              </div>
+              <p
+                class="flex items-center gap-1 text-error text-body-sm font-body-sm mt-1"
+              >
+                <span class="material-symbols-outlined text-base">error</span>
+                Please enter a valid email address
+              </p>
+            </div>
+            <div class="flex flex-col gap-xs mt-sm">
+              <label
+                class="font-label-md text-label-md text-on-surface-variant uppercase"
+                for="password"
+                >Password</label
+              >
+              <div class="relative">
+                <span
+                  class="material-symbols-outlined absolute left-sm top-1/2 -translate-y-1/2 text-on-surface-variant/50"
+                  >lock</span
+                >
+                <input
+                  class="w-full
+                   bg-tertiary-fixed
+                    text-on-surface 
+                    font-body-md 
+                    text-body-md 
+                    rounded-lg py-sm pl-xl pr-sm focus:outline-none focus:ring-1 focus:ring-primary transition-shadow"
+                  id="password"
+                  placeholder="••••••••"
+                  required=""
+                  type="password"
+                />
+              </div>
+            </div>
+            <div class="flex justify-end mt-xs">
+              <a
+                class="font-body-sm text-body-sm text-primary hover:text-primary-container transition-colors"
+                href="#"
+                >Forgot Password?</a
+              >
+            </div>
+            <button
+              class="mt-md w-full bg-primary text-on-primary font-label-md text-label-md uppercase tracking-widest py-sm rounded-lg hover:bg-on-primary-fixed-variant transition-colors shadow-sm min-h-[48px]"
+              type="submit"
+            >
+              Sign In
+            </button>
+          </form>
+          <div class="w-full flex flex-col items-center mt-lg gap-sm">
+            <span class="font-body-sm text-body-sm text-on-surface-variant"
+              >New to the neighborhood?</span
+            >
+            <div class="flex gap-sm">
+              <button
+                class="bg-transparent text-secondary font-label-md text-label-md uppercase tracking-widest py-sm px-md rounded-lg outline outline-1 outline-secondary hover:bg-secondary/10 transition-colors min-h-[48px]"
+              >
+                Join as Diner
+              </button>
+              <button
+                class="bg-transparent text-secondary font-label-md text-label-md uppercase tracking-widest py-sm px-md rounded-lg outline outline-1 outline-secondary hover:bg-secondary/10 transition-colors min-h-[48px]"
+              >
+                Join as Cook
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </body>
+</html>

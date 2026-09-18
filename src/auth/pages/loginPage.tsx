@@ -64,10 +64,14 @@ export const LoginPage = () => {
             <div className="w-full flex flex-col items-center mt-lg gap-sm">
                 <span className="font-body-sm text-body-sm text-on-surface-variant">New to the neighborhood?</span>
                 <div className="flex gap-sm">
-                    <button className="bg-transparent text-secondary font-label-md text-label-md uppercase tracking-widest py-sm px-md rounded-lg outline outline-1 outline-secondary hover:bg-secondary/10 transition-colors min-h-[48px]">
+                    <button
+                        onClick={ () => navigate('/') }
+                        className="bg-transparent text-secondary font-label-md text-label-md uppercase tracking-widest py-sm px-md rounded-lg outline outline-1 outline-secondary hover:bg-secondary/10 transition-colors min-h-[48px]">
                         Join as Diner
                     </button>
-                    <button className="bg-transparent text-secondary font-label-md text-label-md uppercase tracking-widest py-sm px-md rounded-lg outline outline-1 outline-secondary hover:bg-secondary/10 transition-colors min-h-[48px]">
+                    <button 
+                        onClick={() => navigate('/auth/register')}
+                        className="bg-transparent text-secondary font-label-md text-label-md uppercase tracking-widest py-sm px-md rounded-lg outline outline-1 outline-secondary hover:bg-secondary/10 transition-colors min-h-[48px]">
                         Join as Cook
                     </button>
                 </div>

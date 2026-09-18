@@ -7,6 +7,7 @@ import { MealsPage } from '../customers/pages/MealsPage';
 import { OrdersPage } from '../vendors/page/OrdersPage';
 import { PlaceOrderPage } from '../customers/pages/PlaceOrderPage';
 import { OrderConfirmedPage } from '../customers/pages/OrderConfirmedPage';
+import { RegisterVendorPage } from '../auth/pages/RegisterVendorPage';
 
 export const appRouter = createBrowserRouter([
   {
@@ -50,6 +51,10 @@ export const appRouter = createBrowserRouter([
       {
         path: "login",
         element: <LoginPage/>
+      },
+      {
+        path: 'register',
+        element: <RegisterVendorPage/>
       }
     ]
   }
