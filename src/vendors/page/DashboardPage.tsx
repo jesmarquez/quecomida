@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import type { Meal, StatCardProps } from '../interfaces/dashboard.interfaces'
 import { getMeals } from '../actions/get-meals-action';
-import { useNavigate } from 'react-router';
+import { useNavigate, useSearchParams } from 'react-router';
 import { useAuth } from '../../auth/store/AuthContext';
 
 const StatCard = ({ icon, value, label, colorClass, bgClass }: StatCardProps) => (
@@ -102,13 +102,26 @@ const MealItem = ({ meal, onToggle }: MealItemProps) => {
 export const DashboardPage = () => {
   const [mealList, setMealList] = useState<Meal[]>([]);
   const navigate = useNavigate();
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, saveToken, setAuthentication } = useAuth();
+  const [searchParams, setSearchParams] = useSearchParams();
 
+  console.log( isAuthenticated() );
   useEffect(() => {
-    if (!isAuthenticated()) {
-      navigate('/auth/login');
+    const tokenFromUrl = searchParams.get("token");
+
+    if (tokenFromUrl) {
+      saveToken(tokenFromUrl);
+      setAuthentication('newvendor', tokenFromUrl);
+      // Strip ?token= from the URL so it's not left in browser history/bookmarks
+      setSearchParams({}, { replace: true });
+    } else {
+      if (!isAuthenticated()) {
+        console.log('no is authenticated');
+        navigate('/auth/login');
+      }
     }
-  }, [isAuthenticated, navigate]);
+
+  }, [isAuthenticated, navigate, saveToken, searchParams,setAuthentication, setSearchParams ]);
 
   useEffect(() => {
     getMeals().then( meals => {

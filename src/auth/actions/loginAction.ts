@@ -1,19 +1,27 @@
 
 import { qcApi } from '../../api/qcApi'
-import type { AuthResponse } from '../interfaces/auth.response';
+import type { AuthResponse, DataAuth } from '../interfaces/auth.response';
 
-export const loginAction = async(email: string, password: string ):Promise<AuthResponse> => {
+
+
+export const loginAction = async(email: string, password: string ):Promise<DataAuth> => {
 
   try {
-    const { data } = await qcApi.post<AuthResponse>('/vendors/login', {
+    const { data } = await qcApi.post<AuthResponse>('/api/vendors/login', {
       email: email,
       password: password
     });
 
-    return data;
+    return {
+      username: data.vendor.email,
+      token: data.token
+    };
   } catch (error)
    {
-    console.log({ error });
-    throw error;
+    console.log('login action',{ error });
+    return {
+      username: null,
+      token: null
+    };
   }
 }

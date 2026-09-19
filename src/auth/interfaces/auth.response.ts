@@ -12,3 +12,8 @@ export interface Vendor {
   createdAt: Date;
   updatedAt: Date;
 }
+
+export interface DataAuth  {
+  username: string | null;
+  token: string | null;
+}

@@ -12,6 +12,8 @@ type AuthContextType = {
   getAuthentication: () => { username?: string | null; token?: string | null };
   isAuthenticated: () => boolean;
   logout: () => void;
+  saveToken: (token: string) => void;
+  getToken: () => string | null;
 };
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -19,8 +21,9 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [authState, setAuthState] = useState<AuthState>();
 
-  const setAuthentication = (username: string | null, token: string | null): boolean => {
+  const setAuthentication = (username: string | null, token: string): boolean => {
     setAuthState({ username, token });
+    saveToken(token);
     return true;
   };
 
@@ -29,16 +32,28 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     token: authState?.token,
   });
 
-  const isAuthenticated = () => !!authState?.token;
+  const isAuthenticated = () => {
+    return getToken() ? true : false;
+  }
 
   const logout = () => {
-    setAuthentication(null, null);
+    setAuthentication(null, '');
     localStorage.removeItem('username');
     localStorage.removeItem('token');
   };
 
+  const saveToken = (token: string) => {
+      console.log('save token');
+      localStorage.setItem('token', token);
+      return;
+  }
+
+  const getToken = (): string | null => {
+    return localStorage.getItem('token');
+  } 
+
   return (
-    <AuthContext.Provider value={{ authState, setAuthentication, getAuthentication, isAuthenticated, logout }}>
+    <AuthContext.Provider value={{ authState, setAuthentication, getAuthentication, isAuthenticated, logout, saveToken, getToken }}>
       {children}
     </AuthContext.Provider>
   );
