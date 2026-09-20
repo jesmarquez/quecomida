@@ -1,5 +1,7 @@
 import { useState, type FormEvent } from 'react';
 import { useNavigate } from 'react-router';
+import { registerAction } from '../actions/register.action';
+import { SpinButton } from '../../components/ui/SpinButton';
 
 export const RegisterVendorPage = () => {
   const [name, setName] = useState('');
@@ -13,7 +15,9 @@ export const RegisterVendorPage = () => {
   const [passwordError, setPasswordError] = useState('');
   const [repassword, setRepassword] = useState('');
   const [repasswordError, setRepasswordError] = useState('');
-
+  const [isSubmit, setIsSubmit] = useState(false);
+  const [message, setMessage] = useState(''); 
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const navigate = useNavigate();
 
   const validateRepassword = (value: string) => {
@@ -116,11 +120,17 @@ export const RegisterVendorPage = () => {
   const isValidRepassword = repassword.length > 0 && !repasswordError;
   const isInvalidRepassword = repassword.length > 0 && !!repasswordError;
   const isValidForm = isValidEmail && isValidName && isValidPhone && isValidPassword && isValidRepassword;
-  console.log(isValidForm);
+  
 
-  const handleRegister = (event: FormEvent<HTMLFormElement>) => {
+  const handleRegister = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    console.log('handle register', name, email, phone, address, password, repassword);
+    // console.log('handle register', name, email, phone, address, password, repassword);
+    setIsSubmitting(true);
+    const data = await registerAction(name, email, phone,address, password);
+    // console.log(data);
+    setIsSubmitting(false);
+    setMessage( data.message);
+    setIsSubmit(true);
   }
 
   return (
@@ -336,21 +346,58 @@ export const RegisterVendorPage = () => {
                 <div className="flex justify-end mt-xs">
                     <a className="font-body-sm text-body-sm text-primary hover:text-primary-container transition-colors" href="#">Forgot Password?</a>
                 </div>
-                <button type="submit" disabled 
-                    className={`mt-md 
-                      w-full 
-                      bg-primary 
-                      text-on-primary 
-                      font-label-md 
-                      text-label-md 
-                      uppercase 
-                      tracking-widest 
-                      py-sm rounded-lg 
-                      hover:bg-on-primary-fixed-variant transition-colors shadow-sm min-h-[48px]
-                      { ${ !isValidForm ? 'disabled:opacity-50' : ''}
-                      `}>
-                    Sign Up
-                </button>
+
+                {
+                  !isSubmit && (
+                    <button type="submit" 
+                        disabled={ !isValidForm || (isSubmitting && isValidForm)}
+                        className={`mt-md 
+                          w-full
+                          flex
+                          justify-center
+                          items-center
+                          gap-2
+                          bg-primary 
+                          text-on-primary 
+                          font-label-md 
+                          text-label-md 
+                          uppercase 
+                          py-sm rounded-lg 
+                          hover:bg-on-primary-fixed-variant transition-colors shadow-sm min-h-[48px]
+                          ${ !isValidForm ? 'disabled:opacity-50' : '' }
+                          `}
+                      >
+                        {isSubmitting && <SpinButton />}
+                        Sign Up
+                    </button>)
+                }
+
+                {
+                  isSubmit && (
+                  <div
+                    className="bg-surface-container-low p-md rounded-lg flex items-start gap-md mt-sm"
+                  >
+                    <span className="material-symbols-outlined text-primary mt-1"
+                      >info</span
+                    >
+                    <div>
+                      <h4
+                        className="font-label-md text-label-md text-on-surface mb-xs"
+                        id="status-heading"
+                      >
+                        Received request
+                      </h4>
+                      <p
+                        className="font-body-sm text-body-sm text-on-surface-variant"
+                        id="status-desc"
+                      >
+                        { message }
+                      </p>
+                    </div>
+                  </div>
+                  )
+                }
+
             </form>
             <div className="w-full flex flex-col items-center mt-lg gap-sm">
                 <span className="font-body-sm text-body-sm text-on-surface-variant">New to the neighborhood?</span>

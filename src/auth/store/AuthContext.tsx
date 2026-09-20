@@ -43,7 +43,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   };
 
   const saveToken = (token: string) => {
-      console.log('save token');
       localStorage.setItem('token', token);
       return;
   }

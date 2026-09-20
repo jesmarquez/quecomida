@@ -1,0 +1,674 @@
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <style>
+      @layer base {
+        html,
+        body {
+          margin: 0;
+          padding: 0;
+        }
+        body {
+          overscroll-behavior: none;
+        }
+        main > :first-child {
+          margin-top: 0 !important;
+        }
+        main > :last-child {
+          margin-bottom: 0 !important;
+        }
+      }
+      ::-webkit-scrollbar {
+        display: none;
+      }
+    </style>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script id="tailwind-config">
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              "surface-dim": "#e5d8ca",
+              "surface-container": "#f9ecde",
+              "surface-tint": "#9f402d",
+              "secondary-fixed-dim": "#bacbb8",
+              "tertiary-fixed-dim": "#c9c6c1",
+              "on-background": "#211b12",
+              "surface-container-highest": "#eee0d2",
+              "on-primary-fixed": "#3e0500",
+              "outline-variant": "#ddc0ba",
+              "error-container": "#ffdad6",
+              "surface-container-high": "#f3e6d8",
+              "on-tertiary-fixed": "#1c1c18",
+              "surface-bright": "#fff8f3",
+              "on-surface": "#211b12",
+              "on-primary-fixed-variant": "#802918",
+              "on-primary": "#ffffff",
+              "on-tertiary-fixed-variant": "#474743",
+              "inverse-surface": "#362f26",
+              "primary-fixed": "#ffdad3",
+              "primary-container": "#e2725b",
+              "on-secondary-container": "#576757",
+              "inverse-on-surface": "#fcefe0",
+              tertiary: "#5f5e5a",
+              surface: "#fff8f3",
+              "tertiary-fixed": "#e5e2dc",
+              "secondary-fixed": "#d6e7d4",
+              "on-tertiary": "#ffffff",
+              primary: "#9f402d",
+              "on-error": "#ffffff",
+              outline: "#89726d",
+              "surface-variant": "#eee0d2",
+              "surface-container-low": "#fff1e3",
+              error: "#ba1a1a",
+              "on-primary-container": "#5a0d02",
+              "on-secondary": "#ffffff",
+              "inverse-primary": "#ffb4a5",
+              "primary-fixed-dim": "#ffb4a5",
+              "surface-container-lowest": "#ffffff",
+              "secondary-container": "#d3e4d1",
+              "on-secondary-fixed": "#111f13",
+              secondary: "#536253",
+              "on-error-container": "#93000a",
+              "on-surface-variant": "#56423e",
+              "on-tertiary-container": "#2c2c28",
+              background: "#fff8f3",
+              "tertiary-container": "#94938e",
+              "on-secondary-fixed-variant": "#3c4a3c",
+            },
+            borderRadius: {
+              DEFAULT: "0.25rem",
+              lg: "0.5rem",
+              xl: "0.75rem",
+              full: "9999px",
+            },
+            spacing: {
+              md: "24px",
+              base: "8px",
+              gutter: "24px",
+              sm: "12px",
+              lg: "48px",
+              xl: "80px",
+              "container-max": "1280px",
+              xs: "4px",
+            },
+            fontFamily: {
+              "headline-sm": ["Playfair Display"],
+              "headline-lg-mobile": ["Playfair Display"],
+              "headline-lg": ["Playfair Display"],
+              "headline-md": ["Playfair Display"],
+              "body-lg": ['"Source Sans 3"'],
+              "label-md": ['"Source Sans 3"'],
+              "display-lg": ["Playfair Display"],
+              "body-sm": ['"Source Sans 3"'],
+              "body-md": ['"Source Sans 3"'],
+            },
+            fontSize: {
+              "headline-sm": [
+                "20px",
+                { lineHeight: "28px", fontWeight: "500" },
+              ],
+              "headline-lg-mobile": [
+                "28px",
+                { lineHeight: "36px", fontWeight: "600" },
+              ],
+              "headline-lg": [
+                "32px",
+                { lineHeight: "40px", fontWeight: "600" },
+              ],
+              "headline-md": [
+                "24px",
+                { lineHeight: "32px", fontWeight: "600" },
+              ],
+              "body-lg": ["18px", { lineHeight: "28px", fontWeight: "400" }],
+              "label-md": [
+                "14px",
+                {
+                  lineHeight: "16px",
+                  letterSpacing: "0.05em",
+                  fontWeight: "600",
+                },
+              ],
+              "display-lg": [
+                "48px",
+                {
+                  lineHeight: "56px",
+                  letterSpacing: "-0.02em",
+                  fontWeight: "700",
+                },
+              ],
+              "body-sm": ["14px", { lineHeight: "20px", fontWeight: "400" }],
+              "body-md": ["16px", { lineHeight: "24px", fontWeight: "400" }],
+            },
+          },
+        },
+      };
+    </script>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@100..900&family=Source+Sans+3:wght@100..900&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body class="bg-background font-body-md text-on-background">
+    <header
+      class="fixed top-0 w-full z-50 bg-surface/80 backdrop-blur-xl shadow-[0_1px_8px_rgba(0,0,0,0.04)]"
+    >
+      <div
+        class="h-20 max-w-container-max mx-auto px-gutter flex items-center justify-between"
+      >
+        <div class="flex items-center gap-md">
+          <img
+            alt="HomeChef Brand Logo"
+            class="h-8 w-auto object-contain"
+            src="https://lh3.googleusercontent.com/aida-public/AB6AXuCEp5F3PQluY3sI8yOE17jt35i3m56n30cQZyPEEg0mZQumqAkFNc20mYunAb5asXRKuw4p6AyFgfdfvoPzExfWq3_RD1AiU8JE6kqFz4spHgyg2vZ3TTzaTA5z1r0rHHplRj0GdosDezJVF3KNGiKbFKPLEz7wH7C-5P-tnYRpCmOM7zZKPgNEFv4t4g6P_NEpy_O8ysKsv7xhzX2hJKGSBlVHF886yevrgUlT7FKZk2GOxswsSDa0gg"
+          /><span
+            class="font-headline-md text-headline-md text-primary tracking-tight"
+            >HomeChef</span
+          >
+        </div>
+        <nav
+          class="hidden md:flex items-center gap-lg"
+          data-active-classes="text-primary font-bold"
+        >
+          <a
+            class="font-label-md text-label-md text-on-surface-variant hover:text-on-surface transition-colors"
+            data-path="discover-meals"
+            href="#"
+            >Discover Meals</a
+          ><a
+            class="font-label-md text-label-md text-on-surface-variant hover:text-on-surface transition-colors"
+            data-path="my-orders"
+            href="#"
+            >My Orders</a
+          ><a
+            class="font-label-md text-label-md text-on-surface-variant hover:text-on-surface transition-colors"
+            data-path="my-kitchen"
+            href="#"
+            >My Kitchen</a
+          ><a
+            aria-current="page"
+            class="transition-colors text-primary font-bold"
+            data-path="orders-received"
+            href="#"
+            >Orders Received</a
+          >
+        </nav>
+        <div class="flex items-center gap-sm">
+          <span
+            class="material-symbols-outlined text-on-surface-variant cursor-pointer hover:text-primary transition-colors"
+            >shopping_basket</span
+          >
+          <div class="h-8 w-[1px] bg-outline-variant mx-xs"></div>
+          <img
+            alt="Profile"
+            class="w-10 h-10 rounded-full object-cover border-2 border-surface-container-highest cursor-pointer"
+            src="https://lh3.googleusercontent.com/aida-public/AB6AXuDnMr86kBgT5PxszzeoBKBppSbaDLa-ABRKzTeMjMkbYozZQNq_UGyMQdxZKW_P1muYM95AwVqEJHEgeNp7Xbrpve3EQqKHxJNmxo_vScP3Vtea4IGZbgzyw-6KJLuX8WjRsYyjoVVQI65luYrFmuzymALmW5lhTr5sBuSr7c4rXw1v6IA6Diuq6q6ahAugAkceZ5t_sR6DJjW1DsAd0r652aTwzwBdieHgQFucMNwu2BHvFgHmWk2kow"
+          />
+        </div>
+      </div>
+    </header>
+    <main class="w-full pt-20">
+      <div
+        class="flex flex-col w-full px-gutter md:px-lg py-lg max-w-container-max mx-auto gap-xl"
+      >
+        <div class="grid grid-cols-1 md:grid-cols-12 gap-lg relative">
+          <div
+            class="col-span-1 md:col-span-4 flex flex-col gap-md sticky top-[120px] self-start z-10"
+          >
+            <div class="flex items-center gap-sm">
+              <button
+                class="w-12 h-12 flex items-center justify-center rounded-full bg-surface-container hover:bg-surface-container-high transition-colors group cursor-pointer"
+              >
+                <span
+                  class="material-symbols-outlined text-on-surface-variant group-hover:text-primary transition-colors"
+                  >arrow_back</span
+                >
+              </button>
+              <span
+                class="font-label-md text-label-md text-on-surface-variant uppercase tracking-widest"
+                >Back to Orders</span
+              >
+            </div>
+            <div
+              class="relative bg-surface-container rounded-xl overflow-hidden shadow-lg p-lg flex flex-col gap-md"
+            >
+              <div
+                class="absolute inset-0 opacity-20 pointer-events-none"
+                style="
+                  background-image: radial-gradient(
+                    circle at 100% 0%,
+                    var(--tw-colors-primary-container) 0%,
+                    transparent 60%
+                  );
+                "
+              ></div>
+              <div>
+                <span
+                  class="font-label-md text-label-md text-on-surface-variant mb-xs block"
+                  >Order ID</span
+                >
+                <h1
+                  class="font-display-lg text-display-lg text-on-surface mb-0"
+                >
+                  #8492A
+                </h1>
+                <span class="font-body-md text-body-md text-on-surface-variant"
+                  >Placed on Oct 24, 2024 at 4:30 PM</span
+                >
+              </div>
+              <div class="h-[1px] w-full bg-outline-variant/30 my-sm"></div>
+              <div class="flex flex-col gap-base">
+                <div class="flex justify-between items-center">
+                  <span
+                    class="font-body-md text-body-md text-on-surface-variant"
+                    >Customer</span
+                  >
+                  <span class="font-label-md text-label-md text-on-surface"
+                    >Eleanor Vance</span
+                  >
+                </div>
+                <div class="flex justify-between items-center">
+                  <span
+                    class="font-body-md text-body-md text-on-surface-variant"
+                    >Contact</span
+                  >
+                  <span class="font-label-md text-label-md text-on-surface"
+                    >via In-App Chat</span
+                  >
+                </div>
+                <div class="flex justify-between items-center">
+                  <span
+                    class="font-body-md text-body-md text-on-surface-variant"
+                    >Dietary Notes</span
+                  >
+                  <div class="bg-secondary/15 px-sm py-xs rounded-full">
+                    <span class="font-label-md text-label-md text-secondary"
+                      >Gluten-Free Request</span
+                    >
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-span-1 md:col-span-8 flex flex-col gap-xl">
+            <div class="flex flex-col gap-md">
+              <h2 class="font-headline-md text-headline-md text-on-surface">
+                Order Progress
+              </h2>
+              <div
+                class="bg-surface-bright rounded-xl shadow-md p-lg relative overflow-hidden"
+              >
+                <div
+                  class="absolute right-0 top-0 w-64 h-64 bg-primary-fixed/30 rounded-full blur-3xl -mr-32 -mt-32 pointer-events-none"
+                ></div>
+                <div class="relative z-10 flex flex-col gap-lg">
+                  <div class="flex items-center justify-between relative">
+                    <div
+                      class="absolute left-0 top-1/2 -translate-y-1/2 w-full h-1 bg-surface-container-highest rounded-full"
+                    ></div>
+                    <div
+                      class="absolute left-0 top-1/2 -translate-y-1/2 h-1 bg-primary rounded-full transition-all duration-700 ease-in-out w-[10%]"
+                      id="progress-track"
+                    ></div>
+                    <button
+                      class="status-btn relative flex flex-col items-center gap-sm group active cursor-pointer w-32 -ml-16"
+                      data-status="ordered"
+                    >
+                      <div
+                        class="w-8 h-8 rounded-full bg-primary flex items-center justify-center shadow-md transition-all duration-300 ring-4 ring-surface-bright status-indicator z-10"
+                      >
+                        <span
+                          class="material-symbols-outlined text-on-primary text-[16px]"
+                          >receipt_long</span
+                        >
+                      </div>
+                      <span
+                        class="font-label-md text-label-md text-primary status-label transition-colors"
+                        >Ordered</span
+                      >
+                    </button>
+                    <button
+                      class="status-btn relative flex flex-col items-center gap-sm group cursor-pointer w-32"
+                      data-status="ready"
+                    >
+                      <div
+                        class="w-8 h-8 rounded-full bg-surface-container-highest group-hover:bg-primary-container/40 flex items-center justify-center transition-all duration-300 ring-4 ring-surface-bright status-indicator z-10"
+                      >
+                        <span
+                          class="material-symbols-outlined text-on-surface-variant group-hover:text-primary text-[16px]"
+                          >outdoor_grill</span
+                        >
+                      </div>
+                      <span
+                        class="font-label-md text-label-md text-on-surface-variant group-hover:text-primary status-label transition-colors"
+                        >Ready</span
+                      >
+                    </button>
+                    <button
+                      class="status-btn relative flex flex-col items-center gap-sm group cursor-pointer w-32 -mr-16"
+                      data-status="handed_over"
+                    >
+                      <div
+                        class="w-8 h-8 rounded-full bg-surface-container-highest group-hover:bg-primary-container/40 flex items-center justify-center transition-all duration-300 ring-4 ring-surface-bright status-indicator z-10"
+                      >
+                        <span
+                          class="material-symbols-outlined text-on-surface-variant group-hover:text-primary text-[16px]"
+                          >handshake</span
+                        >
+                      </div>
+                      <span
+                        class="font-label-md text-label-md text-on-surface-variant group-hover:text-primary status-label transition-colors"
+                        >Handed Over</span
+                      >
+                    </button>
+                  </div>
+                  <div
+                    class="bg-surface-container-low p-md rounded-lg flex items-start gap-md mt-sm"
+                  >
+                    <span class="material-symbols-outlined text-primary mt-1"
+                      >info</span
+                    >
+                    <div>
+                      <h4
+                        class="font-label-md text-label-md text-on-surface mb-xs"
+                        id="status-heading"
+                      >
+                        Order Received
+                      </h4>
+                      <p
+                        class="font-body-sm text-body-sm text-on-surface-variant"
+                        id="status-desc"
+                      >
+                        The customer has placed the order. Review dietary notes
+                        before you begin preparation.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="flex flex-col gap-md">
+              <h2
+                class="font-headline-md text-headline-md text-on-surface flex items-baseline gap-sm"
+              >
+                Order Items
+                <span
+                  class="font-body-md text-body-md text-on-surface-variant font-normal"
+                  >2 items</span
+                >
+              </h2>
+              <div
+                class="bg-surface-bright rounded-xl shadow-sm overflow-hidden"
+              >
+                <div
+                  class="p-md md:p-lg flex flex-col md:flex-row gap-lg items-start border-b border-outline-variant/20 hover:bg-surface-container-lowest transition-colors"
+                >
+                  <div
+                    class="w-full md:w-32 h-32 md:h-24 bg-cover bg-center rounded-lg shadow-sm flex-shrink-0"
+                    data-alt="A rustic, overhead shot of a large slice of artisanal sourdough bread topped with creamy ricotta, roasted heirloom cherry tomatoes in deep reds and yellows, fresh basil leaves, and a drizzle of balsamic glaze. Soft natural window light, warm earth tones, styled on a speckled ceramic plate over a linen cloth."
+                    style="
+                      background-image: url(&quot;https://lh3.googleusercontent.com/aida-public/AB6AXuDS_SMkae39qGFG-08iq13hEPsVF9VcyNKr5RGmWhUqW7qi_cDNTMR5u_WL5EL70s0UyGXDTsgXTLup9-ACbUNaXyICqFriap40LYGVL3aqhHSgWPOqUD121sGAMaaH6ARhh61ynGqLfHeEj9TxZHhQw2TDTZdp-xzZikKHs3k3xhvcywlvWGdv3hJKl6awynE93Z2flKzL7m5g1V3skEoyxwbt39seteqhUgg98rYqMV-aO92yvsW_sw&quot;);
+                    "
+                  ></div>
+                  <div class="flex-grow flex flex-col justify-between h-full">
+                    <div>
+                      <div class="flex justify-between items-start mb-xs">
+                        <h3
+                          class="font-headline-sm text-headline-sm text-on-surface"
+                        >
+                          Heirloom Tomato Tartine
+                        </h3>
+                        <span
+                          class="font-headline-sm text-headline-sm text-on-surface"
+                          >$14.50</span
+                        >
+                      </div>
+                      <p
+                        class="font-body-sm text-body-sm text-on-surface-variant line-clamp-2"
+                      >
+                        Sourdough toast with whipped ricotta, roasted local
+                        heirloom tomatoes, and fresh garden basil.
+                      </p>
+                    </div>
+                    <div class="mt-sm flex items-center justify-between">
+                      <span
+                        class="font-label-md text-label-md text-secondary uppercase bg-secondary-container px-sm py-xs rounded"
+                        >Qty: 2</span
+                      >
+                      <span
+                        class="font-label-md text-label-md text-on-surface-variant"
+                        >Subtotal: $29.00</span
+                      >
+                    </div>
+                  </div>
+                </div>
+                <div
+                  class="p-md md:p-lg flex flex-col md:flex-row gap-lg items-start hover:bg-surface-container-lowest transition-colors"
+                >
+                  <div
+                    class="w-full md:w-32 h-32 md:h-24 bg-cover bg-center rounded-lg shadow-sm flex-shrink-0"
+                    data-alt="A delicate, handcrafted ceramic bowl filled with a vibrant green matcha chia pudding. The pudding is topped with a perfectly arranged fan of fresh fig slices and toasted coconut flakes. Shot from a slight angle with soft, diffused morning light, emphasizing the textures and fresh, healthy ingredients against a warm, neutral background."
+                    style="
+                      background-image: url(&quot;https://lh3.googleusercontent.com/aida-public/AB6AXuDJ4AtuIkdB7KUEEtIGicGlclUfUMlDgUd-bhI5d_sNayrY47d8A7ZGVFstCf2amupC_fKyO4MIEy2_OnNUD1QuBtM2wd5Lyj2_lZfoGRBsXYruYY0QrYTv4gEyzTC54G084ObQDKCarjXv-tzFK0iMmH5FbiB-86XhD_zpyteLueiLD6j42EevCagybvLcUMTrr48cmBELJVSZarSNXXwzq3vW2xq5OI-o27kkm6pJPLLCXrE-1Z-6TA&quot;);
+                    "
+                  ></div>
+                  <div class="flex-grow flex flex-col justify-between h-full">
+                    <div>
+                      <div class="flex justify-between items-start mb-xs">
+                        <h3
+                          class="font-headline-sm text-headline-sm text-on-surface"
+                        >
+                          Matcha Fig Chia Bowl
+                        </h3>
+                        <span
+                          class="font-headline-sm text-headline-sm text-on-surface"
+                          >$9.00</span
+                        >
+                      </div>
+                      <p
+                        class="font-body-sm text-body-sm text-on-surface-variant line-clamp-2"
+                      >
+                        Overnight chia pudding infused with ceremonial grade
+                        matcha, topped with fresh black mission figs.
+                      </p>
+                    </div>
+                    <div class="mt-sm flex items-center justify-between">
+                      <span
+                        class="font-label-md text-label-md text-secondary uppercase bg-secondary-container px-sm py-xs rounded"
+                        >Qty: 1</span
+                      >
+                      <span
+                        class="font-label-md text-label-md text-on-surface-variant"
+                        >Subtotal: $9.00</span
+                      >
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div
+              class="bg-inverse-surface text-inverse-on-surface rounded-xl shadow-xl p-lg flex flex-col gap-md -mx-4 md:mx-0 px-8 md:px-lg mt-md"
+            >
+              <div class="flex justify-between items-center">
+                <span
+                  class="font-body-lg text-body-lg text-inverse-on-surface/80"
+                  >Subtotal</span
+                >
+                <span class="font-body-lg text-body-lg">$38.00</span>
+              </div>
+              <div class="flex justify-between items-center">
+                <span
+                  class="font-body-lg text-body-lg text-inverse-on-surface/80"
+                  >Community Fee (5%)</span
+                >
+                <span class="font-body-lg text-body-lg">$1.90</span>
+              </div>
+              <div class="h-[1px] w-full bg-outline-variant/20 my-sm"></div>
+              <div class="flex justify-between items-end">
+                <div class="flex flex-col">
+                  <span
+                    class="font-label-md text-label-md text-primary-fixed uppercase tracking-wider mb-xs"
+                    >Total Earnings</span
+                  >
+                  <span
+                    class="font-body-sm text-body-sm text-inverse-on-surface/60"
+                    >Payment held in escrow until pickup</span
+                  >
+                </div>
+                <span class="font-display-lg text-display-lg text-primary-fixed"
+                  >$36.10</span
+                >
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <script>
+        document.addEventListener("DOMContentLoaded", () => {
+          const statusBtns = document.querySelectorAll(".status-btn");
+          const track = document.getElementById("progress-track");
+          const heading = document.getElementById("status-heading");
+          const desc = document.getElementById("status-desc");
+
+          const statusContent = {
+            ordered: {
+              percent: "10%",
+              head: "Order Received",
+              text: "The customer has placed the order. Review dietary notes before you begin preparation.",
+            },
+            ready: {
+              percent: "50%",
+              head: "Ready for Pickup",
+              text: "Order is prepared and packaged. The customer has been notified to head your way.",
+            },
+            handed_over: {
+              percent: "100%",
+              head: "Order Completed",
+              text: "Meal successfully handed over. Your earnings will be released shortly.",
+            },
+          };
+
+          statusBtns.forEach((btn, index) => {
+            btn.addEventListener("click", () => {
+              const status = btn.getAttribute("data-status");
+
+              // Update track
+              track.style.width = statusContent[status].percent;
+
+              // Update content
+              heading.textContent = statusContent[status].head;
+              desc.textContent = statusContent[status].text;
+
+              // Reset all
+              statusBtns.forEach((b, i) => {
+                const indicator = b.querySelector(".status-indicator");
+                const icon = b.querySelector(".material-symbols-outlined");
+                const label = b.querySelector(".status-label");
+
+                b.classList.remove("active");
+
+                if (i <= index) {
+                  // Active or past state
+                  indicator.className =
+                    "w-8 h-8 rounded-full bg-primary flex items-center justify-center shadow-md transition-all duration-300 ring-4 ring-surface-bright status-indicator z-10";
+                  icon.className =
+                    "material-symbols-outlined text-on-primary text-[16px]";
+                  label.className =
+                    "font-label-md text-label-md text-primary status-label transition-colors";
+                } else {
+                  // Future state
+                  indicator.className =
+                    "w-8 h-8 rounded-full bg-surface-container-highest group-hover:bg-primary-container/40 flex items-center justify-center transition-all duration-300 ring-4 ring-surface-bright status-indicator z-10";
+                  icon.className =
+                    "material-symbols-outlined text-on-surface-variant group-hover:text-primary text-[16px]";
+                  label.className =
+                    "font-label-md text-label-md text-on-surface-variant group-hover:text-primary status-label transition-colors";
+                }
+              });
+
+              btn.classList.add("active");
+            });
+          });
+        });
+      </script>
+    </main>
+    <footer
+      class="bg-surface-container py-xl border-t border-outline-variant/20"
+    >
+      <div class="max-w-container-max mx-auto px-gutter">
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-lg mb-lg">
+          <div class="col-span-1 md:col-span-1">
+            <img
+              alt="HomeChef Logo"
+              class="h-6 w-auto mb-md grayscale opacity-80"
+              src="https://lh3.googleusercontent.com/aida-public/AB6AXuCEp5F3PQluY3sI8yOE17jt35i3m56n30cQZyPEEg0mZQumqAkFNc20mYunAb5asXRKuw4p6AyFgfdfvoPzExfWq3_RD1AiU8JE6kqFz4spHgyg2vZ3TTzaTA5z1r0rHHplRj0GdosDezJVF3KNGiKbFKPLEz7wH7C-5P-tnYRpCmOM7zZKPgNEFv4t4g6P_NEpy_O8ysKsv7xhzX2hJKGSBlVHF886yevrgUlT7FKZk2GOxswsSDa0gg"
+            />
+            <p class="text-body-sm font-body-sm text-on-surface-variant">
+              Connecting home cooks with hungry neighbors through the love of
+              shared meals.
+            </p>
+          </div>
+          <div>
+            <h4 class="font-label-md text-label-md text-on-surface mb-md">
+              Marketplace
+            </h4>
+            <ul class="space-y-xs">
+              <li class="text-body-sm font-body-sm text-on-surface-variant">
+                Browse All
+              </li>
+              <li class="text-body-sm font-body-sm text-on-surface-variant">
+                Chef Spotlight
+              </li>
+              <li class="text-body-sm font-body-sm text-on-surface-variant">
+                Gift Cards
+              </li>
+            </ul>
+          </div>
+          <div>
+            <h4 class="font-label-md text-label-md text-on-surface mb-md">
+              Support
+            </h4>
+            <ul class="space-y-xs">
+              <li class="text-body-sm font-body-sm text-on-surface-variant">
+                Help Center
+              </li>
+              <li class="text-body-sm font-body-sm text-on-surface-variant">
+                Trust & Safety
+              </li>
+              <li class="text-body-sm font-body-sm text-on-surface-variant">
+                Terms
+              </li>
+            </ul>
+          </div>
+          <div>
+            <h4 class="font-label-md text-label-md text-on-surface mb-md">
+              Kitchen
+            </h4>
+            <ul class="space-y-xs">
+              <li class="text-body-sm font-body-sm text-on-surface-variant">
+                Become a Chef
+              </li>
+              <li class="text-body-sm font-body-sm text-on-surface-variant">
+                Kitchen Tools
+              </li>
+              <li class="text-body-sm font-body-sm text-on-surface-variant">
+                Earnings
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div
+          class="text-center border-t border-outline-variant/30 pt-md text-body-sm font-body-sm text-on-surface-variant"
+        >
+          © 2024 HomeChef. All rights reserved. Made with love for the
+          community.
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

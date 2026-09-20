@@ -1,5 +1,17 @@
+import { useState } from "react";
+import { useNavigate } from "react-router";
+import { SpinButton } from "../../components/ui/SpinButton";
 
 export const AddMealPage = () => {
+  const [sw, setsw] = useState(false);
+
+  const navigate = useNavigate();
+
+  const onClickPostDeal = () => {
+    console.log(sw);
+    setsw(!sw);
+    return;
+  }
 
     return (
         <main className="w-full pt-20">
@@ -25,8 +37,27 @@ export const AddMealPage = () => {
                     <div className="lg:col-span-4 flex flex-col gap-lg">
                         <div className="bg-surface-container rounded-xl p-md shadow-sm">
                             <h3 className="font-headline-sm mb-md">Publishing</h3>
-                            <button onClick={() => navigate('/my-kitchen')} className="w-full h-12 bg-primary text-on-primary rounded-lg mb-sm">Post Meal</button>
-                            <button onClick={() => navigate('/my-kitchen')} className="w-full h-12 border border-primary text-primary rounded-lg">Save as Draft</button>
+                            <button onClick={ onClickPostDeal } 
+                              className="w-full
+                                      flex
+                                      items-center
+                                      justify-center
+                                      gap-2
+                                      hover:bg-primary-container
+                                      hover:text-on-primary-container
+                                        h-12 
+                                        bg-primary 
+                                        text-on-primary rounded-lg mb-sm">
+                              {
+                                sw && (
+                                  <SpinButton/>
+                                )
+                              }              
+                              {
+                                sw ? "Proccesing..." : 'Post Meal' 
+                              }
+                            </button>
+                            <button onClick={() => navigate('/dashboard')} className="w-full h-12 border border-primary text-primary rounded-lg">Save as Draft</button>
                         </div>
                     </div>
                 </div>
@@ -34,3 +65,5 @@ export const AddMealPage = () => {
         </main>
     );
 };
+
+

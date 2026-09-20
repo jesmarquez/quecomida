@@ -6,7 +6,7 @@ import { useAuth } from '../store/AuthContext';
 
 export const LoginPage = () => {
   const navigate = useNavigate();
-  const { setAuthentication } = useAuth();
+  const { setAuthentication, saveToken } = useAuth();
 
   const handleLogin = async (event: FormEvent<HTMLFormEvent>) => {
     event.preventDefault();
@@ -18,8 +18,11 @@ export const LoginPage = () => {
     const dataAuth = await loginAction(email, password);
     
     if ( dataAuth.token ) {
+      saveToken(dataAuth.token);
       setAuthentication(dataAuth.username, dataAuth.token);
+      console.log(dataAuth.username, dataAuth.token);
       navigate('/dashboard');
+      return;
     } else {
         toast.error('Email or password invalid');
         console.log('error');

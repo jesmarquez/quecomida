@@ -3,6 +3,8 @@ import type { Meal, StatCardProps } from '../interfaces/dashboard.interfaces'
 import { getMeals } from '../actions/get-meals-action';
 import { useNavigate, useSearchParams } from 'react-router';
 import { useAuth } from '../../auth/store/AuthContext';
+import { getVendorAction } from '../../auth/actions/getVendor.action';
+import type { Vendor } from '../../auth/interfaces/auth.response';
 
 const StatCard = ({ icon, value, label, colorClass, bgClass }: StatCardProps) => (
   <div className="bg-surface-container rounded-xl p-md flex flex-col justify-between h-32 relative overflow-hidden group hover:shadow-sm transition-shadow">
@@ -102,32 +104,57 @@ const MealItem = ({ meal, onToggle }: MealItemProps) => {
 export const DashboardPage = () => {
   const [mealList, setMealList] = useState<Meal[]>([]);
   const navigate = useNavigate();
-  const { isAuthenticated, saveToken, setAuthentication } = useAuth();
+  const { saveToken, setAuthentication, getToken } = useAuth();
   const [searchParams, setSearchParams] = useSearchParams();
+  const [ready, setReady] = useState(false);
 
-  console.log( isAuthenticated() );
   useEffect(() => {
-    const tokenFromUrl = searchParams.get("token");
-
-    if (tokenFromUrl) {
-      saveToken(tokenFromUrl);
-      setAuthentication('newvendor', tokenFromUrl);
-      // Strip ?token= from the URL so it's not left in browser history/bookmarks
-      setSearchParams({}, { replace: true });
-    } else {
-      if (!isAuthenticated()) {
-        console.log('no is authenticated');
-        navigate('/auth/login');
+    async function initDashboard () {
+      const tokenFromUrl = searchParams.get("token");
+      
+      if (tokenFromUrl) {
+        saveToken(tokenFromUrl);
+        setSearchParams({}, { replace: true });
+      } 
+      
+      const token = getToken();
+      if (!token) {
+        navigate("/auth/login", { replace: true });
+        return;
       }
+
+      try {
+        const  data  = await getVendorAction();
+        setAuthentication(data.email, token);
+        setReady(true);
+      } catch (error) {
+        // Token was invalid/expired — your axios interceptor already clears
+        // it and redirects to /login on a 401, so this catch is mostly a
+        // safety net for other errors.
+        console.log(error);
+        navigate("/auth/login", { replace: true });
+      }
+
     }
+    initDashboard();
+  }, []);
 
-  }, [isAuthenticated, navigate, saveToken, searchParams,setAuthentication, setSearchParams ]);
-
-  useEffect(() => {
+    useEffect(() => {
     getMeals().then( meals => {
       setMealList(meals);
     });
   }, []);
+
+  if (!ready) {
+    return (
+      <div className="flex items-center justify-center h-full min-h-[300px]">
+        <svg className="h-8 w-8 animate-spin text-primary" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+          <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+          <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z" />
+        </svg>
+      </div>
+    );
+  }
 
   const handleToggle = (id: number) => {
     setMealList((prev) =>
@@ -158,7 +185,23 @@ export const DashboardPage = () => {
             </div>
             <button 
               onClick = { () => navigate('/add-meal') }
-              className="bg-primary text-on-primary font-label-md text-label-md px-md h-12 rounded-full flex items-center justify-center gap-xs hover:bg-primary-container hover:text-on-primary-container transition-colors shadow-sm hover:shadow-md shrink-0 w-full md:w-auto mt-sm md:mt-0">
+              className="bg-primary 
+                text-on-primary 
+                font-label-md 
+                text-label-md 
+                px-md h-12 
+                rounded-full 
+                flex 
+                items-center 
+                justify-center gap-xs 
+                hover:bg-primary-container 
+                hover:text-on-primary-container 
+                transition-colors 
+                shadow-sm 
+                hover:shadow-md 
+                shrink-0 
+                w-full md:w-auto mt-sm md:mt-0">
+                  
               <span className="material-symbols-outlined text-[18px]">Add New Meal</span>
             </button>
           </div>
