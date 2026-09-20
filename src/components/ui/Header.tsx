@@ -21,12 +21,14 @@ export const Header = () => {
   <header className="fixed top-0 w-full z-50 bg-surface/80 backdrop-blur-xl shadow-[0_1px_8px_rgba(0,0,0,0.04)]">
     <div className="h-20 max-w-container-max mx-auto px-gutter flex items-center justify-between">
       <div className="flex items-center gap-md">
+        <Link to="/">
         <img
           alt="HomeChef Brand Logo"
           className="h-8 w-auto object-contain"
           src="https://lh3.googleusercontent.com/aida-public/AB6AXuCEp5F3PQluY3sI8yOE17jt35i3m56n30cQZyPEEg0mZQumqAkFNc20mYunAb5asXRKuw4p6AyFgfdfvoPzExfWq3_RD1AiU8JE6kqFz4spHgyg2vZ3TTzaTA5z1r0rHHplRj0GdosDezJVF3KNGiKbFKPLEz7wH7C-5P-tnYRpCmOM7zZKPgNEFv4t4g6P_NEpy_O8ysKsv7xhzX2hJKGSBlVHF886yevrgUlT7FKZk2GOxswsSDa0gg"
         />
         <span className="font-headline-md text-headline-md text-primary tracking-tight">HomeChef</span>
+        </Link>
       </div>
       <nav className="hidden md:flex items-center gap-lg">
         { isAuthenticated() && (

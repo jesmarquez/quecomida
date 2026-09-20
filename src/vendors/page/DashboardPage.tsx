@@ -4,7 +4,6 @@ import { getMeals } from '../actions/get-meals-action';
 import { useNavigate, useSearchParams } from 'react-router';
 import { useAuth } from '../../auth/store/AuthContext';
 import { getVendorAction } from '../../auth/actions/getVendor.action';
-import type { Vendor } from '../../auth/interfaces/auth.response';
 
 const StatCard = ({ icon, value, label, colorClass, bgClass }: StatCardProps) => (
   <div className="bg-surface-container rounded-xl p-md flex flex-col justify-between h-32 relative overflow-hidden group hover:shadow-sm transition-shadow">

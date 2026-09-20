@@ -1,11 +1,16 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 import { SpinButton } from "../../components/ui/SpinButton";
+import { useAuth } from "../../auth/store/AuthContext";
 
 export const AddMealPage = () => {
   const [sw, setsw] = useState(false);
-
   const navigate = useNavigate();
+  const { getToken} = useAuth();
+
+  useEffect(() => {
+    if (!getToken()) navigate('/auth/login');
+  }, [] );
 
   const onClickPostDeal = () => {
     console.log(sw);
@@ -66,4 +71,8 @@ export const AddMealPage = () => {
     );
 };
 
+
+function getToken() {
+    throw new Error("Function not implemented.");
+}
 

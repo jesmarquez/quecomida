@@ -1,5 +1,15 @@
+import { useNavigate } from "react-router";
+import { useAuth } from "../../auth/store/AuthContext"
+import { useEffect } from "react";
 
 export const OrdersPage = () => {
+  const navigate = useNavigate();
+  const { getToken } = useAuth();
+
+  useEffect(() => {
+    if (!getToken()) navigate('/auth/login');
+  }, [] );
+
   return (
     <main className="w-full pt-20">
         <div className="flex flex-col w-full px-gutter max-w-container-max mx-auto pb-xl">

@@ -4,6 +4,7 @@ import { useNavigate } from "react-router";
 export const PlaceOrderPage = () => {
     const navigate = useNavigate();
     const [qty, setQty] = useState(1);
+
     const basePrice = 18.00;
     const serviceFee = 2.50;
 
@@ -97,3 +98,7 @@ export const PlaceOrderPage = () => {
         </main>
     );
 };
+function getToken() {
+    throw new Error("Function not implemented.");
+}
+
