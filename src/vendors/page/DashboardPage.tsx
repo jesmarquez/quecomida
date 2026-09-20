@@ -182,26 +182,13 @@ export const DashboardPage = () => {
                 Control your active listings, adjust availability, and introduce new culinary creations to your neighbors.
               </p>
             </div>
-            <button 
+
+            <button
               onClick = { () => navigate('/add-meal') }
-              className="bg-primary 
-                text-on-primary 
-                font-label-md 
-                text-label-md 
-                px-md h-12 
-                rounded-full 
-                flex 
-                items-center 
-                justify-center gap-xs 
-                hover:bg-primary-container 
-                hover:text-on-primary-container 
-                transition-colors 
-                shadow-sm 
-                hover:shadow-md 
-                shrink-0 
-                w-full md:w-auto mt-sm md:mt-0">
-                  
-              <span className="material-symbols-outlined text-[18px]">Add New Meal</span>
+              className="bg-primary text-on-primary font-label-md text-label-md px-md h-12 rounded-full flex items-center justify-center gap-xs hover:bg-primary-container hover:text-on-primary-container transition-colors shadow-sm hover:shadow-md shrink-0 w-full md:w-auto mt-sm md:mt-0"
+            >
+              <span className="material-symbols-outlined text-[18px]">add</span>
+              Add New Meal
             </button>
           </div>
 
