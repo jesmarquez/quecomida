@@ -1,13 +1,38 @@
-import type { FormEvent } from "react";
+import { useState, type FormEvent } from "react";
 import { useNavigate } from "react-router";
 import { loginAction } from "../actions/loginAction";
 import { toast } from "sonner";
 import { useAuth } from '../store/AuthContext';
+import { validateEmail } from "../../util/validate";
 
 export const LoginPage = () => {
   const navigate = useNavigate();
   const { setAuthentication, saveToken } = useAuth();
+  const [email, setEmail] = useState('');
+  const [emailError, setEmailError] = useState('');
+  const [password, setPassword] = useState('');
 
+  const handleEmailChange = (e : React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    setEmail(value);
+    const message = validateEmail(email);
+    setEmailError(message);
+    return;
+  }
+
+  const isInvalidEmail = email.length > 0 && !!emailError;
+
+  const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    setPassword(value);
+    return;
+  }
+
+  const isInvalidPassword = password.length > 0 ? false : true;
+
+  const isValidForm = !isInvalidEmail && !isInvalidPassword;
+
+  console.log(isValidForm);
   const handleLogin = async (event: FormEvent<HTMLFormEvent>) => {
     event.preventDefault();
 
@@ -48,20 +73,34 @@ export const LoginPage = () => {
                     <label className="font-label-md text-label-md text-on-surface-variant uppercase" htmlFor="email">Email</label>
                     <div className="relative">
                         <span className="material-symbols-outlined absolute left-sm top-1/2 -translate-y-1/2 text-on-surface-variant/50">mail</span>
-                        <input className="w-full bg-tertiary-fixed text-on-surface font-body-md text-body-md rounded-lg py-sm pl-xl pr-sm focus:outline-none focus:ring-1 focus:ring-primary transition-shadow" id="email" placeholder="you@example.com" required type="email" name="email"/>
+                        <input
+                            onChange={ handleEmailChange }
+                            className="w-full bg-tertiary-fixed text-on-surface font-body-md text-body-md rounded-lg py-sm pl-xl pr-sm focus:outline-none focus:ring-1 focus:ring-primary transition-shadow" id="email" placeholder="you@example.com" required type="email" name="email"/>
                     </div>
+                    { isInvalidEmail && (
+                    <p
+                    className="flex items-center gap-1 text-error text-body-sm font-body-sm mt-1"
+                    >
+                    <span className="material-symbols-outlined text-base">error</span>
+                        { emailError }
+                    </p>)
+                    }
+
                 </div>
                 <div className="flex flex-col gap-xs mt-sm">
                     <label className="font-label-md text-label-md text-on-surface-variant uppercase" htmlFor="password">Password</label>
                     <div className="relative">
                         <span className="material-symbols-outlined absolute left-sm top-1/2 -translate-y-1/2 text-on-surface-variant/50">lock</span>
-                        <input className="w-full bg-tertiary-fixed text-on-surface font-body-md text-body-md rounded-lg py-sm pl-xl pr-sm focus:outline-none focus:ring-1 focus:ring-primary transition-shadow" id="password" placeholder="••••••••" required type="password" name="password"/>
+                        <input 
+                            onChange={ handlePasswordChange }
+                            className="w-full bg-tertiary-fixed text-on-surface font-body-md text-body-md rounded-lg py-sm pl-xl pr-sm focus:outline-none focus:ring-1 focus:ring-primary transition-shadow" id="password" placeholder="••••••••" required type="password" name="password"/>
                     </div>
                 </div>
                 <div className="flex justify-end mt-xs">
                     <a className="font-body-sm text-body-sm text-primary hover:text-primary-container transition-colors" href="#">Forgot Password?</a>
                 </div>
                 <button type="submit" 
+                    disabled={ !isValidForm }
                     className="mt-md 
                         w-full 
                         bg-primary 

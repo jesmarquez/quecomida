@@ -142,263 +142,263 @@ export const RegisterVendorPage = () => {
                 <h1 className="font-headline-lg text-headline-lg text-on-background text-center">HomeChef</h1>
                 <p className="font-body-md text-body-md text-on-surface-variant text-center mt-xs">A neighborhood of flavor.</p>
             </div>
-            <form className="w-full flex flex-col bg-surface-container rounded-xl shadow-md p-md gap-sm relative overflow-hidden" 
-                  onSubmit={(e) => { handleRegister(e) }}>
-                <div className="absolute top-0 right-0 w-32 h-32 bg-primary-fixed/20 rounded-full blur-2xl -mr-16 -mt-16 pointer-events-none"></div>
-                <h2 className="font-headline-sm text-headline-sm text-on-surface mb-sm">Sign Up</h2>
-                <div className="flex flex-col gap-xs">
-                    <label className="font-label-md text-label-md text-on-surface-variant uppercase" htmlFor="name">Name</label>
-                    <div className="relative">
-                        <span className="material-symbols-outlined absolute left-sm top-1/2 -translate-y-1/2 text-on-surface-variant/50">id_card</span>
-                        <input
-                            className= {
-                                `w-full 
-                                bg-tertiary-fixed 
-                                text-on-surface 
-                                font-body-md 
-                                text-body-md 
-                                rounded-lg 
-                                py-sm 
-                                pl-xl 
-                                pr-sm 
-                                focus:outline-none 
-                                ${ isValidName ? 'focus:ring-1 focus:ring-primary transition-shadow' : 'border-error focus:outline-none focus:ring-error' }
-                                ${ isInvalidName ? 'ring-1 ring-error focus:ring-error' : ''}`}
-                            
-                            id="name" 
-                            placeholder="Your name" 
-                            required type="text" name="name"
-                            value={ name }
-                            onChange={ handleNameChange }/>
-                    </div>
-                    { isInvalidName && (
-                    <p
-                      className="flex items-center gap-1 text-error text-body-sm font-body-sm mt-1"
-                    >
-                      <span className="material-symbols-outlined text-base">error</span>
-                        { nameError }
-                    </p>)
-                    }
-                </div>
-                <div className="flex flex-col gap-xs">
-                    <label className="font-label-md text-label-md text-on-surface-variant uppercase" htmlFor="email">Email</label>
-                    <div className="relative">
-                        <span className="material-symbols-outlined absolute left-sm top-1/2 -translate-y-1/2 text-on-surface-variant/50">mail</span>
-                        <input 
-                            className={ 
-                                `w-full 
-                                bg-tertiary-fixed 
-                                text-on-surface 
-                                font-body-md 
-                                text-body-md 
-                                rounded-lg 
-                                py-sm 
-                                pl-xl 
-                                pr-sm 
-                                focus:outline-none 
-                                ${ isValidEmail ? 'focus:ring-1 focus:ring-primary transition-shadow' : 'border-error focus:outline-none focus:ring-error' }
-                                ${ isInvalidEmail ? 'ring-1 ring-error focus:ring-error' : ''}`}
 
-                            id="email" 
-                            placeholder="you@example.com" 
-                            required type="email" 
-                            name="email"
-                            value={ email }
-                            onChange={ handleEmailChange }
-                        />
-                    </div>
-                    { isInvalidEmail && (
-                    <p
-                      className="flex items-center gap-1 text-error text-body-sm font-body-sm mt-1"
-                    >
-                      <span className="material-symbols-outlined text-base">error</span>
-                        { emailError }
-                    </p>)
-                    }
-                </div>
-                <div className="flex flex-col gap-xs">
-                    <label className="font-label-md text-label-md text-on-surface-variant uppercase" htmlFor="name">Phone</label>
-                    <div className="relative">
-                        <span className="material-symbols-outlined absolute left-sm top-1/2 -translate-y-1/2 text-on-surface-variant/50">contact_phone</span>
-                        <input 
-                            className={ 
-                                `w-full 
-                                bg-tertiary-fixed 
-                                text-on-surface 
-                                font-body-md 
-                                text-body-md 
-                                rounded-lg 
-                                py-sm 
-                                pl-xl 
-                                pr-sm 
-                                focus:outline-none 
-                                ${ isValidPhone ? 'focus:ring-1 focus:ring-primary transition-shadow' : 'border-error focus:outline-none focus:ring-error' }
-                                ${ isInvalidPhone ? 'ring-1 ring-error focus:ring-error' : ''}`}
-                            id="phone" 
-                            placeholder="Your phone number" 
-                            required 
-                            type="text" 
-                            name="phone"
-                            value={ phone }
-                            onChange={ handlePhoneChange }
-                        />
-                    </div>
-                    { isInvalidPhone && (
-                    <p
-                      className="flex items-center gap-1 text-error text-body-sm font-body-sm mt-1"
-                    >
-                      <span className="material-symbols-outlined text-base">error</span>
-                        { phoneError }
-                    </p>)
-                    }
-                </div>
-                <div className="flex flex-col gap-xs">
-                    <label className="font-label-md text-label-md text-on-surface-variant uppercase" htmlFor="name">Address</label>
-                    <div className="relative">
-                        <span className="material-symbols-outlined absolute left-sm top-1/2 -translate-y-1/2 text-on-surface-variant/50">add_location</span>
-                        <input 
-                            className="w-full bg-tertiary-fixed texWt-on-surface font-body-md text-body-md rounded-lg py-sm pl-xl pr-sm focus:outline-none focus:ring-1 focus:ring-primary transition-shadow" 
-                            id="address" 
-                            placeholder="Your address" 
-                            required 
-                            type="text" 
-                            name="address"
-                            value={ address }
-                            onChange={ (e) => setAddress(e.target.value )}
-                        />
-                    </div>
-                </div>
-
-                <div className="flex flex-col gap-xs mt-sm">
-                    <label className="font-label-md text-label-md text-on-surface-variant uppercase" htmlFor="password">Password</label>
-                    <div className="relative">
-                        <span className="material-symbols-outlined absolute left-sm top-1/2 -translate-y-1/2 text-on-surface-variant/50">lock</span>
-                        <input 
-                          className={ 
-                                `w-full 
-                                bg-tertiary-fixed 
-                                text-on-surface 
-                                font-body-md 
-                                text-body-md 
-                                rounded-lg 
-                                py-sm 
-                                pl-xl 
-                                pr-sm 
-                                focus:outline-none 
-                                ${ isValidPassword ? 'focus:ring-1 focus:ring-primary transition-shadow' : 'border-error focus:outline-none focus:ring-error' }
-                                ${ isInvalidPassword ? 'ring-1 ring-error focus:ring-error' : ''}`}
-
-                            id="password" 
-                            placeholder="••••••••" 
-                            required 
-                            type="password" 
-                            name="password"
-                            value={ password }
-                            onChange={ handlePasswordChange }
-                        />
-                    </div>
-                     { isInvalidPassword && (
+            { !isSubmit && (
+              <form className="w-full flex flex-col bg-surface-container rounded-xl shadow-md p-md gap-sm relative overflow-hidden" 
+                    onSubmit={(e) => { handleRegister(e) }}>
+                  <div className="absolute top-0 right-0 w-32 h-32 bg-primary-fixed/20 rounded-full blur-2xl -mr-16 -mt-16 pointer-events-none"></div>
+                  <h2 className="font-headline-sm text-headline-sm text-on-surface mb-sm">Sign Up</h2>
+                  <div className="flex flex-col gap-xs">
+                      <label className="font-label-md text-label-md text-on-surface-variant uppercase" htmlFor="name">Name</label>
+                      <div className="relative">
+                          <span className="material-symbols-outlined absolute left-sm top-1/2 -translate-y-1/2 text-on-surface-variant/50">id_card</span>
+                          <input
+                              className= {
+                                  `w-full 
+                                  bg-tertiary-fixed 
+                                  text-on-surface 
+                                  font-body-md 
+                                  text-body-md 
+                                  rounded-lg 
+                                  py-sm 
+                                  pl-xl 
+                                  pr-sm 
+                                  focus:outline-none 
+                                  ${ isValidName ? 'focus:ring-1 focus:ring-primary transition-shadow' : 'border-error focus:outline-none focus:ring-error' }
+                                  ${ isInvalidName ? 'ring-1 ring-error focus:ring-error' : ''}`}
+                              
+                              id="name" 
+                              placeholder="Your name" 
+                              required type="text" name="name"
+                              value={ name }
+                              onChange={ handleNameChange }/>
+                      </div>
+                      { isInvalidName && (
                       <p
                         className="flex items-center gap-1 text-error text-body-sm font-body-sm mt-1"
                       >
                         <span className="material-symbols-outlined text-base">error</span>
-                          { passwordError }
+                          { nameError }
                       </p>)
                       }
-                </div>
-                <div className="flex flex-col gap-xs mt-sm">
-                    <label className="font-label-md text-label-md text-on-surface-variant uppercase" htmlFor="repassword">Retype Password</label>
-                    <div className="relative">
-                        <span className="material-symbols-outlined absolute left-sm top-1/2 -translate-y-1/2 text-on-surface-variant/50">lock</span>
-                        <input 
-                          className={ 
-                                `w-full 
-                                bg-tertiary-fixed 
-                                text-on-surface 
-                                font-body-md 
-                                text-body-md 
-                                rounded-lg 
-                                py-sm 
-                                pl-xl 
-                                pr-sm 
-                                focus:outline-none 
-                                ${ isValidRepassword ? 'focus:ring-1 focus:ring-primary transition-shadow' : 'border-error focus:outline-none focus:ring-error' }
-                                ${ isInvalidRepassword ? 'ring-1 ring-error focus:ring-error' : ''}`}
-                            id="repassword" 
-                            placeholder="••••••••" 
-                            required 
-                            type="password" 
-                            name="repassword"
-                            value={ repassword }
-                            onChange={ handleRepasswordChange }/>
-                    </div>
-
-                      { isInvalidRepassword && (
-                      <p
-                        className="flex items-center gap-1 text-error text-body-sm font-body-sm mt-1"
-                      >
-                        <span className="material-symbols-outlined text-base">error</span>
-                          { repasswordError }
-                      </p>)
-                      }
-                </div>
-
-                <div className="flex justify-end mt-xs">
-                    <a className="font-body-sm text-body-sm text-primary hover:text-primary-container transition-colors" href="#">Forgot Password?</a>
-                </div>
-
-                {
-                  !isSubmit && (
-                    <button type="submit" 
-                        disabled={ !isValidForm || (isSubmitting && isValidForm)}
-                        className={`mt-md 
-                          w-full
-                          flex
-                          justify-center
-                          items-center
-                          gap-2
-                          bg-primary 
-                          text-on-primary 
-                          font-label-md 
-                          text-label-md 
-                          uppercase 
-                          py-sm rounded-lg 
-                          hover:bg-on-primary-fixed-variant transition-colors shadow-sm min-h-[48px]
-                          ${ !isValidForm ? 'disabled:opacity-50' : '' }
-                          `}
-                      >
-                        {isSubmitting && <SpinButton />}
-                        Sign Up
-                    </button>)
-                }
-
-                {
-                  isSubmit && (
-                  <div
-                    className="bg-surface-container-low p-md rounded-lg flex items-start gap-md mt-sm"
-                  >
-                    <span className="material-symbols-outlined text-primary mt-1"
-                      >info</span
-                    >
-                    <div>
-                      <h4
-                        className="font-label-md text-label-md text-on-surface mb-xs"
-                        id="status-heading"
-                      >
-                        Received request
-                      </h4>
-                      <p
-                        className="font-body-sm text-body-sm text-on-surface-variant"
-                        id="status-desc"
-                      >
-                        { message }
-                      </p>
-                    </div>
                   </div>
-                  )
-                }
+                  <div className="flex flex-col gap-xs">
+                      <label className="font-label-md text-label-md text-on-surface-variant uppercase" htmlFor="email">Email</label>
+                      <div className="relative">
+                          <span className="material-symbols-outlined absolute left-sm top-1/2 -translate-y-1/2 text-on-surface-variant/50">mail</span>
+                          <input 
+                              className={ 
+                                  `w-full 
+                                  bg-tertiary-fixed 
+                                  text-on-surface 
+                                  font-body-md 
+                                  text-body-md 
+                                  rounded-lg 
+                                  py-sm 
+                                  pl-xl 
+                                  pr-sm 
+                                  focus:outline-none 
+                                  ${ isValidEmail ? 'focus:ring-1 focus:ring-primary transition-shadow' : 'border-error focus:outline-none focus:ring-error' }
+                                  ${ isInvalidEmail ? 'ring-1 ring-error focus:ring-error' : ''}`}
 
-            </form>
+                              id="email" 
+                              placeholder="you@example.com" 
+                              required type="email" 
+                              name="email"
+                              value={ email }
+                              onChange={ handleEmailChange }
+                          />
+                      </div>
+                      { isInvalidEmail && (
+                      <p
+                        className="flex items-center gap-1 text-error text-body-sm font-body-sm mt-1"
+                      >
+                        <span className="material-symbols-outlined text-base">error</span>
+                          { emailError }
+                      </p>)
+                      }
+                  </div>
+                  <div className="flex flex-col gap-xs">
+                      <label className="font-label-md text-label-md text-on-surface-variant uppercase" htmlFor="name">Phone</label>
+                      <div className="relative">
+                          <span className="material-symbols-outlined absolute left-sm top-1/2 -translate-y-1/2 text-on-surface-variant/50">contact_phone</span>
+                          <input 
+                              className={ 
+                                  `w-full 
+                                  bg-tertiary-fixed 
+                                  text-on-surface 
+                                  font-body-md 
+                                  text-body-md 
+                                  rounded-lg 
+                                  py-sm 
+                                  pl-xl 
+                                  pr-sm 
+                                  focus:outline-none 
+                                  ${ isValidPhone ? 'focus:ring-1 focus:ring-primary transition-shadow' : 'border-error focus:outline-none focus:ring-error' }
+                                  ${ isInvalidPhone ? 'ring-1 ring-error focus:ring-error' : ''}`}
+                              id="phone" 
+                              placeholder="Your phone number" 
+                              required 
+                              type="text" 
+                              name="phone"
+                              value={ phone }
+                              onChange={ handlePhoneChange }
+                          />
+                      </div>
+                      { isInvalidPhone && (
+                      <p
+                        className="flex items-center gap-1 text-error text-body-sm font-body-sm mt-1"
+                      >
+                        <span className="material-symbols-outlined text-base">error</span>
+                          { phoneError }
+                      </p>)
+                      }
+                  </div>
+                  <div className="flex flex-col gap-xs">
+                      <label className="font-label-md text-label-md text-on-surface-variant uppercase" htmlFor="name">Address</label>
+                      <div className="relative">
+                          <span className="material-symbols-outlined absolute left-sm top-1/2 -translate-y-1/2 text-on-surface-variant/50">add_location</span>
+                          <input 
+                              className="w-full bg-tertiary-fixed texWt-on-surface font-body-md text-body-md rounded-lg py-sm pl-xl pr-sm focus:outline-none focus:ring-1 focus:ring-primary transition-shadow" 
+                              id="address" 
+                              placeholder="Your address" 
+                              required 
+                              type="text" 
+                              name="address"
+                              value={ address }
+                              onChange={ (e) => setAddress(e.target.value )}
+                          />
+                      </div>
+                  </div>
+
+                  <div className="flex flex-col gap-xs mt-sm">
+                      <label className="font-label-md text-label-md text-on-surface-variant uppercase" htmlFor="password">Password</label>
+                      <div className="relative">
+                          <span className="material-symbols-outlined absolute left-sm top-1/2 -translate-y-1/2 text-on-surface-variant/50">lock</span>
+                          <input 
+                            className={ 
+                                  `w-full 
+                                  bg-tertiary-fixed 
+                                  text-on-surface 
+                                  font-body-md 
+                                  text-body-md 
+                                  rounded-lg 
+                                  py-sm 
+                                  pl-xl 
+                                  pr-sm 
+                                  focus:outline-none 
+                                  ${ isValidPassword ? 'focus:ring-1 focus:ring-primary transition-shadow' : 'border-error focus:outline-none focus:ring-error' }
+                                  ${ isInvalidPassword ? 'ring-1 ring-error focus:ring-error' : ''}`}
+
+                              id="password" 
+                              placeholder="••••••••" 
+                              required 
+                              type="password" 
+                              name="password"
+                              value={ password }
+                              onChange={ handlePasswordChange }
+                          />
+                      </div>
+                      { isInvalidPassword && (
+                        <p
+                          className="flex items-center gap-1 text-error text-body-sm font-body-sm mt-1"
+                        >
+                          <span className="material-symbols-outlined text-base">error</span>
+                            { passwordError }
+                        </p>)
+                        }
+                  </div>
+                  <div className="flex flex-col gap-xs mt-sm">
+                      <label className="font-label-md text-label-md text-on-surface-variant uppercase" htmlFor="repassword">Retype Password</label>
+                      <div className="relative">
+                          <span className="material-symbols-outlined absolute left-sm top-1/2 -translate-y-1/2 text-on-surface-variant/50">lock</span>
+                          <input 
+                            className={ 
+                                  `w-full 
+                                  bg-tertiary-fixed 
+                                  text-on-surface 
+                                  font-body-md 
+                                  text-body-md 
+                                  rounded-lg 
+                                  py-sm 
+                                  pl-xl 
+                                  pr-sm 
+                                  focus:outline-none 
+                                  ${ isValidRepassword ? 'focus:ring-1 focus:ring-primary transition-shadow' : 'border-error focus:outline-none focus:ring-error' }
+                                  ${ isInvalidRepassword ? 'ring-1 ring-error focus:ring-error' : ''}`}
+                              id="repassword" 
+                              placeholder="••••••••" 
+                              required 
+                              type="password" 
+                              name="repassword"
+                              value={ repassword }
+                              onChange={ handleRepasswordChange }/>
+                      </div>
+
+                        { isInvalidRepassword && (
+                        <p
+                          className="flex items-center gap-1 text-error text-body-sm font-body-sm mt-1"
+                        >
+                          <span className="material-symbols-outlined text-base">error</span>
+                            { repasswordError }
+                        </p>)
+                        }
+                  </div>
+
+                  <div className="flex justify-end mt-xs">
+                      <a className="font-body-sm text-body-sm text-primary hover:text-primary-container transition-colors" href="#">Forgot Password?</a>
+                  </div>
+
+                  {
+                    !isSubmit && (
+                      <button type="submit" 
+                          disabled={ !isValidForm || (isSubmitting && isValidForm)}
+                          className={`mt-md 
+                            w-full
+                            flex
+                            justify-center
+                            items-center
+                            gap-2
+                            bg-primary 
+                            text-on-primary 
+                            font-label-md 
+                            text-label-md 
+                            uppercase 
+                            py-sm rounded-lg 
+                            hover:bg-on-primary-fixed-variant transition-colors shadow-sm min-h-[48px]
+                            ${ !isValidForm ? 'disabled:opacity-50' : '' }
+                            `}
+                        >
+                          {isSubmitting && <SpinButton />}
+                          Sign Up
+                      </button>)
+                  }
+
+
+
+              </form>
+
+              
+              )
+            }
+
+            { isSubmit && (
+              <div className="bg-surface-container-low p-md rounded-lg flex items-start gap-md mt-sm">
+                <span className="material-symbols-outlined text-primary mt-1">info</span>
+                <div>
+                  <h4 className="font-label-md text-label-md text-on-surface mb-xs" id="status-heading">
+                    Request received
+                  </h4>
+                  <p className="font-body-sm text-body-sm text-on-surface-variant" id="status-desc">
+                    { message }
+                  </p>
+                </div>
+              </div>
+              )
+            }
+
+
+            { !isSubmit && (
             <div className="w-full flex flex-col items-center mt-lg gap-sm">
                 <span className="font-body-sm text-body-sm text-on-surface-variant">New to the neighborhood?</span>
                 <div className="flex gap-sm">
@@ -416,6 +416,8 @@ export const RegisterVendorPage = () => {
                     </button>
                 </div>
             </div>
+            )
+          }
         </div>
     </div>
 

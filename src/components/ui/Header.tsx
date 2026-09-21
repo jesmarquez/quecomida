@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Link, useNavigate } from "react-router";
 import { useAuth } from "../../auth/store/AuthContext";
 
@@ -90,7 +90,7 @@ export const Header = () => {
               </div>)
               }
             </div>
-        </div>)
+        </div>
         </>)
       }
     </div>
