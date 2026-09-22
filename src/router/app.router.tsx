@@ -8,6 +8,8 @@ import { OrdersPage } from '../vendors/page/OrdersPage';
 import { PlaceOrderPage } from '../customers/pages/PlaceOrderPage';
 import { OrderConfirmedPage } from '../customers/pages/OrderConfirmedPage';
 import { RegisterVendorPage } from '../auth/pages/RegisterVendorPage';
+import { ForgetPasswordPage } from '../auth/pages/ForgetPasswordPage';
+import { ChangePasswordPage } from '../auth/pages/ChangePasswordPage';
 
 export const appRouter = createBrowserRouter([
   {
@@ -55,6 +57,14 @@ export const appRouter = createBrowserRouter([
       {
         path: 'register',
         element: <RegisterVendorPage/>
+      },
+      {
+        path: 'forget-password',
+        element: <ForgetPasswordPage/>
+      },
+      {
+        path: 'change-password',
+        element: <ChangePasswordPage/>
       }
     ]
   }

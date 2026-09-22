@@ -1,5 +1,5 @@
 import { useState, type FormEvent } from "react";
-import { useNavigate } from "react-router";
+import { useNavigate, Link } from "react-router";
 import { loginAction } from "../actions/loginAction";
 import { toast } from "sonner";
 import { useAuth } from '../store/AuthContext';
@@ -32,7 +32,6 @@ export const LoginPage = () => {
 
   const isValidForm = !isInvalidEmail && !isInvalidPassword;
 
-  console.log(isValidForm);
   const handleLogin = async (event: FormEvent<HTMLFormEvent>) => {
     event.preventDefault();
 
@@ -58,7 +57,6 @@ export const LoginPage = () => {
   
   return (
     <div className="flex flex-col w-full h-full items-center justify-center min-h-screen py-lg bg-background">
-
         <div className="w-full max-w-[24rem] flex flex-col items-center">
             <div className="mb-lg flex flex-col items-center">
                 <span className="material-symbols-outlined text-primary text-5xl mb-sm" style={{fontVariationSettings: "'FILL' 1"}}>skillet</span>
@@ -97,7 +95,7 @@ export const LoginPage = () => {
                     </div>
                 </div>
                 <div className="flex justify-end mt-xs">
-                    <a className="font-body-sm text-body-sm text-primary hover:text-primary-container transition-colors" href="#">Forgot Password?</a>
+                    <Link to="/auth/forget-password" className="font-body-sm text-body-sm text-primary hover:text-primary-container transition-colors">Forgot Password?</Link>
                 </div>
                 <button type="submit" 
                     disabled={ !isValidForm }
