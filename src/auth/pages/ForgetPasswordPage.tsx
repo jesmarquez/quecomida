@@ -50,7 +50,7 @@ export const ForgetPasswordPage = () => {
               <form className="w-full flex flex-col bg-surface-container rounded-xl shadow-md p-md gap-sm relative overflow-hidden" 
                     onSubmit={(e) => { handleForget(e) }}>
                   <div className="absolute top-0 right-0 w-32 h-32 bg-primary-fixed/20 rounded-full blur-2xl -mr-16 -mt-16 pointer-events-none"></div>
-                  <h2 className="font-headline-sm text-headline-sm text-on-surface mb-sm">Reset your password</h2>
+                  <h2 className="font-headline-sm text-headline-sm text-on-surface mb-sm">Enter your email and we will send an email to create an new password</h2>
                   <div className="flex flex-col gap-xs">
                       <label className="font-label-md text-label-md text-on-surface-variant uppercase" htmlFor="email">Email</label>
                       <div className="relative">

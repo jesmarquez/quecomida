@@ -344,11 +344,6 @@ export const RegisterVendorPage = () => {
                         </p>)
                         }
                   </div>
-
-                  <div className="flex justify-end mt-xs">
-                      <a className="font-body-sm text-body-sm text-primary hover:text-primary-container transition-colors" href="#">Forgot Password?</a>
-                  </div>
-
                   {
                     !isSubmit && (
                       <button type="submit" 
@@ -373,12 +368,7 @@ export const RegisterVendorPage = () => {
                           Sign Up
                       </button>)
                   }
-
-
-
               </form>
-
-              
               )
             }
 
