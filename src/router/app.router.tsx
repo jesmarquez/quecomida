@@ -21,6 +21,21 @@ export const appRouter = createBrowserRouter([
         element: <MealsPage/>
       },
       {
+        path: "place-order",
+        element: <PlaceOrderPage/>
+      },
+      {
+        path: "order-confirmed",
+        element: <OrderConfirmedPage/>
+      }
+
+    ]
+  },
+  {
+    path:'vendor',
+    element: <MainLayout />,
+    children: [
+      {
         path: "dashboard",
         element: <DashboardPage />,
       },
@@ -32,15 +47,6 @@ export const appRouter = createBrowserRouter([
         path: "add-meal",
         element: <AddMealPage />
       },
-      {
-        path: "place-order",
-        element: <PlaceOrderPage/>
-      },
-      {
-        path: "order-confirmed",
-        element: <OrderConfirmedPage/>
-      }
-
     ]
   },
   {
@@ -67,5 +73,9 @@ export const appRouter = createBrowserRouter([
         element: <ChangePasswordPage/>
       }
     ]
+  },
+  {
+    path:  '*',
+    element: <Navigate to="/" />
   }
 ])

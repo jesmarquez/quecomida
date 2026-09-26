@@ -1,4 +1,4 @@
-import { useState, type FormEvent } from "react";
+import { useEffect, useState, type FormEvent } from "react";
 import { useNavigate, Link } from "react-router";
 import { loginAction } from "../actions/loginAction";
 import { toast } from "sonner";
@@ -7,10 +7,17 @@ import { validateEmail } from "../../util/validate";
 
 export const LoginPage = () => {
   const navigate = useNavigate();
-  const { setAuthentication, saveToken } = useAuth();
+  const { setAuthentication, saveToken, isAuthenticated } = useAuth();
   const [email, setEmail] = useState('');
   const [emailError, setEmailError] = useState('');
   const [password, setPassword] = useState('');
+
+    useEffect(() => {
+        if (isAuthenticated()) navigate('/vendor/dashboard');
+    
+        return;
+    }, []);
+  
 
   const handleEmailChange = (e : React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
@@ -45,7 +52,7 @@ export const LoginPage = () => {
       saveToken(dataAuth.token);
       setAuthentication(dataAuth.username, dataAuth.token);
       console.log(dataAuth.username, dataAuth.token);
-      navigate('/dashboard');
+      navigate('/vendor/dashboard');
       return;
     } else {
         toast.error('Email or password invalid');

@@ -36,11 +36,11 @@ export const Header = () => {
           <Link className="font-label-md text-label-md text-on-surface-variant hover:text-on-surface transition-colors" to="/">
             Discover Meals
           </Link>
-          <Link className="font-label-md text-label-md text-on-surface-variant hover:text-on-surface transition-colors" href="#">My Orders</Link>
-          <Link aria-current="page" className="transition-colors text-primary font-bold" to="dashboard">
+          <Link to="/vendor/orders" className="font-label-md text-label-md text-on-surface-variant hover:text-on-surface transition-colors">My Orders</Link>
+          <Link to="/vendor/dashboard" aria-current="page" className="transition-colors text-primary font-bold">
             My Kitchen
           </Link>
-          <Link className="font-label-md text-label-md text-on-surface-variant hover:text-on-surface transition-colors" to="orders">
+          <Link to="/vendor/orders" className="font-label-md text-label-md text-on-surface-variant hover:text-on-surface transition-colors">
             Orders Received
           </Link>
           </>)

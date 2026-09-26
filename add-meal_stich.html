@@ -1,0 +1,531 @@
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <style>
+      @layer base {
+        html,
+        body {
+          margin: 0;
+          padding: 0;
+        }
+        body {
+          overscroll-behavior: none;
+        }
+        main > :first-child {
+          margin-top: 0 !important;
+        }
+        main > :last-child {
+          margin-bottom: 0 !important;
+        }
+      }
+      ::-webkit-scrollbar {
+        display: none;
+      }
+    </style>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script id="tailwind-config">
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              "surface-dim": "#e5d8ca",
+              "surface-container": "#f9ecde",
+              "surface-tint": "#9f402d",
+              "secondary-fixed-dim": "#bacbb8",
+              "tertiary-fixed-dim": "#c9c6c1",
+              "on-background": "#211b12",
+              "surface-container-highest": "#eee0d2",
+              "on-primary-fixed": "#3e0500",
+              "outline-variant": "#ddc0ba",
+              "error-container": "#ffdad6",
+              "surface-container-high": "#f3e6d8",
+              "on-tertiary-fixed": "#1c1c18",
+              "surface-bright": "#fff8f3",
+              "on-surface": "#211b12",
+              "on-primary-fixed-variant": "#802918",
+              "on-primary": "#ffffff",
+              "on-tertiary-fixed-variant": "#474743",
+              "inverse-surface": "#362f26",
+              "primary-fixed": "#ffdad3",
+              "primary-container": "#e2725b",
+              "on-secondary-container": "#576757",
+              "inverse-on-surface": "#fcefe0",
+              tertiary: "#5f5e5a",
+              surface: "#fff8f3",
+              "tertiary-fixed": "#e5e2dc",
+              "secondary-fixed": "#d6e7d4",
+              "on-tertiary": "#ffffff",
+              primary: "#9f402d",
+              "on-error": "#ffffff",
+              outline: "#89726d",
+              "surface-variant": "#eee0d2",
+              "surface-container-low": "#fff1e3",
+              error: "#ba1a1a",
+              "on-primary-container": "#5a0d02",
+              "on-secondary": "#ffffff",
+              "inverse-primary": "#ffb4a5",
+              "primary-fixed-dim": "#ffb4a5",
+              "surface-container-lowest": "#ffffff",
+              "secondary-container": "#d3e4d1",
+              "on-secondary-fixed": "#111f13",
+              secondary: "#536253",
+              "on-error-container": "#93000a",
+              "on-surface-variant": "#56423e",
+              "on-tertiary-container": "#2c2c28",
+              background: "#fff8f3",
+              "tertiary-container": "#94938e",
+              "on-secondary-fixed-variant": "#3c4a3c",
+            },
+            borderRadius: {
+              DEFAULT: "0.25rem",
+              lg: "0.5rem",
+              xl: "0.75rem",
+              full: "9999px",
+            },
+            spacing: {
+              md: "24px",
+              base: "8px",
+              gutter: "24px",
+              sm: "12px",
+              lg: "48px",
+              xl: "80px",
+              "container-max": "1280px",
+              xs: "4px",
+            },
+            fontFamily: {
+              "headline-sm": ["Playfair Display"],
+              "headline-lg-mobile": ["Playfair Display"],
+              "headline-lg": ["Playfair Display"],
+              "headline-md": ["Playfair Display"],
+              "body-lg": ['"Source Sans 3"'],
+              "label-md": ['"Source Sans 3"'],
+              "display-lg": ["Playfair Display"],
+              "body-sm": ['"Source Sans 3"'],
+              "body-md": ['"Source Sans 3"'],
+            },
+            fontSize: {
+              "headline-sm": [
+                "20px",
+                { lineHeight: "28px", fontWeight: "500" },
+              ],
+              "headline-lg-mobile": [
+                "28px",
+                { lineHeight: "36px", fontWeight: "600" },
+              ],
+              "headline-lg": [
+                "32px",
+                { lineHeight: "40px", fontWeight: "600" },
+              ],
+              "headline-md": [
+                "24px",
+                { lineHeight: "32px", fontWeight: "600" },
+              ],
+              "body-lg": ["18px", { lineHeight: "28px", fontWeight: "400" }],
+              "label-md": [
+                "14px",
+                {
+                  lineHeight: "16px",
+                  letterSpacing: "0.05em",
+                  fontWeight: "600",
+                },
+              ],
+              "display-lg": [
+                "48px",
+                {
+                  lineHeight: "56px",
+                  letterSpacing: "-0.02em",
+                  fontWeight: "700",
+                },
+              ],
+              "body-sm": ["14px", { lineHeight: "20px", fontWeight: "400" }],
+              "body-md": ["16px", { lineHeight: "24px", fontWeight: "400" }],
+            },
+          },
+        },
+      };
+    </script>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@100..900&family=Source+Sans+3:wght@100..900&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body class="bg-background font-body-md text-on-background">
+    <header
+      class="fixed top-0 w-full z-50 bg-surface/80 backdrop-blur-xl shadow-[0_1px_8px_rgba(0,0,0,0.04)]"
+    >
+      <div
+        class="h-20 max-w-container-max mx-auto px-gutter flex items-center justify-between"
+      >
+        <div class="flex items-center gap-md">
+          <img
+            alt="HomeChef Brand Logo"
+            class="h-8 w-auto object-contain"
+            src="https://lh3.googleusercontent.com/aida-public/AB6AXuCEp5F3PQluY3sI8yOE17jt35i3m56n30cQZyPEEg0mZQumqAkFNc20mYunAb5asXRKuw4p6AyFgfdfvoPzExfWq3_RD1AiU8JE6kqFz4spHgyg2vZ3TTzaTA5z1r0rHHplRj0GdosDezJVF3KNGiKbFKPLEz7wH7C-5P-tnYRpCmOM7zZKPgNEFv4t4g6P_NEpy_O8ysKsv7xhzX2hJKGSBlVHF886yevrgUlT7FKZk2GOxswsSDa0gg"
+          /><span
+            class="font-headline-md text-headline-md text-primary tracking-tight"
+            >HomeChef</span
+          >
+        </div>
+        <nav
+          class="hidden md:flex items-center gap-lg"
+          data-active-classes="text-primary font-bold"
+        >
+          <a
+            class="font-label-md text-label-md text-on-surface-variant hover:text-on-surface transition-colors"
+            data-path="discover-meals"
+            href="#"
+            >Discover Meals</a
+          ><a
+            class="font-label-md text-label-md text-on-surface-variant hover:text-on-surface transition-colors"
+            data-path="my-orders"
+            href="#"
+            >My Orders</a
+          ><a
+            aria-current="page"
+            class="transition-colors text-primary font-bold"
+            data-path="my-kitchen"
+            href="#"
+            >My Kitchen</a
+          ><a
+            class="font-label-md text-label-md text-on-surface-variant hover:text-on-surface transition-colors"
+            data-path="orders-received"
+            href="#"
+            >Orders Received</a
+          >
+        </nav>
+        <div class="flex items-center gap-sm">
+          <span
+            class="material-symbols-outlined text-on-surface-variant cursor-pointer hover:text-primary transition-colors"
+            >shopping_basket</span
+          >
+          <div class="h-8 w-[1px] bg-outline-variant mx-xs"></div>
+          <img
+            alt="Profile"
+            class="w-10 h-10 rounded-full object-cover border-2 border-surface-container-highest cursor-pointer"
+            src="https://lh3.googleusercontent.com/aida-public/AB6AXuDnMr86kBgT5PxszzeoBKBppSbaDLa-ABRKzTeMjMkbYozZQNq_UGyMQdxZKW_P1muYM95AwVqEJHEgeNp7Xbrpve3EQqKHxJNmxo_vScP3Vtea4IGZbgzyw-6KJLuX8WjRsYyjoVVQI65luYrFmuzymALmW5lhTr5sBuSr7c4rXw1v6IA6Diuq6q6ahAugAkceZ5t_sR6DJjW1DsAd0r652aTwzwBdieHgQFucMNwu2BHvFgHmWk2kow"
+          />
+        </div>
+      </div>
+    </header>
+    <main class="w-full pt-20">
+      <div
+        class="flex flex-col w-full max-w-container-max mx-auto px-gutter py-xl"
+      >
+        <div class="mb-lg">
+          <h1
+            class="font-headline-lg text-headline-lg text-on-background mb-xs"
+          >
+            Create a New Meal Post
+          </h1>
+          <p class="font-body-md text-body-md text-on-surface-variant">
+            Share your culinary creation with the neighborhood.
+          </p>
+        </div>
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-lg">
+          <!-- Main Form Area -->
+          <div class="lg:col-span-8 flex flex-col gap-lg">
+            <!-- Basic Details Card -->
+            <div
+              class="bg-surface-container rounded-xl p-md shadow-sm relative overflow-hidden"
+            >
+              <div
+                class="absolute top-0 right-0 w-32 h-32 bg-primary/5 rounded-bl-full -mr-16 -mt-16 pointer-events-none"
+              ></div>
+              <h2
+                class="font-headline-md text-headline-md text-on-surface mb-md"
+              >
+                Meal Details
+              </h2>
+              <div class="flex flex-col gap-md">
+                <div class="flex flex-col gap-xs">
+                  <label
+                    class="font-label-md text-label-md text-on-surface"
+                    for="meal-title"
+                    >Meal Title</label
+                  >
+                  <input
+                    class="bg-surface font-body-md text-body-md text-on-surface rounded-lg px-sm py-sm focus:outline-none focus:ring-2 focus:ring-primary transition-all"
+                    id="meal-title"
+                    placeholder="e.g. Nonna's Sunday Lasagna"
+                    type="text"
+                  />
+                </div>
+                <div class="flex flex-col gap-xs">
+                  <label
+                    class="font-label-md text-label-md text-on-surface"
+                    for="meal-description"
+                    >Description</label
+                  >
+                  <textarea
+                    class="bg-surface font-body-md text-body-md text-on-surface rounded-lg px-sm py-sm focus:outline-none focus:ring-2 focus:ring-primary transition-all resize-none"
+                    id="meal-description"
+                    placeholder="Describe the flavors, ingredients, and story behind this dish..."
+                    rows="4"
+                  ></textarea>
+                </div>
+                <div class="flex flex-col sm:flex-row gap-md">
+                  <div class="flex flex-col gap-xs flex-1">
+                    <label
+                      class="font-label-md text-label-md text-on-surface"
+                      for="meal-price"
+                      >Price ($)</label
+                    >
+                    <div class="relative">
+                      <span
+                        class="absolute left-sm top-1/2 -translate-y-1/2 font-body-md text-on-surface-variant"
+                        >$</span
+                      >
+                      <input
+                        class="w-full bg-surface font-body-md text-body-md text-on-surface rounded-lg pl-[28px] pr-sm py-sm focus:outline-none focus:ring-2 focus:ring-primary transition-all"
+                        id="meal-price"
+                        placeholder="15.00"
+                        type="number"
+                      />
+                    </div>
+                  </div>
+                  <div class="flex flex-col gap-xs flex-1">
+                    <label
+                      class="font-label-md text-label-md text-on-surface"
+                      for="meal-portions"
+                      >Portions Available</label
+                    >
+                    <input
+                      class="w-full bg-surface font-body-md text-body-md text-on-surface rounded-lg px-sm py-sm focus:outline-none focus:ring-2 focus:ring-primary transition-all"
+                      id="meal-portions"
+                      placeholder="e.g. 12"
+                      type="number"
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- Image Upload Card -->
+            <div class="bg-surface-container rounded-xl p-md shadow-sm">
+              <div class="flex items-center justify-between mb-md">
+                <h2 class="font-headline-md text-headline-md text-on-surface">
+                  Mouthwatering Photos
+                </h2>
+                <span
+                  class="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider"
+                  >Up to 4 images</span
+                >
+              </div>
+              <div class="grid grid-cols-2 sm:grid-cols-4 gap-sm">
+                <!-- Main Image Upload Zone -->
+                <div
+                  class="col-span-2 sm:col-span-2 aspect-[4/3] bg-surface rounded-lg flex flex-col items-center justify-center cursor-pointer hover:bg-surface-dim transition-colors group relative overflow-hidden"
+                >
+                  <input
+                    accept="image/*"
+                    class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
+                    type="file"
+                  />
+                  <span
+                    class="material-symbols-outlined text-4xl text-on-surface-variant mb-xs group-hover:-translate-y-1 transition-transform"
+                    >add_a_photo</span
+                  >
+                  <span
+                    class="font-label-md text-label-md text-on-surface-variant group-hover:text-primary transition-colors"
+                    >Main Photo</span
+                  >
+                </div>
+                <!-- Secondary Image Slots -->
+                <div
+                  class="aspect-square bg-surface rounded-lg flex flex-col items-center justify-center cursor-pointer hover:bg-surface-dim transition-colors relative"
+                >
+                  <input
+                    accept="image/*"
+                    class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
+                    type="file"
+                  />
+                  <span
+                    class="material-symbols-outlined text-on-surface-variant"
+                    >add</span
+                  >
+                </div>
+                <div
+                  class="aspect-square bg-surface rounded-lg flex flex-col items-center justify-center cursor-pointer hover:bg-surface-dim transition-colors relative"
+                >
+                  <input
+                    accept="image/*"
+                    class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
+                    type="file"
+                  />
+                  <span
+                    class="material-symbols-outlined text-on-surface-variant"
+                    >add</span
+                  >
+                </div>
+              </div>
+              <p
+                class="font-body-sm text-body-sm text-on-surface-variant mt-sm text-center"
+              >
+                Use high-quality, well-lit photos to attract more neighbors.
+              </p>
+            </div>
+          </div>
+          <!-- Sidebar / Settings Area -->
+          <div class="lg:col-span-4 flex flex-col gap-lg">
+            <!-- Status & Publishing -->
+            <div class="bg-surface-container rounded-xl p-md shadow-sm">
+              <h3
+                class="font-headline-sm text-headline-sm text-on-surface mb-md"
+              >
+                Publishing
+              </h3>
+              <div
+                class="flex items-center justify-between mb-md bg-surface p-sm rounded-lg"
+              >
+                <div class="flex flex-col">
+                  <span class="font-label-md text-label-md text-on-surface"
+                    >Available Now</span
+                  >
+                  <span
+                    class="font-body-sm text-body-sm text-on-surface-variant"
+                    >Neighbors can order immediately.</span
+                  >
+                </div>
+                <label class="relative inline-flex items-center cursor-pointer">
+                  <input
+                    checked=""
+                    class="sr-only peer"
+                    type="checkbox"
+                    value=""
+                  />
+                  <div
+                    class="w-11 h-6 bg-tertiary-fixed rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"
+                  ></div>
+                </label>
+              </div>
+              <div class="flex flex-col gap-sm">
+                <button
+                  class="w-full h-12 bg-primary text-on-primary font-label-md text-label-md rounded-lg hover:bg-primary-container hover:text-on-primary-container transition-colors shadow-md hover:shadow-lg flex items-center justify-center gap-xs"
+                >
+                  <span class="material-symbols-outlined text-sm"
+                    >restaurant</span
+                  >
+                  Post Meal
+                </button>
+                <button
+                  class="w-full h-12 bg-transparent text-primary font-label-md text-label-md rounded-lg hover:bg-surface-dim transition-colors flex items-center justify-center"
+                >
+                  Save as Draft
+                </button>
+              </div>
+            </div>
+            <!-- Dietary Tags (Decorative/Functional stub) -->
+            <div class="bg-surface-container rounded-xl p-md shadow-sm">
+              <h3
+                class="font-headline-sm text-headline-sm text-on-surface mb-md"
+              >
+                Dietary Info
+              </h3>
+              <div class="flex flex-wrap gap-xs">
+                <span
+                  class="px-sm py-xs bg-secondary/10 text-secondary font-label-md text-label-md rounded-full cursor-pointer hover:bg-secondary/20 transition-colors"
+                  >Vegetarian</span
+                >
+                <span
+                  class="px-sm py-xs bg-secondary/10 text-secondary font-label-md text-label-md rounded-full cursor-pointer hover:bg-secondary/20 transition-colors"
+                  >Vegan</span
+                >
+                <span
+                  class="px-sm py-xs bg-secondary/10 text-secondary font-label-md text-label-md rounded-full cursor-pointer hover:bg-secondary/20 transition-colors"
+                  >Gluten-Free</span
+                >
+                <span
+                  class="px-sm py-xs bg-secondary/10 text-secondary font-label-md text-label-md rounded-full cursor-pointer hover:bg-secondary/20 transition-colors"
+                  >Nut-Free</span
+                >
+                <span
+                  class="px-sm py-xs bg-surface text-on-surface-variant font-label-md text-label-md rounded-full cursor-pointer border border-dashed border-outline-variant hover:bg-surface-dim transition-colors flex items-center gap-xs"
+                >
+                  <span class="material-symbols-outlined text-xs">add</span>
+                  Custom
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+    <footer
+      class="bg-surface-container py-xl border-t border-outline-variant/20"
+    >
+      <div class="max-w-container-max mx-auto px-gutter">
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-lg mb-lg">
+          <div class="col-span-1 md:col-span-1">
+            <img
+              alt="HomeChef Logo"
+              class="h-6 w-auto mb-md grayscale opacity-80"
+              src="https://lh3.googleusercontent.com/aida-public/AB6AXuCEp5F3PQluY3sI8yOE17jt35i3m56n30cQZyPEEg0mZQumqAkFNc20mYunAb5asXRKuw4p6AyFgfdfvoPzExfWq3_RD1AiU8JE6kqFz4spHgyg2vZ3TTzaTA5z1r0rHHplRj0GdosDezJVF3KNGiKbFKPLEz7wH7C-5P-tnYRpCmOM7zZKPgNEFv4t4g6P_NEpy_O8ysKsv7xhzX2hJKGSBlVHF886yevrgUlT7FKZk2GOxswsSDa0gg"
+            />
+            <p class="text-body-sm font-body-sm text-on-surface-variant">
+              Connecting home cooks with hungry neighbors through the love of
+              shared meals.
+            </p>
+          </div>
+          <div>
+            <h4 class="font-label-md text-label-md text-on-surface mb-md">
+              Marketplace
+            </h4>
+            <ul class="space-y-xs">
+              <li class="text-body-sm font-body-sm text-on-surface-variant">
+                Browse All
+              </li>
+              <li class="text-body-sm font-body-sm text-on-surface-variant">
+                Chef Spotlight
+              </li>
+              <li class="text-body-sm font-body-sm text-on-surface-variant">
+                Gift Cards
+              </li>
+            </ul>
+          </div>
+          <div>
+            <h4 class="font-label-md text-label-md text-on-surface mb-md">
+              Support
+            </h4>
+            <ul class="space-y-xs">
+              <li class="text-body-sm font-body-sm text-on-surface-variant">
+                Help Center
+              </li>
+              <li class="text-body-sm font-body-sm text-on-surface-variant">
+                Trust & Safety
+              </li>
+              <li class="text-body-sm font-body-sm text-on-surface-variant">
+                Terms
+              </li>
+            </ul>
+          </div>
+          <div>
+            <h4 class="font-label-md text-label-md text-on-surface mb-md">
+              Kitchen
+            </h4>
+            <ul class="space-y-xs">
+              <li class="text-body-sm font-body-sm text-on-surface-variant">
+                Become a Chef
+              </li>
+              <li class="text-body-sm font-body-sm text-on-surface-variant">
+                Kitchen Tools
+              </li>
+              <li class="text-body-sm font-body-sm text-on-surface-variant">
+                Earnings
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div
+          class="text-center border-t border-outline-variant/30 pt-md text-body-sm font-body-sm text-on-surface-variant"
+        >
+          © 2024 HomeChef. All rights reserved. Made with love for the
+          community.
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

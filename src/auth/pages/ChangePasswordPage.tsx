@@ -26,8 +26,9 @@ export const ChangePasswordPage = () => {
     if (!tokenSecurity || !email) {
       navigate('/auth/login') ;
     } 
-    setToken(tokenSecurity);
-    setEmail(email);
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setToken(tokenSecurity || '');
+    setEmail(email || '');
     console.log('token-security', tokenSecurity, email);
     return;
   }, []);
