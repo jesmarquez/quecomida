@@ -1,5 +1,5 @@
 import { useEffect, useState, type ChangeEvent } from "react";
-import { useNavigate } from "react-router";
+import { useNavigate, useParams } from "react-router";
 // import { SpinButton } from "../../components/ui/SpinButton";
 import { useAuth } from "../../auth/store/AuthContext";
 import { useForm } from 'react-hook-form';
@@ -7,11 +7,11 @@ import { X } from "lucide-react";
 import type { DietaryInfo, Meal } from '../interfaces/vendor.interfaces';
 
 interface MealFormValues {
-  name: string;
+  title: string;
   description: string;
   price: number;
   status: 'Active' | 'Inactive'; // adjust to your actual status type
-  image: string;
+  images: FileList;
   dietaryTags: DietaryInfo[];
   customTags: string[];
 }
@@ -19,9 +19,12 @@ interface MealFormValues {
 const availableDietaryInfo: DietaryInfo[] = ["Gluten-free", "Nut-free", "Vegan", "Vegetarian"];
 
 export const AddMealPage = () => {
+  const { id } = useParams();
   const navigate = useNavigate();
   const { getToken} = useAuth();
   const [isChecked, setIsChecked] = useState(false);
+  const [ isNew, setIsNew ] = useState(false);
+
   const { register, 
           handleSubmit, 
           formState: { errors },
@@ -30,11 +33,10 @@ export const AddMealPage = () => {
           watch
         } = useForm<MealFormValues>({
     defaultValues: {
-      name: '',
+      title: '',
       description: '',
       price: 0,  
       status: 'Inactive',
-      image: '',
       dietaryTags : ['Vegan'],
       customTags: []
     }
@@ -46,6 +48,13 @@ export const AddMealPage = () => {
 
   useEffect(() => {
     if (!getToken()) navigate('/auth/login');
+    if (id == 'new') {
+      setIsNew(true)
+     } else {
+      setIsNew(false);
+     }
+     console.log(id);
+
   }, [] );
 
   const onChangeDietary = (e: ChangeEvent<HTMLInputElement>) => {
@@ -88,8 +97,25 @@ export const AddMealPage = () => {
       e.currentTarget.value = ''; // clear the input after adding
     }
   }
-  const onSubmitDeal = ( mealLike: Meal) => {
-    console.log('onSubmit', mealLike );
+  const onSubmit = async ( data: MealFormValues) => {
+    try {
+      const formData = new FormData();
+
+      formData.append('title', data.title);
+      formData.append('description', data.description);
+      formData.append('price', data.price.toString());
+      formData.append('dietaryTags', JSON.stringify(data.dietaryTags));
+      formData.append('customTags', JSON.stringify(data.customTags));
+
+      Array.from(data.images).forEach((file) => {
+        formData.append('images', file);
+      });
+
+
+      console.log('Meal created:', res.data);
+    } catch (err) {
+      console.error('Failed to create meal:', err);
+    }
     return;
   }
 
@@ -97,6 +123,13 @@ export const AddMealPage = () => {
     if (['e', 'E', '+', '-'].includes(e.key)) {
       e.preventDefault();
     }
+  };
+
+  const handleFileChange = ( e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = e.target.files;
+    if (!files) return;
+    console.log('file change');
+    return;
   };
 
     return (
@@ -110,7 +143,7 @@ export const AddMealPage = () => {
             Share your culinary creation with the neighborhood.
           </p>
         </div>
-        <form onSubmit={ handleSubmit(onSubmitDeal) }>
+        <form onSubmit={ handleSubmit(onSubmit) }>
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-lg">
             <div className="lg:col-span-8 flex flex-col gap-lg">
               <div className="bg-surface-container rounded-xl p-md shadow-sm relative overflow-hidden">
@@ -128,7 +161,7 @@ export const AddMealPage = () => {
                     >
                     <input
                       type="text"
-                      { ...register('name', {
+                      { ...register('title', {
                         required: true
                       }) }
                       className="bg-surface font-body-md text-body-md text-on-surface rounded-lg px-sm py-sm focus:outline-none focus:ring-2 focus:ring-primary transition-all"
@@ -136,7 +169,7 @@ export const AddMealPage = () => {
                       placeholder="e.g. Nonna's Sunday Lasagna"
                     />
                     {
-                      errors.name && (<p className="text-red-500 text-sm">Meal title is required</p>)
+                      errors.title && (<p className="text-red-500 text-sm">Meal title is required</p>)
                     }
                   </div>
                   <div className="flex flex-col gap-xs">
@@ -222,9 +255,20 @@ export const AddMealPage = () => {
                   <div
                     className="col-span-2 sm:col-span-2 aspect-[4/3] bg-surface rounded-lg flex flex-col items-center justify-center cursor-pointer hover:bg-surface-dim transition-colors group relative overflow-hidden">
                     <input
+                      id="images"
                       accept="image/*"
+                      multiple
                       className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
                       type="file"
+                          {...register('images', {
+                            required: "At least one image is required",
+                            validate: (files) => {
+                              if (!files || files.length === 0) return "At least one image is required";
+                              if (files.length > 5) return "You can upload up to 5 images";
+                              return true;
+                            },
+                          })}
+                      onChange={ handleFileChange }
                     />
                     <span
                       className="material-symbols-outlined text-4xl text-on-surface-variant mb-xs group-hover:-translate-y-1 transition-transform"
@@ -234,6 +278,9 @@ export const AddMealPage = () => {
                       className="font-label-md text-label-md text-on-surface-variant group-hover:text-primary transition-colors"
                       >Main Photo</span
                     >
+                    {errors.images && (
+                      <p className="text-red-500 text-sm mt-1">{errors.images.message}</p>
+                    )}
                   </div>
                   <div
                     className="aspect-square bg-surface rounded-lg flex flex-col items-center justify-center cursor-pointer hover:bg-surface-dim transition-colors relative">

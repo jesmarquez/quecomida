@@ -44,7 +44,7 @@ export const appRouter = createBrowserRouter([
         element: <OrdersPage/>
       },
       {
-        path: "add-meal",
+        path: "meal/:id",
         element: <AddMealPage />
       },
     ]
