@@ -6,7 +6,7 @@ export interface Meal {
   isAvailable: boolean;
   image: string;
   dietaryTags: DietaryInfo[];
-  customTasg: string[];
+  customTags: string[];
 }
 
 export type DietaryInfo = 'GLUTEN_FREE' | 'VEGAN' | 'CARNIVORE' | 'ITALIAN';

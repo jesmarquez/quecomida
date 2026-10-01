@@ -8,9 +8,10 @@ export const createUpdateMealAction = async( formData: FormData) => {
       headers: { "Content-Type" : 'multipart/form-data' }
     });
   
-    console.log('Meal created', data );
+    return data;
   } catch(error) {
     console.log('Failed to create meal:',error);
+    throw error;
   }
 
 }

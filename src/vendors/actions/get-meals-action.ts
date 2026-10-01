@@ -1,6 +1,13 @@
-import { mealApi } from "../api/vendor.api";
+import { qcApi } from "../../api/qcApi";
+import type{ Meal } from "../interfaces/meals.response.interface";
+
 
 export const getMeals = async () => {
-  const { data } = await mealApi.get(`/`);
-  return data;
+  try {
+    const { data } = await qcApi.get<Meal[]>('/api/meals');
+    return data;
+  } catch (error) {
+    console.log (error);
+    throw (error);
+  }
 }

@@ -7,6 +7,7 @@ import { X } from "lucide-react";
 import type { DietaryInfo } from '../interfaces/vendor.interfaces';
 import { createUpdateMealAction } from "../actions/create-update-meal-post.action";
 import { SpinButton } from "../../components/ui/SpinButton";
+import { toast } from "sonner";
 
 
 interface MealFormValues {
@@ -116,6 +117,7 @@ export const AddMealPage = () => {
 
       console.log('Meal created:', res);
     } catch (err) {
+      toast.error('Failed creation meal!');
       console.error('Failed to create meal:', err);
     }
     return;
