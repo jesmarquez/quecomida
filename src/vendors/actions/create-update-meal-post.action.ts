@@ -4,7 +4,7 @@ export const createUpdateMealAction = async( formData: FormData) => {
 
   try {
 
-    const { data }  = await qcApi.post('meals', formData, {
+    const { data }  = await qcApi.post('/api/meals', formData, {
       headers: { "Content-Type" : 'multipart/form-data' }
     });
   

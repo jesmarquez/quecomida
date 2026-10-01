@@ -4,40 +4,45 @@ import { useNavigate, useParams } from "react-router";
 import { useAuth } from "../../auth/store/AuthContext";
 import { useForm } from 'react-hook-form';
 import { X } from "lucide-react";
-import type { DietaryInfo, Meal } from '../interfaces/vendor.interfaces';
+import type { DietaryInfo } from '../interfaces/vendor.interfaces';
+import { createUpdateMealAction } from "../actions/create-update-meal-post.action";
+import { SpinButton } from "../../components/ui/SpinButton";
+
 
 interface MealFormValues {
   title: string;
   description: string;
   price: number;
-  status: 'Active' | 'Inactive'; // adjust to your actual status type
-  images: FileList;
+  isAvailable: boolean; // adjust to your actual status type
+  images: File[];
   dietaryTags: DietaryInfo[];
   customTags: string[];
 }
 
-const availableDietaryInfo: DietaryInfo[] = ["Gluten-free", "Nut-free", "Vegan", "Vegetarian"];
+const availableDietaryInfo: DietaryInfo[] = ["GLUTEN_FREE", "VEGAN", "CARNIVORE", "ITALIAN"];
 
 export const AddMealPage = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const { getToken} = useAuth();
-  const [isChecked, setIsChecked] = useState(false);
   const [ isNew, setIsNew ] = useState(false);
-
+  const [files, setFiles] = useState<File[]>([]);
+  
   const { register, 
           handleSubmit, 
-          formState: { errors },
+          formState: { errors, isSubmitting, isValid },
           getValues, 
           setValue,
           watch
         } = useForm<MealFormValues>({
+    mode: 'onTouched',
     defaultValues: {
       title: '',
       description: '',
       price: 0,  
-      status: 'Inactive',
-      dietaryTags : ['Vegan'],
+      isAvailable: false,
+      images: [],
+      dietaryTags : ['GLUTEN_FREE'],
       customTags: []
     }
   });
@@ -57,17 +62,11 @@ export const AddMealPage = () => {
 
   }, [] );
 
-  const onChangeDietary = (e: ChangeEvent<HTMLInputElement>) => {
-    const newValue = e.target.checked;
-    setIsChecked(newValue);
-    console.log({ newValue });
-    
-    if (newValue) {
-      setValue('status', 'Active')
-    } else {
-      setValue('status', 'Inactive')
-    }
-  }
+  useEffect(() => {
+    console.log('current error:', errors.images);
+  }, [errors.images]);
+
+  const previewUrls = files.map((file) => URL.createObjectURL(file));
 
   const onHandleAddTag = ( dietaryTagSelected: DietaryInfo ) => {
     const dietarySet = new Set<DietaryInfo>(getValues('dietaryTags'));
@@ -106,13 +105,16 @@ export const AddMealPage = () => {
       formData.append('price', data.price.toString());
       formData.append('dietaryTags', JSON.stringify(data.dietaryTags));
       formData.append('customTags', JSON.stringify(data.customTags));
+      formData.append('isAvailable', data.isAvailable.toString());
 
-      Array.from(data.images).forEach((file) => {
+      files.forEach((file) => {
         formData.append('images', file);
       });
 
+      const res = createUpdateMealAction(formData);
+      navigate('/vendor/dashboard');
 
-      console.log('Meal created:', res.data);
+      console.log('Meal created:', res);
     } catch (err) {
       console.error('Failed to create meal:', err);
     }
@@ -126,10 +128,15 @@ export const AddMealPage = () => {
   };
 
   const handleFileChange = ( e: React.ChangeEvent<HTMLInputElement>) => {
-    const files = e.target.files;
-    if (!files) return;
-    console.log('file change');
-    return;
+    const newFiles = e.target.files ? Array.from(e.target.files) : [];
+    const combined = [...files, ...newFiles].slice(0, 5); // enforce the 5-image max
+
+    setFiles(combined);
+    setValue('images', combined, { shouldValidate: true });
+    console.log('stored in form:', getValues('images'));
+    console.log(files);
+
+    e.target.value = '';
   };
 
     return (
@@ -226,20 +233,6 @@ export const AddMealPage = () => {
                         }
                       </div>
                     </div>
-                    <div className="flex flex-col gap-xs flex-1">
-                      <label
-                        className="font-label-md text-label-md text-on-surface"
-                        htmlFor="meal-portions"
-                        >Status</label
-                      >
-                    <select
-                      {...register("status")}
-                      className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
-                    >
-                      <option value="Active">Active</option>
-                      <option value="Inactive">Inactive</option>
-                    </select>
-                    </div>
                   </div>
                 </div>
               </div>
@@ -251,24 +244,28 @@ export const AddMealPage = () => {
                     >Up to 4 images</span
                   >
                 </div>
-                <div className="grid grid-cols-2 sm:grid-cols-4 gap-sm">
+                <div className="flex items-center justify-between mb-md">
                   <div
-                    className="col-span-2 sm:col-span-2 aspect-[4/3] bg-surface rounded-lg flex flex-col items-center justify-center cursor-pointer hover:bg-surface-dim transition-colors group relative overflow-hidden">
+                    className="w-24 col-span-4 sm:col-span-4 aspect-4/3 bg-surface rounded-lg flex flex-col items-center justify-center cursor-pointer hover:bg-surface-dim transition-colors group relative overflow-hidden">
                     <input
                       id="images"
                       accept="image/*"
                       multiple
                       className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
                       type="file"
-                          {...register('images', {
-                            required: "At least one image is required",
-                            validate: (files) => {
-                              if (!files || files.length === 0) return "At least one image is required";
-                              if (files.length > 5) return "You can upload up to 5 images";
-                              return true;
-                            },
-                          })}
                       onChange={ handleFileChange }
+                    />
+
+                    {/* Hidden input — this is what RHF actually tracks for validation/submission */}
+                    <input
+                      type="hidden"
+                      {...register('images', {
+                        validate: (files) => {
+                          if (!files || files.length === 0) return "At least one image is required";
+                          if (files.length > 5) return "You can upload up to 5 images";
+                          return true;
+                        },
+                      })}
                     />
                     <span
                       className="material-symbols-outlined text-4xl text-on-surface-variant mb-xs group-hover:-translate-y-1 transition-transform"
@@ -276,36 +273,26 @@ export const AddMealPage = () => {
                     >
                     <span
                       className="font-label-md text-label-md text-on-surface-variant group-hover:text-primary transition-colors"
-                      >Main Photo</span
+                      >Upload Photo</span
                     >
+                  </div>
                     {errors.images && (
                       <p className="text-red-500 text-sm mt-1">{errors.images.message}</p>
                     )}
-                  </div>
-                  <div
-                    className="aspect-square bg-surface rounded-lg flex flex-col items-center justify-center cursor-pointer hover:bg-surface-dim transition-colors relative">
-                    <input
-                      accept="image/*"
-                      className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
-                      type="file"
-                    />
-                    <span
-                      className="material-symbols-outlined text-on-surface-variant"
-                      >add</span
-                    >
-                  </div>
-                  <div className="aspect-square bg-surface rounded-lg flex flex-col items-center justify-center cursor-pointer hover:bg-surface-dim transition-colors relative"
-                  >
-                    <input
-                      accept="image/*"
-                      className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
-                      type="file"
-                    />
-                    <span
-                      className="material-symbols-outlined text-on-surface-variant"
-                      >add</span
-                    >
-                  </div>
+                </div>
+
+                <div className="grid grid-cols-4 sm:grid-cols-4 gap-4">
+                  {
+                    previewUrls.map ((url, i) => (
+                      <div key={ i } className="aspect-square bg-surface rounded-lg flex flex-col items-center justify-center cursor-pointer hover:bg-surface-dim transition-colors relative">
+                        <img
+                          src={ url }
+                          alt={`Preview ${i + 1}`}
+                          className="rounded-lg"
+                        />
+                      </div>
+                    ))
+                  }
                 </div>
                 <p
                   className="font-body-sm text-body-sm text-on-surface-variant mt-sm text-center"
@@ -336,8 +323,8 @@ export const AddMealPage = () => {
                   </div>
                   <label className="relative inline-flex items-center cursor-pointer">
                     <input
-                      checked={ isChecked }
-                      onChange={ e => onChangeDietary(e) }
+                      id="isAvailable"
+                      {...register("isAvailable")}
                       className="sr-only peer"
                       type="checkbox"
                       value=""
@@ -348,11 +335,28 @@ export const AddMealPage = () => {
                   </label>
                 </div>
                 <div className="flex flex-col gap-sm">
-                  <button className="w-full h-12 bg-primary text-on-primary font-label-md text-label-md rounded-lg hover:bg-primary-container hover:text-on-primary-container transition-colors shadow-md hover:shadow-lg flex items-center justify-center gap-xs">
+                  <button 
+                    disabled = { isSubmitting || !isValid }
+                    type="submit" 
+           className={`w-full 
+                      h-12 
+                      bg-primary 
+                      text-on-primary 
+                      font-label-md 
+                      text-label-md 
+                      rounded-lg 
+                      hover:bg-primary-container 
+                      hover:text-on-primary-container 
+                      transition-colors shadow-md 
+                      hover:shadow-lg 
+                      flex items-center justify-center gap-xs
+                      ${ isSubmitting || !isValid ? 'disabled:opacity-50' : '' }
+                      `}>
                     <span className="material-symbols-outlined text-sm">restaurant</span>
+                    { isSubmitting && <SpinButton />}
                     Post Meal
                   </button>
-                  <button className="w-full h-12 bg-transparent text-primary font-label-md text-label-md rounded-lg hover:bg-surface-dim transition-colors flex items-center justify-center">
+                  <button type="button" className="w-full h-12 bg-transparent text-primary font-label-md text-label-md rounded-lg hover:bg-surface-dim transition-colors flex items-center justify-center">
                     Save as Draft
                   </button>
                 </div>

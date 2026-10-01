@@ -3,11 +3,10 @@ export interface Meal {
   name: string;
   description: string;
   price: string;
-  status: Status;
+  isAvailable: boolean;
   image: string;
   dietaryTags: DietaryInfo[];
   customTasg: string[];
 }
 
-export type Status = 'Active' | 'Inactive';
-export type DietaryInfo = 'Vegetarian' | 'Vegan' | 'Gluten-free' | 'Nut-free';
+export type DietaryInfo = 'GLUTEN_FREE' | 'VEGAN' | 'CARNIVORE' | 'ITALIAN';
