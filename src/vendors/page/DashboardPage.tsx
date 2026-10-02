@@ -6,6 +6,7 @@ import { useAuth } from '../../auth/store/AuthContext';
 import { getVendorAction } from '../../auth/actions/getVendor.action';
 import { toast } from 'sonner';
 import type { Meal } from '../interfaces/meals.response.interface';
+import { getMealsMine } from '../actions/get-meals-mine.action';
 
 const StatCard = ({ icon, value, label, colorClass, bgClass }: StatCardProps) => (
   <div className="bg-surface-container rounded-xl p-md flex flex-col justify-between h-32 relative overflow-hidden group hover:shadow-sm transition-shadow">
@@ -142,8 +143,8 @@ export const DashboardPage = () => {
   useEffect(() => {
     async function loadMeals() {
       try {
-        const  data  = await getMeals();
-        console.log(data);
+        const  data  = await getMealsMine();
+        // console.log(data);
         setMealList(data);
       } catch(error) {
         console.log(error);
