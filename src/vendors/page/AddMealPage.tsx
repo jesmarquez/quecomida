@@ -111,9 +111,9 @@ export const AddMealPage = () => {
         formData.append('images', file);
       });
 
-      console.log(data);
-      const res = createUpdateMealAction(formData);
-      console.log(res);
+      // console.log(data);
+      const res = await createUpdateMealAction(formData);
+      // console.log(res);
       navigate('/vendor/dashboard');
 
     } catch (err) {
@@ -127,6 +127,8 @@ export const AddMealPage = () => {
     if (['e', 'E', '+', '-'].includes(e.key)) {
       e.preventDefault();
     }
+
+    console.log(e.key);
   };
 
   const handleFileChange = ( e: React.ChangeEvent<HTMLInputElement>) => {
@@ -144,6 +146,39 @@ export const AddMealPage = () => {
   const onRemoveImage = (index: number) => {
     setFiles((prev) => prev.filter((_, i) => i !== index));
   };
+
+  function sanitizePrice(raw: string): string {
+    // Keep only digits and dots
+    let value = raw.replace(/[^\d.]/g, '');
+
+    // Keep only the first dot if multiple were typed
+    const firstDot = value.indexOf('.');
+    if (firstDot !== -1) {
+      value = value.slice(0, firstDot + 1) + value.slice(firstDot + 1).replace(/\./g, '');
+    }
+
+    let [intPart, decPart] = value.split('.');
+
+    // Strip leading zeros from the integer part; fall back to a single "0"
+    intPart = intPart.replace(/^0+/, '');
+    if (intPart === '') intPart = '0';
+
+    // Limit decimals to 2 digits
+    if (decPart !== undefined) {
+      decPart = decPart.slice(0, 2);
+      return `${intPart}.${decPart}`;
+    }
+
+    return intPart;
+  }
+
+  const priceField = register('price', {
+    required: true,
+    min: 1,
+    valueAsNumber: true,
+    validate: (value) =>
+      /^\d+(\.\d{1,2})?$/.test(value.toString()) || "Only numbers are allowed",
+  });
 
   return (
   <main className="w-full pt-20">
@@ -204,40 +239,33 @@ export const AddMealPage = () => {
                     errors.description && (<p className="text-red-500 text-sm">Description is required</p>)
                   }
                 </div>
-                <div className="flex flex-col sm:flex-row gap-md">
-                  <div className="flex flex-col gap-xs flex-1">
-                    <label
-                      className="font-label-md text-label-md text-on-surface"
-                      htmlFor="meal-price"
-                      >Price ($)</label
-                    >
-                    <div className="relative">
-                      <span
-                        className="absolute left-sm top-1/2 -translate-y-1/2 font-body-md text-on-surface-variant"
-                        >$</span
-                      >
-                      <input
+                <div className="flex flex-col gap-xs">
+                    <div className="w-32 flex-none">
+                      <label
+                        className="font-label-md text-label-md text-on-surface"
+                        htmlFor="meal-price"
+                        >Price ($)
+                      </label>
+                    </div>
 
-                        { ...register('price', {
-                          required: true,
-                          min: 1,
-                          valueAsNumber: true,
-                          
-                          validate: (value) =>
-                            /^\d+(\.\d{1,2})?$/.test(value.toString()) || "Only numbers are allowed",
-                          
-                        })}
+                    <div className="w-40 flex-none">
+                      <input
+                        { ...priceField }
                         className="w-full bg-surface font-body-md text-body-md text-on-surface rounded-lg pl-[28px] pr-sm py-sm focus:outline-none focus:ring-2 focus:ring-primary transition-all"
                         id="meal-price"
                         placeholder="15.00"
-                        type="number"
+                        type="text"
+                        inputMode="decimal"
                         onKeyDown={ blockInvalidChar }
+                        onChange={(e) => {
+                          e.target.value = sanitizePrice(e.target.value);
+                          priceField.onChange(e); // forward the sanitized value to RHF
+                        }}
                         step="0.01"
                       />
                       {
                         errors.price && (<p className="text-red-500 text-sm">Price must be greater than 1</p>)
                       }
-                    </div>
                   </div>
                 </div>
               </div>

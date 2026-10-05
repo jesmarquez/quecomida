@@ -142,9 +142,10 @@ export const DashboardPage = () => {
 
   useEffect(() => {
     async function loadMeals() {
+      console.log('fetching meals...'); 
       try {
         const  data  = await getMealsMine();
-        // console.log(data);
+        console.log(data);
         setMealList(data);
       } catch(error) {
         console.log(error);
@@ -153,6 +154,7 @@ export const DashboardPage = () => {
 
     }
     loadMeals();
+  
   }, []);
 
   if (!ready) {
