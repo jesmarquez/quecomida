@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react';
-import type { StatCardProps } from '../interfaces/dashboard.interfaces'
 import { useNavigate, useSearchParams } from 'react-router';
 import { useAuth } from '../../auth/store/AuthContext';
 import { getVendorAction } from '../../auth/actions/getVendor.action';
@@ -7,17 +6,7 @@ import { toast } from 'sonner';
 import type { Meal } from '../interfaces/meals.response.interface';
 import { getMealsMine } from '../actions/get-meals-mine.action';
 import { MealItem } from '../components/MealItem';
-
-const StatCard = ({ icon, value, label, colorClass, bgClass }: StatCardProps) => (
-  <div className="bg-surface-container rounded-xl p-md flex flex-col justify-between h-32 relative overflow-hidden group hover:shadow-sm transition-shadow">
-    <div className={`absolute top-0 right-0 w-24 h-24 ${bgClass} rounded-full -mr-8 -mt-8 blur-xl transition-colors`} />
-    <span className={`material-symbols-outlined ${colorClass} mb-xs`}>{icon}</span>
-    <div>
-      <div className="font-headline-md text-headline-md text-on-surface">{value}</div>
-      <div className="font-body-sm text-body-sm text-on-surface-variant">{label}</div>
-    </div>
-  </div>
-);
+import { StatCard } from '../components/StatCard';
 
 // ---- Main Page ----
 export const DashboardPage = () => {
@@ -60,16 +49,13 @@ export const DashboardPage = () => {
 
   useEffect(() => {
     async function loadMeals() {
-      console.log('fetching meals...'); 
       try {
         const  data  = await getMealsMine();
-        console.log(data);
         setMealList(data);
       } catch(error) {
         console.log(error);
         toast.warning('Error loading meals');
       }
-
     }
     loadMeals();
   

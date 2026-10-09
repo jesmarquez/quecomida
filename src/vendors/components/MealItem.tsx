@@ -1,4 +1,5 @@
 // ---- Meal Item ----
+import { useNavigate } from 'react-router';
 import type { Meal } from '../interfaces/meals.response.interface';
 
 interface MealItemProps {
@@ -7,6 +8,7 @@ interface MealItemProps {
 }
 
 export const MealItem = ({ meal, onToggle }: MealItemProps) => {
+  const navigate = useNavigate();
   const isNew = false;
 
 
@@ -73,7 +75,9 @@ export const MealItem = ({ meal, onToggle }: MealItemProps) => {
 
       {/* Actions */}
       <div className="w-full md:w-24 flex justify-end gap-2 px-xs md:px-0">
-        <button className="h-10 w-10 rounded-full flex items-center justify-center text-on-surface-variant hover:bg-surface-container-high hover:text-primary transition-colors" title="Edit Meal">
+        <button 
+          className="h-10 w-10 rounded-full flex items-center justify-center text-on-surface-variant hover:bg-surface-container-high hover:text-primary transition-colors" title="Edit Meal"
+          onClick={ () => navigate(`/vendor/meal/${meal.id}`)}>
           <span className="material-symbols-outlined text-[20px]">edit</span>
         </button>
         <button className="h-10 w-10 rounded-full flex items-center justify-center text-on-surface-variant hover:bg-error-container hover:text-error transition-colors" title="Delete Meal">

@@ -8,7 +8,7 @@ import type { DietaryInfo } from '../interfaces/vendor.interfaces';
 import { createUpdateMealAction } from "../actions/create-update-meal-post.action";
 import { SpinButton } from "../../components/ui/SpinButton";
 import { toast } from "sonner";
-
+import { getMealById } from "../actions/get-meal-byid.action";
 
 interface MealFormValues {
   title: string;
@@ -28,60 +28,94 @@ export const AddMealPage = () => {
   const { getToken} = useAuth();
   const [ isNew, setIsNew ] = useState(false);
   const [files, setFiles] = useState<File[]>([]);
-  
+  const [existingImages, setExistingImages] = useState<{ id: string; imageUrl: string }[]>([]);
+  const [removedImageIds, setRemovedImageIds] = useState<string[]>([]);
+
   const { register, 
-          handleSubmit, 
-          formState: { errors, isSubmitting, isValid },
+          handleSubmit,
+          reset, 
+          formState: { errors, isSubmitting, isValid, isDirty },
           getValues, 
           setValue,
+          setError,
+          clearErrors,
           watch
         } = useForm<MealFormValues>({
-    mode: 'onTouched',
-    defaultValues: {
-      title: '',
-      description: '',
-      price: 0,  
-      isAvailable: false,
-      images: [],
-      dietaryTags : [],
-      customTags: []
-    }
-  });
+            mode: 'onTouched',
+            defaultValues: {
+              title: '',
+              description: '',
+              price: 0,  
+              isAvailable: false,
+              images: [],
+              dietaryTags : [],
+              customTags: []
+            }
+          });
 
   // eslint-disable-next-line react-hooks/incompatible-library
   const selectedDietery = watch('dietaryTags');
   const selectedCustomTag = watch('customTags');
 
+  const hasImageChanges = files.length > 0 || removedImageIds.length > 0;
+  const hasChanges = isDirty || hasImageChanges;
+
+  const disableSubmit = isSubmitting || !isValid || (!isNew && !hasChanges);
+
   useEffect(() => {
     if (!getToken()) navigate('/auth/login');
     if (id == 'new') {
-      setIsNew(true)
+      setIsNew(true);
+      console.log({ isNew });
      } else {
       setIsNew(false);
      }
   }, [] );
 
-  // useEffect(() => {
-  //   console.log('current error:', errors.images);
-  // }, [errors.images]);
+  useEffect(() => {
+
+    if (isNew) return;
+    
+    async function loadMeal() {
+      try {
+        const meal = await getMealById(id);
+        reset({
+          title: meal.title,
+          description: meal.description,
+          price: meal.price, // number from API -> string for the form field
+          isAvailable: meal.isAvailable,
+          images: [], // see note below on images
+          dietaryTags: meal.dietaryTags,
+          customTags: meal.customTags,
+        });
+
+        setFiles([]); // clear any leftover local file selection
+        setExistingImages(meal.images ?? []); 
+      } catch (err) {
+        console.error("Failed to load meal:", err);
+      }
+    }
+
+    loadMeal();
+  }, [isNew, id]);
 
   const previewUrls = files.map((file) => URL.createObjectURL(file));
 
   const onHandleAddTag = ( dietaryTagSelected: DietaryInfo ) => {
     const dietarySet = new Set<DietaryInfo>(getValues('dietaryTags'));
     dietarySet.add(dietaryTagSelected);
-    setValue('dietaryTags', Array.from(dietarySet));
+    setValue('dietaryTags', Array.from(dietarySet), { shouldDirty: true });
     
     return;
   }
 
   const onHandleTagRemove = (dietaryTagSelected: DietaryInfo) => {
-    setValue('dietaryTags', getValues('dietaryTags').filter(tag => tag !== dietaryTagSelected) );
+    setValue('dietaryTags', getValues('dietaryTags').filter(tag => tag !== dietaryTagSelected), { shouldDirty: true } );
     return;
   }
 
   const onHandleCustomTagRemove = (customTagSelected: string) => {
-    setValue('customTags', getValues('customTags').filter(tag => tag !== customTagSelected) );
+    setValue('customTags', getValues('customTags').filter(tag => tag !== customTagSelected), { shouldDirty: true } );
     return;
   }
 
@@ -91,8 +125,7 @@ export const AddMealPage = () => {
       const value = e.currentTarget.value;
       if (!value) return;
       const currentTags = getValues('customTags');
-      setValue('customTags', [...currentTags, value]);
-      console.log(value, currentTags);
+      setValue('customTags', [...currentTags, value], { shouldDirty: true });
       e.currentTarget.value = ''; // clear the input after adding
     }
   }
@@ -107,13 +140,15 @@ export const AddMealPage = () => {
       formData.append('customTags', JSON.stringify(data.customTags));
       formData.append('isAvailable', data.isAvailable.toString());
 
+      if (!isNew && removedImageIds.length > 0) {
+        formData.append('removedImageIds', JSON.stringify(removedImageIds));
+      }
+
       files.forEach((file) => {
         formData.append('images', file);
       });
 
-      // console.log(data);
-      const res = await createUpdateMealAction(formData);
-      // console.log(res);
+      const res = await createUpdateMealAction(formData, isNew ? undefined : id);
       navigate('/vendor/dashboard');
 
     } catch (err) {
@@ -127,8 +162,6 @@ export const AddMealPage = () => {
     if (['e', 'E', '+', '-'].includes(e.key)) {
       e.preventDefault();
     }
-
-    console.log(e.key);
   };
 
   const handleFileChange = ( e: React.ChangeEvent<HTMLInputElement>) => {
@@ -136,11 +169,9 @@ export const AddMealPage = () => {
     const combined = [...files, ...newFiles].slice(0, 5); // enforce the 5-image max
 
     setFiles(combined);
-    setValue('images', combined, { shouldValidate: true });
-    console.log('stored in form:', getValues('images'));
-    console.log(files);
-
+    setValue('images', combined, { shouldValidate: true, shouldDirty: true });
     e.target.value = '';
+    console.log('handleFileChnage');
   };
 
   const onRemoveImage = (index: number) => {
@@ -179,6 +210,32 @@ export const AddMealPage = () => {
     validate: (value) =>
       /^\d+(\.\d{1,2})?$/.test(value.toString()) || "Only numbers are allowed",
   });
+
+  // const onRemoveExistingImage = (imageId: string) => {
+  //   setExistingImages((prev) => prev.filter((img) => img.id !== imageId));
+  //   setRemovedImageIds((prev) => [...prev, imageId]);
+  //   setValue('images', files, { shouldValidate: true }); // re-trigger validation with current files
+  // };
+
+  const onRemoveExistingImage = (imageId: string) => {
+    const updatedExisting = existingImages.filter((img) => img.id !== imageId);
+    setExistingImages(updatedExisting);
+    setRemovedImageIds((prev) => [...prev, imageId]);
+    // Validate using the value we just computed, not stale state
+    removedImage = true;
+    const totalImages = files.length + updatedExisting.length;
+    if (totalImages === 0) {
+      setError('images', { type: 'manual', message: 'At least one image is required' });
+    } else {
+      clearErrors('images');
+    }
+};
+
+  const handleDraft = () => {
+    console.log({ isSubmitting, isDirty, isValid, id });
+    console.log({ files, existingImages, removedImageIds });
+    console.log({ removedImage });
+  }
 
   return (
   <main className="w-full pt-20">
@@ -270,6 +327,7 @@ export const AddMealPage = () => {
                 </div>
               </div>
             </div>
+
             <div className="bg-surface-container rounded-xl p-md shadow-sm">
               <div className="flex items-center justify-between mb-md">
                 <h2 className="font-headline-md text-headline-md text-on-surface">Mouthwatering Photos</h2>
@@ -295,8 +353,10 @@ export const AddMealPage = () => {
                     type="hidden"
                     {...register('images', {
                       validate: (files) => {
-                        if (!files || files.length === 0) return "At least one image is required";
-                        if (files.length > 5) return "You can upload up to 5 images";
+                        const totalImages = files.length + existingImages.length;
+                        console.log('validate images', totalImages);
+                        if (totalImages === 0) return "At least one image is required";
+                        if (totalImages > 5) return "You can upload up to 5 images total";
                         return true;
                       },
                     })}
@@ -316,6 +376,23 @@ export const AddMealPage = () => {
               </div>
 
               <div className="grid grid-cols-4 sm:grid-cols-4 gap-4">
+                {existingImages.map((img) => (
+                  <div key={img.id} className="aspect-square bg-surface rounded-lg relative">
+                    <img
+                      src={`${import.meta.env.VITE_QC_API_URL}${img.imageUrl}`}
+                      alt="Existing meal photo"
+                      className="rounded-lg w-full h-full object-cover"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => onRemoveExistingImage(img.id)}
+                      aria-label="Remove image"
+                      className="absolute -top-2 -right-2 bg-secondary text-white rounded-full p-0.5 hover:bg-secondary/80"
+                    >
+                      <X className="h-3 w-3" />
+                    </button>
+                  </div>
+                ))}
                 {
                   previewUrls.map ((url, i) => (
                     <div key={ i } className="aspect-square bg-surface rounded-lg flex flex-col items-center justify-center cursor-pointer hover:bg-surface-dim transition-colors relative">
@@ -378,7 +455,7 @@ export const AddMealPage = () => {
               </div>
               <div className="flex flex-col gap-sm">
                 <button 
-                  disabled = { isSubmitting || !isValid }
+                  disabled = { disableSubmit }
                   type="submit" 
           className={`w-full 
                     h-12 
@@ -392,13 +469,14 @@ export const AddMealPage = () => {
                     transition-colors shadow-md 
                     hover:shadow-lg 
                     flex items-center justify-center gap-xs
-                    ${ isSubmitting || !isValid ? 'disabled:opacity-50' : '' }
+                    ${ disableSubmit ? 'disabled:opacity-50' : '' }
                     `}>
                   <span className="material-symbols-outlined text-sm">restaurant</span>
                   { isSubmitting && <SpinButton />}
-                  Post Meal
+                  { isNew ? 'Post Meal' : 'Update Meal'}
                 </button>
-                <button type="button" className="w-full h-12 bg-transparent text-primary font-label-md text-label-md rounded-lg hover:bg-surface-dim transition-colors flex items-center justify-center">
+                <button type="button" className="w-full h-12 bg-transparent text-primary font-label-md text-label-md rounded-lg hover:bg-surface-dim transition-colors flex items-center justify-center"
+                  onClick={ handleDraft }>
                   Save as Draft
                 </button>
               </div>
