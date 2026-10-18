@@ -14,7 +14,7 @@ export const registerAction = async ( name: string, email: string, phone: string
     return { success: true, ...data};
   } catch( error) {
     console.log(error);
-    return { success: false, error};
+    throw(error);
   }
 
 }

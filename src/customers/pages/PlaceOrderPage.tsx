@@ -1,13 +1,64 @@
-import { useState } from "react";
-import { useNavigate } from "react-router";
+import { useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router";
+import { getMealById } from '../../vendors/actions/get-meal-byid.action';
+import type { Meal } from "../../vendors/interfaces/meals.response.interface";
+import { validateEmail } from '../../util/validate';
 
 export const PlaceOrderPage = () => {
     const navigate = useNavigate();
+    const { id } = useParams();
+    const [meal, setMeal] = useState<Meal>();
     const [qty, setQty] = useState(1);
+    const [email, setEmail] = useState('');
+    const [emailTouched, setEmailTouched ] = useState(false);
+    const [emailMsgError,setEmailMsgError] = useState("");
+    useEffect(() => {
+      // console.log(id );
 
-    const basePrice = 18.00;
-    const serviceFee = 2.50;
+      async function getMeal() {
+        try {
+          const mealToOrder = await getMealById(id!);
+          // console.log('mealToOrder', mealToOrder);
 
+          setMeal(mealToOrder);
+        } catch (error) {
+          console.log(error);
+        }
+      }
+
+      getMeal();
+    }, []);
+
+    // useEffect(() => {
+    //   console.log('meal', meal);
+    // }, [meal]);
+    
+
+    const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement> ) => {
+      console.log('change');
+      const value = e.target.value;
+      setEmail(value);
+      if (emailTouched) {
+        console.log('onchange');
+        setEmailMsgError(validateEmail(value));
+      }
+      if (value.length === 0) {
+        setEmailTouched(false);
+        setEmailMsgError('');
+      }
+    }
+
+    const handleEmailBlur = (e: React.ChangeEvent<HTMLInputElement>) => {
+      const {name, value } = e.target;
+      console.log('onblur');
+      // console.log(name, value);
+      if (value.length > 0) setEmailTouched(true);
+      setEmailMsgError(validateEmail(value));
+    }
+
+    const basePrice = meal?.price ?? 0;
+    const isEmailValid = emailTouched && !emailMsgError;
+    console.log({ emailMsgError} , { emailTouched }, {isEmailValid} );
     return (
         <main className="w-full pt-20">
             <div className="flex flex-col w-full relative min-h-[calc(100vh-80px)]">
@@ -24,7 +75,8 @@ export const PlaceOrderPage = () => {
                         </div>
                         <div className="bg-surface-container rounded-xl shadow-[0_8px_30px_rgba(74,66,56,0.06)] overflow-hidden flex flex-col">
                             <div className="h-64 w-full relative">
-                                <div className="absolute inset-0 bg-cover bg-center" style={{backgroundImage: "url('https://lh3.googleusercontent.com/aida-public/AB6AXuA9CrC951oka0UYQdg9L-ISF-E4zAMDifgiDzXOu3xhhIScwEOr4oJPZVdWakK8qAE_2oYukMJTl9uX-CafO56ZoH2pGV5-dTDIualy5ElpdfyktyjIloV-2eIXOOhszfAPKBnyISGYocpS59AZ2TdewScpinMR-Cbe4ecsMjthq5MQDkA5wpeTD-khvPV7MkGy6dNnXS9D2KxTRl4U2iMFb4u6OpEAUhrzN2aZOOLBYkaZTcWvwa7FOw')"}}></div>
+                                <div className="absolute inset-0 bg-cover bg-center" 
+                                    style={{backgroundImage: `url('${import.meta.env.VITE_QC_API_URL}${meal?.images?.[0]?.imageUrl}')`}}></div>
                                 <div className="absolute top-sm left-sm flex gap-xs">
                                     <span className="bg-secondary/15 text-secondary px-sm py-[2px] rounded-full font-label-md text-[12px] uppercase backdrop-blur-sm">Vegetarian</span>
                                 </div>
@@ -32,15 +84,15 @@ export const PlaceOrderPage = () => {
                             <div className="p-md flex flex-col gap-sm">
                                 <div className="flex justify-between items-start">
                                     <div>
-                                        <h3 className="font-headline-lg text-headline-lg text-on-surface">Rustic Root Vegetable Tart</h3>
+                                        <h3 className="font-headline-lg text-headline-lg text-on-surface">{meal?.title}</h3>
                                         <p className="font-body-md text-body-md text-on-surface-variant flex items-center gap-xs">
-                                            <span className="material-symbols-outlined text-[18px]">skillet</span> By Chef Elena Rostova
+                                            <span className="material-symbols-outlined text-[18px]">skillet</span> { meal?.vendor.name }
                                         </p>
                                     </div>
-                                    <span className="font-headline-md text-headline-md text-primary">${basePrice.toFixed(2)}</span>
+                                    <span className="font-headline-md text-headline-md text-primary">${ basePrice.toFixed(2)}</span>
                                 </div>
                                 <p className="font-body-md text-body-md text-on-surface-variant mt-sm border-t border-outline-variant/30 pt-sm">
-                                    A comforting medley of seasonal root vegetables, slow-roasted with thyme and garlic.
+                                    { meal?.description }
                                 </p>
                             </div>
                         </div>
@@ -57,7 +109,11 @@ export const PlaceOrderPage = () => {
                                         <label className="font-label-md text-label-md text-on-surface-variant mb-1">Contact Email</label>
                                         <div className="relative flex items-center">
                                             <span className="material-symbols-outlined absolute left-sm text-outline z-10">mail</span>
-                                            <input className="w-full bg-surface-bright font-body-md text-body-md text-on-surface pl-xl pr-sm py-[14px] rounded-lg border border-outline-variant" placeholder="your@email.com" required type="email"/>
+                                            <input className="w-full bg-surface-bright font-body-md text-body-md text-on-surface pl-xl pr-sm py-[14px] rounded-lg border border-outline-variant" placeholder="your@email.com" required type="email"
+                                                onChange={ handleEmailChange }
+                                                onBlur={ handleEmailBlur }
+                                                name="email"
+                                            />
                                         </div>
                                     </div>
                                     <div className="flex flex-col gap-xs mt-sm">
@@ -79,16 +135,22 @@ export const PlaceOrderPage = () => {
                                         </div>
                                         <div className="flex justify-between items-center text-on-surface-variant">
                                             <span>Service Fee</span>
-                                            <span>${serviceFee.toFixed(2)}</span>
+                                            <span>$0.00</span>
                                         </div>
                                     </div>
                                     <div className="mt-sm pt-sm border-t border-outline-variant/50 flex justify-between items-end mb-md">
                                         <span className="font-headline-sm">Total</span>
-                                        <span className="font-display-lg text-primary">${(basePrice * qty + serviceFee).toFixed(2)}</span>
+                                        <span className="font-display-lg text-primary">${(basePrice * qty).toFixed(2)}</span>
                                     </div>
-                                    <button onClick = {() => navigate('/order-confirmed')} className="w-full h-14 bg-primary text-on-primary font-label-md uppercase rounded-lg shadow-md hover:bg-primary-container transition-all flex items-center justify-center gap-sm" type="submit">
-                                        Confirm Order <span className="material-symbols-outlined">arrow_forward</span>
-                                    </button>
+                                    <button
+                                      className={`w-full h-14 bg-primary text-on-primary 
+                                        font-label-md uppercase rounded-lg shadow-md 
+                                        hover:bg-primary-container transition-all flex items-center 
+                                        justify-center gap-sm ${ !isEmailValid ? 'disabled:opacity-50' : ''}`}
+                                      disabled={ !isEmailValid }
+                                      onClick = {() => navigate('/order-confirmed')} type="submit">
+                                      Send email to confirm <span className="material-symbols-outlined">arrow_forward</span>
+                                  </button>
                                 </form>
                             </div>
                         </div>

@@ -2,6 +2,7 @@ import { useState, type FormEvent } from 'react';
 import { useNavigate } from 'react-router';
 import { registerAction } from '../actions/register.action';
 import { SpinButton } from '../../components/ui/SpinButton';
+import { toast } from "sonner";
 
 export const RegisterVendorPage = () => {
   const [name, setName] = useState('');
@@ -26,14 +27,12 @@ export const RegisterVendorPage = () => {
       return;
     }
     setRepasswordError('');
-    console.log(password, value);
   }
 
   const handleRepasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     setRepassword(value);
     validateRepassword(value);
-    console.log(repassword);
   }
 
   const validatePassword = (value: string) => {
@@ -124,13 +123,32 @@ export const RegisterVendorPage = () => {
 
   const handleRegister = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    // console.log('handle register', name, email, phone, address, password, repassword);
-    setIsSubmitting(true);
-    const data = await registerAction(name, email, phone,address, password);
-    // console.log(data);
-    setIsSubmitting(false);
-    setMessage( data.message);
-    setIsSubmit(true);
+    try {
+      setIsSubmitting(true);
+      const data = await registerAction(name, email, phone,address, password);
+      // console.log(data);
+      setIsSubmitting(false);
+      setMessage( data.message);
+      setIsSubmit(true);
+    } catch (error) {
+      setIsSubmitting(false);
+     
+      if (error.response) {
+        console.log('HTTP Status Code:', error.response.status); // e.g., 404, 500
+        console.log('Response Data:', error.response.data);
+        toast.error(error.response.data.error);
+      }
+          // 2. The request was made but no response was received
+      else if (error.request) {
+        console.log('No response received:', error.request);
+        toast.error('Error unknown')
+      } 
+      // 3. Something happened during setting up the request
+      else {
+        console.log('No response received:', error.request);
+        toast('Something happened during setting up the request');
+      }
+    }
   }
 
   return (

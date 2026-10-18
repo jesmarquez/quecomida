@@ -21,7 +21,7 @@ export const appRouter = createBrowserRouter([
         element: <MealsPage/>
       },
       {
-        path: "place-order",
+        path: "place-order/:id",
         element: <PlaceOrderPage/>
       },
       {
