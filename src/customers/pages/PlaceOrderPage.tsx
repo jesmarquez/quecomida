@@ -1,20 +1,29 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router";
 import { getMealById } from '../../vendors/actions/get-meal-byid.action';
 import type { Meal } from "../../vendors/interfaces/meals.response.interface";
 import { validateEmail } from '../../util/validate';
+import { createOrder } from "../actions/create-order.action";
+import { verifyOrderAction } from '../actions/verify-order.action'
+import { toast } from "sonner";
+import { SpinButton } from "../../components/ui/SpinButton";
+import { isAxiosError } from "axios";
 
 export const PlaceOrderPage = () => {
     const navigate = useNavigate();
     const { id } = useParams();
+    const inputQuantityRef = useRef(null);
     const [meal, setMeal] = useState<Meal>();
     const [qty, setQty] = useState(1);
     const [email, setEmail] = useState('');
     const [emailTouched, setEmailTouched ] = useState(false);
     const [emailMsgError,setEmailMsgError] = useState("");
-    useEffect(() => {
-      // console.log(id );
+    const [step, setStep] = useState("THIRD");
+    const [isSubmitting, setIsSubmitting] = useState(false);
+    const [orderId, setOrderId] = useState('');
+    const [code, setCode] = useState('');
 
+    useEffect(() => {
       async function getMeal() {
         try {
           const mealToOrder = await getMealById(id!);
@@ -25,14 +34,9 @@ export const PlaceOrderPage = () => {
           console.log(error);
         }
       }
-
       getMeal();
     }, []);
 
-    // useEffect(() => {
-    //   console.log('meal', meal);
-    // }, [meal]);
-    
 
     const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement> ) => {
       console.log('change');
@@ -56,9 +60,51 @@ export const PlaceOrderPage = () => {
       setEmailMsgError(validateEmail(value));
     }
 
+    const onSubmit = async (e: React.SubmitEvent<HTMLFormElement>) => {
+      e.preventDefault();
+      const quantity = inputQuantityRef.current.value;
+      setIsSubmitting(true);
+      console.log('send email', email, id, quantity);
+      try {
+        const orderCreated = await createOrder(email, id!, quantity)
+        setOrderId(orderCreated.orderId);
+        console.log(orderCreated);
+        setIsSubmitting(true);
+        setStep('SECOND');
+      } catch (error) {
+        console.log(error);
+        toast.error('Error creating order!');
+      }
+    }
+
+    const onSubmitSecond = async (e: React.SubmitEvent<HTMLFormElement>) => {
+      e.preventDefault();
+
+      if (code.length != 6 ) return;
+
+      setIsSubmitting(true);
+      console.log('confirm order');
+      try {
+        setIsSubmitting(true);
+        console.log({orderId}, {code});
+        await verifyOrderAction(orderId, code);
+        setIsSubmitting(false);
+        setStep('THIRD');
+
+      } catch (error) {
+        const message = isAxiosError(error)
+          ? error.response?.data?.error ?? 'Could not verify the order'
+          : 'Could not verify the order';
+        toast.error(message);
+      } finally {
+        setIsSubmitting(false);
+      }
+    }
+
+
     const basePrice = meal?.price ?? 0;
     const isEmailValid = emailTouched && !emailMsgError;
-    console.log({ emailMsgError} , { emailTouched }, {isEmailValid} );
+    // console.log({ emailMsgError} , { emailTouched }, {isEmailValid} );
     return (
         <main className="w-full pt-20">
             <div className="flex flex-col w-full relative min-h-[calc(100vh-80px)]">
@@ -97,6 +143,8 @@ export const PlaceOrderPage = () => {
                             </div>
                         </div>
                     </div>
+                    {
+                      step === 'FIRST' &&
                     <div className="w-full md:w-[420px] lg:w-[480px] shrink-0">
                         <div className="bg-surface sticky top-[104px] rounded-xl shadow-[0_12px_40px_rgba(74,66,56,0.08)] overflow-hidden">
                             <div className="bg-surface-container-high px-md py-sm flex justify-between items-center border-b border-outline-variant/20">
@@ -104,7 +152,7 @@ export const PlaceOrderPage = () => {
                                 <span className="font-label-md text-label-md text-primary tracking-wide">SECURE CHECKOUT</span>
                             </div>
                             <div className="p-md">
-                                <form className="flex flex-col gap-md" onSubmit={(e) => {e.preventDefault(); navigate('/order-confirmation');}}>
+                                <form className="flex flex-col gap-md" onSubmit={ (e) => onSubmit(e)}>
                                     <div className="flex flex-col gap-xs relative">
                                         <label className="font-label-md text-label-md text-on-surface-variant mb-1">Contact Email</label>
                                         <div className="relative flex items-center">
@@ -122,7 +170,7 @@ export const PlaceOrderPage = () => {
                                             <button onClick={() => setQty(Math.max(1, qty - 1))} className="w-12 h-12 rounded-lg bg-surface-container flex items-center justify-center" type="button">
                                                 <span className="material-symbols-outlined">remove</span>
                                             </button>
-                                            <input className="flex-1 h-12 bg-surface-bright font-headline-md text-center text-on-surface border border-outline-variant rounded-lg" value={qty} readOnly/>
+                                            <input ref={ inputQuantityRef } className="flex-1 h-12 bg-surface-bright font-headline-md text-center text-on-surface border border-outline-variant rounded-lg" value={qty} readOnly/>
                                             <button onClick={() => setQty(Math.min(10, qty + 1))} className="w-12 h-12 rounded-lg bg-surface-container flex items-center justify-center" type="button">
                                                 <span className="material-symbols-outlined">add</span>
                                             </button>
@@ -143,18 +191,91 @@ export const PlaceOrderPage = () => {
                                         <span className="font-display-lg text-primary">${(basePrice * qty).toFixed(2)}</span>
                                     </div>
                                     <button
-                                      className={`w-full h-14 bg-primary text-on-primary 
-                                        font-label-md uppercase rounded-lg shadow-md 
-                                        hover:bg-primary-container transition-all flex items-center 
+                                      type="submit"
+                                      className={`w-full h-14 
+                                        bg-primary 
+                                        text-on-primary 
+                                        font-label-md 
+                                        uppercase 
+                                        rounded-lg 
+                                        shadow-md 
+                                        hover:bg-primary-container 
+                                        transition-all 
+                                        flex items-center 
                                         justify-center gap-sm ${ !isEmailValid ? 'disabled:opacity-50' : ''}`}
                                       disabled={ !isEmailValid }
-                                      onClick = {() => navigate('/order-confirmed')} type="submit">
+                                      >
+                                      { isSubmitting && <SpinButton />}
                                       Send email to confirm <span className="material-symbols-outlined">arrow_forward</span>
                                   </button>
                                 </form>
                             </div>
                         </div>
                     </div>
+                    }
+                    {
+                      step === 'SECOND' &&
+                    <div className="w-full md:w-[420px] lg:w-[480px] shrink-0">
+                        <div className="bg-surface sticky top-[104px] rounded-xl shadow-[0_12px_40px_rgba(74,66,56,0.08)] overflow-hidden">
+                            <div className="bg-surface-container-high px-md py-sm flex justify-between items-center border-b border-outline-variant/20">
+                                <h2 className="font-headline-sm text-headline-sm text-on-surface">Confirmation</h2>
+                                <span className="font-label-md text-label-md text-primary tracking-wide">SECURE CHECKOUT</span>
+                            </div>
+                            <div className="p-md">
+                                <form className="flex flex-col gap-md" onSubmit={ (e) => onSubmitSecond(e)}>
+                                    <div className="flex flex-col gap-xs relative">
+                                        <label className="font-label-md text-label-md text-on-surface-variant mb-1">Enter the 6-digit code we emailed you</label>
+                                        <div className="relative flex items-center">
+                                            <span className="material-symbols-outlined absolute left-sm text-outline z-10">confirmation_number</span>
+                                            <input className="w-full text-center
+                                              bg-surface-bright font-body-md text-body-lg text-on-surface 
+                                              pl-xl pr-sm py-[14px] 
+                                              rounded-lg border border-outline-variant" required
+                                                name="code"
+                                                maxLength={ 6 }
+                                                type="text"
+                                                inputMode="numeric"
+                                                autoComplete="one-time-code"
+                                                pattern="[0-9]*" 
+                                                title="Only numbers are allowed"
+                                                onChange={(e) => setCode(e.target.value.replace(/\D/g, ''))}
+                                                value={ code }
+                                            />
+                                        </div>
+                                    </div>
+                                    <button
+                                      type="submit"
+                                      className={`w-full h-14 bg-primary text-on-primary 
+                                        font-label-md uppercase rounded-lg shadow-md 
+                                        hover:bg-primary-container transition-all flex items-center 
+                                        justify-center gap-sm ${ 'disabled:opacity-50' }`}
+                                      disabled={ code.length != 6 }
+                                      >
+
+                                      Send code to confirm <span className="material-symbols-outlined">arrow_forward</span>
+                                  </button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    }
+                    {
+                      step == 'THIRD' && 
+                                          <div className="w-full md:w-[420px] lg:w-[480px] shrink-0">
+                        <div className="bg-surface sticky top-[104px] rounded-xl shadow-[0_12px_40px_rgba(74,66,56,0.08)] overflow-hidden">
+                            <div className="bg-surface-container-high px-md py-sm flex justify-between items-center border-b border-outline-variant/20">
+                                <h2 className="font-headline-sm text-headline-sm text-on-surface">ORDER CONFIRMED</h2>
+                            </div>
+                            <div className="p-md">
+                              <p className="font-body-lg text-body-lg text-on-surface-variant max-w-[90%]">You order has been confirmed...
+                              <span className="material-symbols-outlined absolute text-outline z-10">check_small</span>
+                              </p>
+
+                            </div>
+                        </div>
+                    </div>
+      
+                    }
                 </div>
             </div>
         </main>
