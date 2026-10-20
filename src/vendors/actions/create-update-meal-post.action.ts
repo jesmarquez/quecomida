@@ -1,4 +1,5 @@
-import { qcApi } from "../../api/qcApi"
+import { qcApi } from "../../api/qcApi";
+import axios from "axios";
 
 export const createUpdateMealAction = async( formData: FormData, id?: string) => {
 
@@ -15,8 +16,21 @@ export const createUpdateMealAction = async( formData: FormData, id?: string) =>
 
     return data;
   } catch(error) {
-    console.log('Failed to create meal:',error);
-    throw error;
-  }
+      if (axios.isAxiosError(error)) {
+        if (error.response) {
+          const backendMessage = error.response.data?.message || error.response.data;
+          console.log(`Error ${error.response.status}: ${backendMessage}`);
+          
+        } else if (error.request) {
+          console.log('Network Error: No response received from the server.');
+          
+        } else {
+          console.log(`Request Error: ${error.message}`);
+        }
 
+      } else {
+        console.log(`An unexpected error occurred: ${String(error)}`);
+      }
+      throw(error);
+    }
 }
