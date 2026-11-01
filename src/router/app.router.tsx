@@ -10,7 +10,7 @@ import { OrderConfirmedPage } from '../customers/pages/OrderConfirmedPage';
 import { RegisterVendorPage } from '../auth/pages/RegisterVendorPage';
 import { ForgetPasswordPage } from '../auth/pages/ForgetPasswordPage';
 import { ChangePasswordPage } from '../auth/pages/ChangePasswordPage';
-import { OrderProgress } from '../vendors/page/OrderProgress';
+import { OrderProgressPage } from '../vendors/page/OrderProgressPage';
 
 export const appRouter = createBrowserRouter([
   {
@@ -49,8 +49,8 @@ export const appRouter = createBrowserRouter([
         element: <AddMealPage />
       },
       {
-        path: "order-progress",
-        element: <OrderProgress />
+        path: "order-progress/:id",
+        element: <OrderProgressPage />
       }
     ]
   },

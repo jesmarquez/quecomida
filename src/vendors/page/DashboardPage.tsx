@@ -12,7 +12,7 @@ import { StatCard } from '../components/StatCard';
 export const DashboardPage = () => {
   const [mealList, setMealList] = useState<Meal[]>([]);
   const navigate = useNavigate();
-  const { saveToken, setAuthentication, getToken } = useAuth();
+  const { saveToken, setAuthentication, getToken, logout } = useAuth();
   const [searchParams, setSearchParams] = useSearchParams();
   const [ready, setReady] = useState(false);
 
@@ -39,8 +39,9 @@ export const DashboardPage = () => {
         // Token was invalid/expired — your axios interceptor already clears
         // it and redirects to /login on a 401, so this catch is mostly a
         // safety net for other errors.
+        if (error.response.status === 401 ) logout();
         console.log(error);
-        navigate("/auth/login", { replace: true });
+        // navigate("/auth/login", { replace: true });
       }
 
     }

@@ -3,7 +3,7 @@ export interface Order {
   mealPostId:       string;
   customerEmail:    string;
   quantity:         number;
-  status:           string;
+  status:           Status;
   verificationCode: string;
   isVerified:       boolean;
   createdAt:        Date;
@@ -15,4 +15,12 @@ export interface MealPost {
   id:          string;
   title: string;
   price:       number;
+  images: Images[];
 }
+
+export interface Images {
+  id: string;
+  imageUrl: string
+}
+
+export type Status = "ORDERED" | "READY_FOR_PICKUP" | "HANDED_OVER";

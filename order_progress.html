@@ -309,18 +309,24 @@
                 <div class="relative z-10 flex flex-col gap-lg">
                   <div class="flex items-center justify-between relative">
                     <div
-                      class="absolute left-0 top-1/2 -translate-y-1/2 w-full h-1 bg-surface-container-highest rounded-full"
+                      class="absolute left-0 top-1/2 -translate-y-1/2 w-full h-1 
+                          bg-surface-container-highest rounded-full"
                     ></div>
                     <div
-                      class="absolute left-0 top-1/2 -translate-y-1/2 h-1 bg-primary rounded-full transition-all duration-700 ease-in-out w-[10%]"
+                      class="absolute left-0 top-1/2 -translate-y-1/2 h-1 
+                      bg-primary rounded-full transition-all duration-700 ease-in-out w-[10%]"
                       id="progress-track"
                     ></div>
                     <button
-                      class="status-btn relative flex flex-col items-center gap-sm group active cursor-pointer w-32 -ml-16"
+                      class="status-btn 
+                        relative flex flex-col items-center gap-sm group active cursor-pointer w-32 -ml-16"
                       data-status="ordered"
                     >
                       <div
-                        class="w-8 h-8 rounded-full bg-primary flex items-center justify-center shadow-md transition-all duration-300 ring-4 ring-surface-bright status-indicator z-10"
+                        class="w-8 h-8 rounded-full bg-primary 
+                          flex items-center justify-center shadow-md 
+                          transition-all duration-300 ring-4 ring-surface-bright 
+                          status-indicator z-10"
                       >
                         <span
                           class="material-symbols-outlined text-on-primary text-[16px]"
@@ -328,7 +334,8 @@
                         >
                       </div>
                       <span
-                        class="font-label-md text-label-md text-primary status-label transition-colors"
+                        class="font-label-md text-label-md text-primary status-label 
+                        transition-colors"
                         >Ordered</span
                       >
                     </button>
@@ -337,10 +344,14 @@
                       data-status="ready"
                     >
                       <div
-                        class="w-8 h-8 rounded-full bg-surface-container-highest group-hover:bg-primary-container/40 flex items-center justify-center transition-all duration-300 ring-4 ring-surface-bright status-indicator z-10"
+                        class="w-8 h-8 rounded-full bg-surface-container-highest 
+                        group-hover:bg-primary-container/40 flex items-center 
+                        justify-center transition-all duration-300 ring-4 ring-surface-bright 
+                        status-indicator z-10"
                       >
                         <span
-                          class="material-symbols-outlined text-on-surface-variant group-hover:text-primary text-[16px]"
+                          class="material-symbols-outlined text-on-surface-variant 
+                          group-hover:text-primary text-[16px]"
                           >outdoor_grill</span
                         >
                       </div>
@@ -354,7 +365,9 @@
                       data-status="handed_over"
                     >
                       <div
-                        class="w-8 h-8 rounded-full bg-surface-container-highest group-hover:bg-primary-container/40 flex items-center justify-center transition-all duration-300 ring-4 ring-surface-bright status-indicator z-10"
+                        class="w-8 h-8 rounded-full bg-surface-container-highest
+                         group-hover:bg-primary-container/40 flex items-center 
+                         justify-center transition-all duration-300 ring-4 ring-surface-bright status-indicator z-10"
                       >
                         <span
                           class="material-symbols-outlined text-on-surface-variant group-hover:text-primary text-[16px]"
@@ -555,8 +568,9 @@
 
           statusBtns.forEach((btn, index) => {
             btn.addEventListener("click", () => {
+              console.log('addeventlistener');
               const status = btn.getAttribute("data-status");
-
+              console.log(statusContent[status]);
               // Update track
               track.style.width = statusContent[status].percent;
 
