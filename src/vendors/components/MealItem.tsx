@@ -5,9 +5,10 @@ import type { Meal } from '../interfaces/meals.response.interface';
 interface MealItemProps {
   meal: Meal;
   onToggle: (id: string) => void;
+  onDelete: (id: string) => void;
 }
 
-export const MealItem = ({ meal, onToggle }: MealItemProps) => {
+export const MealItem = ({ meal, onToggle, onDelete }: MealItemProps) => {
   const navigate = useNavigate();
   const isNew = false;
 
@@ -42,10 +43,10 @@ export const MealItem = ({ meal, onToggle }: MealItemProps) => {
             <span className="bg-primary-container text-on-primary-container text-[10px] font-label-md px-2 py-0.5 rounded-sm uppercase tracking-wider md:hidden">New</span>
           )}
         </div>
-        <p className="font-body-sm text-body-sm text-on-surface-variant line-clamp-2 w-full max-w-lg mb-sm md:mb-0">{meal.description}</p>
+        <p className="font-body-sm text-body-sm text-on-surface-variant line-clamp-2 w-full">{meal.description}</p>
         <div className="flex gap-2 mt-auto md:hidden">
           {meal.dietaryTags.map((tag) => (
-            <span key={tag} className="font-label-md text-[10px] text-tertiary bg-tertiary-container/20 px-2 py-1 rounded-full">{tag}</span>
+            <span key={tag} className="font-label-md text-[10px] text-tertiary bg-tertiary-container/20 px-2 py-1 rounded-full">{ tag }</span>
           ))}
         </div>
       </div>
@@ -80,7 +81,8 @@ export const MealItem = ({ meal, onToggle }: MealItemProps) => {
           onClick={ () => navigate(`/vendor/meal/${meal.id}`)}>
           <span className="material-symbols-outlined text-[20px]">edit</span>
         </button>
-        <button className="h-10 w-10 rounded-full flex items-center justify-center text-on-surface-variant hover:bg-error-container hover:text-error transition-colors" title="Delete Meal">
+        <button className="h-10 w-10 rounded-full flex items-center justify-center text-on-surface-variant hover:bg-error-container hover:text-error transition-colors" title="Delete Meal"
+          onClick={ ()=> onDelete(meal.id) }>
           <span className="material-symbols-outlined text-[20px]">delete</span>
         </button>
       </div>

@@ -31,6 +31,8 @@ export const ListOrders = () => {
       }
 
       return() => {
+        console.log('return effect');
+        
         cancelled = true;
       }
 

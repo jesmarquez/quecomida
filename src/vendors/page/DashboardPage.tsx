@@ -7,6 +7,10 @@ import type { Meal } from '../interfaces/meals.response.interface';
 import { getMealsMine } from '../actions/get-meals-mine.action';
 import { MealItem } from '../components/MealItem';
 import { StatCard } from '../components/StatCard';
+import type { MealAvailability } from '../interfaces/availability_meal.interface';
+import { updateMealAvailable } from '../actions/update-available-meal.action';
+import { ConfirmDialog } from '../../components/ui/ConfirmDialog';
+import { deleteMeal } from '../actions/delete-meal.action';
 
 // ---- Main Page ----
 export const DashboardPage = () => {
@@ -15,7 +19,9 @@ export const DashboardPage = () => {
   const { saveToken, setAuthentication, getToken, logout } = useAuth();
   const [searchParams, setSearchParams] = useSearchParams();
   const [ready, setReady] = useState(false);
-
+  const [mealToDelete, setMealToDelete] = useState<Meal | null>(null);
+  const [isDeleting, setIsDeleting] = useState(false);
+  const [messageErrorConfirmDelete, setMessageErrorConfirmDelete] = useState<string | null>(null);
   useEffect(() => {
     async function initDashboard () {
       const tokenFromUrl = searchParams.get("token");
@@ -73,17 +79,50 @@ export const DashboardPage = () => {
     );
   }
 
-  const handleToggle = (id: string) => {
-    console.log(id);
+  const handleToggle = async (id: string) => {
+    try {
+      const mealToUpdating = mealList.find((meal) => meal.id === id);
+      const mealUpdated: MealAvailability = await updateMealAvailable(id, !mealToUpdating?.isAvailable);
+
     setMealList((prev) =>
-      prev.map((meal) =>
-        meal.id === id
-          ? { ...meal, isAvailable: meal.isAvailable ? false : true }
-          : meal
-      )
-    );
-    console.log(mealList);
+        prev.map((meal) => 
+          meal.id === id
+            ? { ...meal, isAvailable: meal.isAvailable ? false : true }
+            : meal
+        )
+      );
+
+    } catch (error) {
+      console.log(error);
+      console.log(`Error updating availalibity meal id ${ id }`);
+    }
   };
+
+  const onConfirmDelete = async () => {
+    console.log(`confirm delete meal id: ${ mealToDelete?.id }`);
+
+    try {
+      const data = await deleteMeal(mealToDelete.id);
+      console.log(data);
+      setMealToDelete(null);
+      setMessageErrorConfirmDelete(null);
+      toast.info('Deleted meal!');
+    } catch (error) {
+      console.log('Failed delete meal', error);
+      setMessageErrorConfirmDelete(error.message! || 'Failed delete meal');
+    }
+
+  }
+
+  const onDeleteMeal = (id: string) => {
+    const mealFound = mealList.find((meal) => meal.id === id );
+    setMealToDelete(mealFound || null);
+  }
+
+  const onCancelDelete = () => {
+    setMealToDelete(null);
+    setMessageErrorConfirmDelete(null);
+  }
 
   return (
     <>
@@ -110,10 +149,10 @@ export const DashboardPage = () => {
 
           {/* Stats */}
           <div className="grid grid-cols-1 md:grid-cols-4 gap-md mb-xl">
-            <StatCard icon="restaurant_menu" value="12" label="Active Listings" colorClass="text-primary" bgClass="bg-primary/5 group-hover:bg-primary/10" />
-            <StatCard icon="payments" value="$450" label="Sales This Week" colorClass="text-secondary" bgClass="bg-secondary/5 group-hover:bg-secondary/10" />
-            <StatCard icon="visibility" value="842" label="Menu Views" colorClass="text-tertiary" bgClass="bg-tertiary/5 group-hover:bg-tertiary/10" />
-            <StatCard icon="star" value="4.9" label="Average Rating" colorClass="text-primary-container" bgClass="bg-primary-container/5 group-hover:bg-primary-container/10" />
+            <StatCard icon="restaurant_menu" value="12" label="Active Listings" className="text-primary" bgclassName="bg-primary/5 group-hover:bg-primary/10" />
+            <StatCard icon="payments" value="$450" label="Sales This Week" className="text-secondary" bgclassName="bg-secondary/5 group-hover:bg-secondary/10" />
+            <StatCard icon="visibility" value="842" label="Menu Views" className="text-tertiary" bgclassName="bg-tertiary/5 group-hover:bg-tertiary/10" />
+            <StatCard icon="star" value="4.9" label="Average Rating" className="text-primary-container" bgclassName="bg-primary-container/5 group-hover:bg-primary-container/10" />
           </div>
 
           {/* Meal List */}
@@ -126,8 +165,10 @@ export const DashboardPage = () => {
               <div className="w-24 font-label-md text-label-md text-on-surface-variant uppercase tracking-wider text-right">Actions</div>
             </div>
             {mealList.map((meal) => (
-              <MealItem key={meal.id} meal={meal} onToggle={handleToggle} />
+              <MealItem key={meal.id} meal={meal} onToggle={handleToggle} onDelete={ onDeleteMeal }/>
             ))}
+
+
           </div>
 
           {/* Load More */}
@@ -137,7 +178,12 @@ export const DashboardPage = () => {
             </button>
           </div>
         </div>
+
+      {
+        mealToDelete && <ConfirmDialog open={ true } title='Delete meal' message={`Are you sure you want to delete ${ mealToDelete.title }? This action cannot be undone and will permanently remove this meal from your kitchen and the neighborhood marketplace`} confirmLabel='Delete' isLoading={ false } onConfirm={ onConfirmDelete } onCancel= { onCancelDelete } messageError={ messageErrorConfirmDelete }/>
+      }
       </main>
-      </>
+
+    </>
   );
 };
