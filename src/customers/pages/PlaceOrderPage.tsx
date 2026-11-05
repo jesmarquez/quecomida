@@ -18,7 +18,7 @@ export const PlaceOrderPage = () => {
     const [email, setEmail] = useState('');
     const [emailTouched, setEmailTouched ] = useState(false);
     const [emailMsgError,setEmailMsgError] = useState("");
-    const [step, setStep] = useState("THIRD");
+    const [step, setStep] = useState("FIRST");
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [orderId, setOrderId] = useState('');
     const [code, setCode] = useState('');

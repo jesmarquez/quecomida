@@ -99,11 +99,11 @@ export const DashboardPage = () => {
   };
 
   const onConfirmDelete = async () => {
-    console.log(`confirm delete meal id: ${ mealToDelete?.id }`);
 
     try {
       const data = await deleteMeal(mealToDelete.id);
-      console.log(data);
+      setMealList(mealList.filter( m => m.id !== mealToDelete.id ));
+
       setMealToDelete(null);
       setMessageErrorConfirmDelete(null);
       toast.info('Deleted meal!');
@@ -111,7 +111,6 @@ export const DashboardPage = () => {
       console.log('Failed delete meal', error);
       setMessageErrorConfirmDelete(error.message! || 'Failed delete meal');
     }
-
   }
 
   const onDeleteMeal = (id: string) => {
