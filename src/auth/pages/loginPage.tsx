@@ -3,7 +3,7 @@ import { useNavigate, Link } from "react-router";
 import { loginAction } from "../actions/loginAction";
 import { toast } from "sonner";
 import { useAuth } from '../store/AuthContext';
-import { validateEmail } from "../../util/validate";
+import { validateAllInOne } from "../../util/validateAllinone";
 
 export const LoginPage = () => {
   const navigate = useNavigate();
@@ -11,6 +11,19 @@ export const LoginPage = () => {
   const [email, setEmail] = useState('');
   const [emailError, setEmailError] = useState('');
   const [password, setPassword] = useState('');
+  const [formData, setFormData] = useState({
+    email: '',
+    password: ''
+  });
+  const [ touched, setTouched ] = useState({
+    email: false,
+    password: false
+  });
+
+  const [ errors, setErrors ] = useState({
+    email: '',
+    password: ''
+  });
 
     useEffect(() => {
         if (isAuthenticated()) navigate('/vendor/dashboard');
@@ -19,21 +32,40 @@ export const LoginPage = () => {
     }, []);
   
 
-  const handleEmailChange = (e : React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
-    setEmail(value);
-    const message = validateEmail(email);
-    setEmailError(message);
-    return;
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value}));
+
+    if (touched[name]) {
+      setErrors((prev) => ({ ...prev, [name]: validateAllInOne(name, value) }));
+    }
   }
+
+  const handleBlur = (e: React.FocusEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+
+    setTouched((prev) => ({ ...prev, [name]: true }));
+    setErrors((prev) => ({...prev, [name] : validateAllInOne(name, value)}))
+  }
+  // function handleEmailChange(e: React.ChangeEvent<HTMLInputElement>) {
+  //   console.log(e.target);
+  //   const { name, value } = e.target;
+  //   console.log(name, value);
+
+  //   // const value = e.target.value;
+  //   setEmail(value);
+  //   const message = validateEmail(email);
+  //   setEmailError(message);
+  //   return;
+  // }
 
   const isInvalidEmail = email.length > 0 && !!emailError;
 
-  const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
-    setPassword(value);
-    return;
-  }
+  // const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  //   const value = e.target.value;
+  //   setPassword(value);
+  //   return;
+  // }
 
   const isInvalidPassword = password.length > 0 ? false : true;
 
@@ -61,7 +93,10 @@ export const LoginPage = () => {
     // navigate('dashboard'); 
     return;
   }
-  
+//   console.log(errors, touched);
+
+  const isValid = touched.email && errors.email === '' && formData.password.length > 1;
+  console.log({ isValid });
   return (
     <div className="flex flex-col w-full h-full items-center justify-center min-h-screen py-lg bg-background">
         <div className="w-full max-w-[24rem] flex flex-col items-center">
@@ -79,15 +114,16 @@ export const LoginPage = () => {
                     <div className="relative">
                         <span className="material-symbols-outlined absolute left-sm top-1/2 -translate-y-1/2 text-on-surface-variant/50">mail</span>
                         <input
-                            onChange={ handleEmailChange }
+                            onChange={ handleChange }
+                            onBlur={ handleBlur }
                             className="w-full bg-tertiary-fixed text-on-surface font-body-md text-body-md rounded-lg py-sm pl-xl pr-sm focus:outline-none focus:ring-1 focus:ring-primary transition-shadow" id="email" placeholder="you@example.com" required type="email" name="email"/>
                     </div>
-                    { isInvalidEmail && (
+                    { touched.email && errors.email && (
                     <p
                     className="flex items-center gap-1 text-error text-body-sm font-body-sm mt-1"
                     >
                     <span className="material-symbols-outlined text-base">error</span>
-                        { emailError }
+                        { errors.email }
                     </p>)
                     }
 
@@ -97,16 +133,26 @@ export const LoginPage = () => {
                     <div className="relative">
                         <span className="material-symbols-outlined absolute left-sm top-1/2 -translate-y-1/2 text-on-surface-variant/50">lock</span>
                         <input 
-                            onChange={ handlePasswordChange }
+                            onChange={ handleChange }
+                            onBlur={ handleBlur }
                             className="w-full bg-tertiary-fixed text-on-surface font-body-md text-body-md rounded-lg py-sm pl-xl pr-sm focus:outline-none focus:ring-1 focus:ring-primary transition-shadow" id="password" placeholder="••••••••" required type="password" name="password"/>
                     </div>
+                    { touched.password && errors.password && (
+                    <p
+                    className="flex items-center gap-1 text-error text-body-sm font-body-sm mt-1"
+                    >
+                    <span className="material-symbols-outlined text-base">error</span>
+                        { errors.password }
+                    </p>)
+                    }
+
                 </div>
                 <div className="flex justify-end mt-xs">
                     <Link to="/auth/forget-password" className="font-body-sm text-body-sm text-primary hover:text-primary-container transition-colors">Forgot Password?</Link>
                 </div>
                 <button type="submit" 
-                    disabled={ !isValidForm }
-                    className="mt-md 
+                    disabled={ !isValid }
+                    className={`mt-md 
                         w-full 
                         bg-primary 
                         text-on-primary 
@@ -116,7 +162,8 @@ export const LoginPage = () => {
                         tracking-widest 
                         py-sm rounded-lg 
                         hover:bg-on-primary-fixed-variant 
-                        transition-colors shadow-sm min-h-[48px]">
+                        transition-colors shadow-sm min-h-[48px]
+                        ${ !isValid ? 'disabled:opacity-50' : '' }`}>
                     Sign In
                 </button>
             </form>
