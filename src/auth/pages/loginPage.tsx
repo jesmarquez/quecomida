@@ -5,17 +5,19 @@ import { toast } from "sonner";
 import { useAuth } from '../store/AuthContext';
 import { validateAllInOne } from "../../util/validateAllinone";
 
+type TouchedFields = { 
+  email: boolean; 
+  password: boolean 
+};
+
 export const LoginPage = () => {
   const navigate = useNavigate();
   const { setAuthentication, saveToken, isAuthenticated } = useAuth();
-  const [email, setEmail] = useState('');
-  const [emailError, setEmailError] = useState('');
-  const [password, setPassword] = useState('');
   const [formData, setFormData] = useState({
     email: '',
     password: ''
   });
-  const [ touched, setTouched ] = useState({
+  const [ touched, setTouched ] = useState<TouchedFields>({
     email: false,
     password: false
   });
@@ -33,7 +35,10 @@ export const LoginPage = () => {
   
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
+    const name = e.target.name as keyof TouchedFields;
+    const value = e.target.value as keyof TouchedFields;
+    
+    
     setFormData((prev) => ({ ...prev, [name]: value}));
 
     if (touched[name]) {
@@ -47,29 +52,7 @@ export const LoginPage = () => {
     setTouched((prev) => ({ ...prev, [name]: true }));
     setErrors((prev) => ({...prev, [name] : validateAllInOne(name, value)}))
   }
-  // function handleEmailChange(e: React.ChangeEvent<HTMLInputElement>) {
-  //   console.log(e.target);
-  //   const { name, value } = e.target;
-  //   console.log(name, value);
 
-  //   // const value = e.target.value;
-  //   setEmail(value);
-  //   const message = validateEmail(email);
-  //   setEmailError(message);
-  //   return;
-  // }
-
-  const isInvalidEmail = email.length > 0 && !!emailError;
-
-  // const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-  //   const value = e.target.value;
-  //   setPassword(value);
-  //   return;
-  // }
-
-  const isInvalidPassword = password.length > 0 ? false : true;
-
-  const isValidForm = !isInvalidEmail && !isInvalidPassword;
 
   const handleLogin = async (event: FormEvent<HTMLFormEvent>) => {
     event.preventDefault();
@@ -96,7 +79,7 @@ export const LoginPage = () => {
 //   console.log(errors, touched);
 
   const isValid = touched.email && errors.email === '' && formData.password.length > 1;
-  console.log({ isValid });
+
   return (
     <div className="flex flex-col w-full h-full items-center justify-center min-h-screen py-lg bg-background">
         <div className="w-full max-w-[24rem] flex flex-col items-center">

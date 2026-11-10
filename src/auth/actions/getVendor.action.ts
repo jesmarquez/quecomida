@@ -9,15 +9,14 @@ export const getVendorAction = async() => {
     return data;
 
   } catch (error) {
-    if (axios.isAxiosError(error)) {
-      const backendMessage = error.response.data?.error || error.response.data;
-      console.log(`Error ${error.response.status}: ${backendMessage}`);
-      if (error.response.status === 401) {
-        console.log('delete token');
-      } 
-    } else {
-      console.log(`An unexpected error occured: ${ String(error)}`);
+    if (axios.isAxiosError<{ error?: string }>(error)) {
+      const status = error.response?.data?.error ?? error.message
+      const backendMessage = error.response?.data?.error ?? error.message;
+      console.log(`Error ${status ?? 'no response'}: ${backendMessage}`);
     }
-    throw (error);
+    else {
+      console.log(`An unexpected error occurred getVendorAction: ${String(error)}`);
+    }
+    throw error;
   }
 }

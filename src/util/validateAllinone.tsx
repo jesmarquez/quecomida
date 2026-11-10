@@ -9,6 +9,9 @@ export const validateAllInOne = (type: string, value: string ) => {
     case 'password':
       if (!value) return 'Password is required';
       return '';
+    case 'repassword':
+      if (!value) return 'Password is required';
+      return '';
 
   }
 }

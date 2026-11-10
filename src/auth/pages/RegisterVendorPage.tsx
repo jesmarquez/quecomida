@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router';
 import { registerAction } from '../actions/register.action';
 import { SpinButton } from '../../components/ui/SpinButton';
 import { toast } from "sonner";
+import axios from 'axios';
 
 export const RegisterVendorPage = () => {
   const [name, setName] = useState('');
@@ -133,21 +134,15 @@ export const RegisterVendorPage = () => {
     } catch (error) {
       setIsSubmitting(false);
      
-      if (error.response) {
-        console.log('HTTP Status Code:', error.response.status); // e.g., 404, 500
-        console.log('Response Data:', error.response.data);
-        toast.error(error.response.data.error);
-      }
-          // 2. The request was made but no response was received
-      else if (error.request) {
-        console.log('No response received:', error.request);
-        toast.error('Error unknown')
-      } 
-      // 3. Something happened during setting up the request
-      else {
-        console.log('No response received:', error.request);
-        toast('Something happened during setting up the request');
-      }
+    if (axios.isAxiosError<{ error?: string }>(error)) {
+      const status = error.response?.data?.error ?? error.message
+      const backendMessage = error.response?.data?.error ?? error.message;
+      console.log(`Error ${status ?? 'no response'}: ${backendMessage}`);
+    }
+    else {
+      console.log(`An unexpected error occurred RegisterVendorPage: ${String(error)}`);
+    }
+    throw error;
     }
   }
 

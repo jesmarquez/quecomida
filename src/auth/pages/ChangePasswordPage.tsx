@@ -3,14 +3,20 @@ import { Link, useNavigate, useSearchParams } from "react-router";
 import { validatePassword } from "../../util/validate";
 import { changePassword } from "../actions/changePassword";
 import { SpinButton } from "../../components/ui/SpinButton";
+import { validateAllInOne } from "../../util/validateAllinone";
+
+type TouchedFields = { 
+  password: boolean; 
+  repassword: boolean 
+};
 
 export const ChangePasswordPage = () => {
   const navigate = useNavigate();
 
   const [searchParams] = useSearchParams();
-  const [passwordError, setPasswordError] = useState('');
-  const [password, setPassword] = useState('');
-  const [repassword, setRepassword] = useState('');
+  // const [passwordError, setPasswordError] = useState('');
+  // const [password, setPassword] = useState('');
+  // const [repassword, setRepassword] = useState('');
   const [token, setToken] = useState('');
   const [email, setEmail] = useState('');
   const [ isSubmitting, setIsSubmitting ] = useState(false);
@@ -18,6 +24,21 @@ export const ChangePasswordPage = () => {
   const [message, setMessage] = useState('');
   const [messageTitle, setMessageTitle] = useState('');
 
+
+  const [formData, setFormData] = useState({
+    password: '',
+    repassword: ''
+  });
+
+  const [ touched, setTouched ] = useState<TouchedFields>({
+    password: false,
+    repassword: false
+  });
+
+  const [ errors, setErrors ] = useState({
+    password: '',
+    repassword: ''
+  });
   
   useEffect(() => {
     const tokenSecurity = searchParams.get('token_security');
@@ -29,22 +50,46 @@ export const ChangePasswordPage = () => {
     // eslint-disable-next-line react-hooks/set-state-in-effect
     setToken(tokenSecurity || '');
     setEmail(email || '');
-    console.log('token-security', tokenSecurity, email);
+    // console.log('token-security', tokenSecurity, email);
     return;
   }, []);
 
-  const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
-    const message = validatePassword(value);
-    setPasswordError(message);
-    setPassword(value);
-    return;
+  // const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  //   const value = e.target.value;
+  //   const message = validatePassword(value);
+  //   setPasswordError(message);
+  //   setPassword(value);
+  //   return;
+  // }
+
+  // const handleRePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  //   const value = e.target.value;
+  //   setRepassword(value);
+  //   return;
+  // }
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const name = e.target.name as keyof TouchedFields;
+    const value = e.target.value as keyof TouchedFields;
+    
+    
+    setFormData((prev) => ({ ...prev, [name]: value}));
+
+    if (touched[name]) {
+      setErrors((prev) => ({ ...prev, [name]: validateAllInOne(name, value) }));
+      if (name === 'repassword') {
+        if (formData.password !== value) {
+          setErrors((prev) => ({ ...prev, [name]: 'Password does not match' }));
+        }
+      }
+    }
   }
 
-  const handleRePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
-    setRepassword(value);
-    return;
+  const handleBlur = (e: React.FocusEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+
+    setTouched((prev) => ({ ...prev, [name]: true }));
+    setErrors((prev) => ({...prev, [name] : validateAllInOne(name, value)}))
   }
 
   const handleChangePassword = async (event: FormEvent<HtmlFormEvent>) => {
@@ -53,7 +98,7 @@ export const ChangePasswordPage = () => {
     console.log('handle submit change password');
     setIsSubmitting(true);
     
-    const data = await changePassword(email, token, password);
+    const data = await changePassword(email, token, formData.password);
     if ( data ) {
       setMessage(data.message);
       setMessageTitle('Request received');
@@ -63,9 +108,11 @@ export const ChangePasswordPage = () => {
     return;
   }
 
-  const isInvalidPassword = password.length > 0 && !!passwordError;
-  const isInvalidRepassword = ( (repassword.length > 0) && (password != repassword) );
-  const isValidForm = ((!isInvalidPassword && !isInvalidRepassword) && (password.length> 0 && repassword.length > 0 ));
+  // const isInvalidPassword = password.length > 0 && !!passwordError;
+  // const isInvalidRepassword = ( (repassword.length > 0) && (password != repassword) );
+  // const isValidForm = ((!isInvalidPassword && !isInvalidRepassword) && (password.length> 0 && repassword.length > 0 ));
+
+  const isValid = touched.password && errors.password === '' && formData.password.length > 1 && formData.repassword === formData.password;
 
   return (
   <div className="flex flex-col w-full h-full items-center justify-center min-h-screen py-lg bg-background">
@@ -86,12 +133,13 @@ export const ChangePasswordPage = () => {
                       <div className="relative">
                           <span className="material-symbols-outlined absolute left-sm top-1/2 -translate-y-1/2 text-on-surface-variant/50">lock</span>
                           <input 
-                              onChange={ handlePasswordChange }
+                              onChange={ handleChange }
+                              onBlur={ handleBlur }
                               className="w-full bg-tertiary-fixed text-on-surface font-body-md text-body-md rounded-lg py-sm pl-xl pr-sm focus:outline-none focus:ring-1 focus:ring-primary transition-shadow" id="password" placeholder="••••••••" required type="password" name="password"/>
                       </div>
-                      { isInvalidPassword && (
+                      { errors.password && (
                         <p className="flex items-center gap-1 text-error text-body-sm font-body-sm mt-1">
-                          <span className="material-symbols-outlined text-base">error</span>{ passwordError }
+                          <span className="material-symbols-outlined text-base">error</span>{ errors.password }
                         </p>)
                       }
                   </div>
@@ -100,16 +148,17 @@ export const ChangePasswordPage = () => {
                       <div className="relative">
                           <span className="material-symbols-outlined absolute left-sm top-1/2 -translate-y-1/2 text-on-surface-variant/50">lock</span>
                           <input 
-                              onChange={ handleRePasswordChange }
+                              onChange={ handleChange }
+                              onBlur={ handleBlur }
                               className="w-full bg-tertiary-fixed text-on-surface font-body-md text-body-md rounded-lg py-sm pl-xl pr-sm focus:outline-none focus:ring-1 focus:ring-primary transition-shadow" id="password" placeholder="••••••••" required type="password" name="repassword"/>
                       </div>
-                      { isInvalidRepassword && (<p className="flex items-center gap-1 text-error text-body-sm font-body-sm mt-1">
+                      { errors.repassword && (<p className="flex items-center gap-1 text-error text-body-sm font-body-sm mt-1">
                           <span className="material-symbols-outlined text-base">error</span>{ 'Password does not match!' }
                         </p>)
                       }
                   </div>
                   <button type="submit" 
-                      disabled={ !isValidForm || isSubmitting }
+                      disabled={ !isValid || isSubmitting }
                       className={`mt-md 
                           w-full
                           flex
@@ -124,7 +173,7 @@ export const ChangePasswordPage = () => {
                           py-sm rounded-lg 
                           hover:bg-on-primary-fixed-variant 
                           transition-colors shadow-sm min-h-[48px]
-                          ${ !isValidForm || isSubmitting ? 'disabled:opacity-50' : '' }`}>
+                          ${ !isValid || isSubmitting ? 'disabled:opacity-50' : '' }`}>
                       { isSubmitting && <SpinButton /> }
                       Change it!
                   </button>

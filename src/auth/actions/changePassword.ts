@@ -1,3 +1,4 @@
+import axios from "axios";
 import { qcApi } from "../../api/qcApi"
 
 
@@ -12,10 +13,15 @@ export const changePassword = async (email: string, token: string, password:stri
       });
     return data;
   } catch (error) {
-    console.log(error);
-    return {
-      message: error.response.data.error
-    }
 
+    if (axios.isAxiosError<{ error?: string }>(error)) {
+      const status = error.response?.data?.error ?? error.message
+      const backendMessage = error.response?.data?.error ?? error.message;
+      console.log(`Error ${status ?? 'no response'}: ${backendMessage}`);
+    }
+    else {
+      console.log(`An unexpected error occurred changePassword: ${String(error)}`);
+    }
+    throw error;
   }
 }
