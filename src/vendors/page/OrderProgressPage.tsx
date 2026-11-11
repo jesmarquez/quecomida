@@ -46,7 +46,7 @@ export const OrderProgressPage = () => {
 
     try {
       const data = await updateOrder(id!, status);
-
+      console.log(data);
       toast('Order updated!');
     } catch (error) {
       console.log(error);

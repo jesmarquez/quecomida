@@ -11,6 +11,7 @@ import type { MealAvailability } from '../interfaces/availability_meal.interface
 import { updateMealAvailable } from '../actions/update-available-meal.action';
 import { ConfirmDialog } from '../../components/ui/ConfirmDialog';
 import { deleteMeal } from '../actions/delete-meal.action';
+import axios from "axios";
 
 // ---- Main Page ----
 export const DashboardPage = () => {
@@ -20,7 +21,6 @@ export const DashboardPage = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const [ready, setReady] = useState(false);
   const [mealToDelete, setMealToDelete] = useState<Meal | null>(null);
-  const [isDeleting, setIsDeleting] = useState(false);
   const [messageErrorConfirmDelete, setMessageErrorConfirmDelete] = useState<string | null>(null);
   useEffect(() => {
     async function initDashboard () {
@@ -45,11 +45,17 @@ export const DashboardPage = () => {
         // Token was invalid/expired — your axios interceptor already clears
         // it and redirects to /login on a 401, so this catch is mostly a
         // safety net for other errors.
-        if (error.response.status === 401 ) logout();
-        console.log(error);
         // navigate("/auth/login", { replace: true });
+        if (axios.isAxiosError<{ error?: string }>(error)) {
+          if (error?.response?.status === 401 ) logout();
+          const status = error.response?.data?.error ?? error.message
+          const backendMessage = error.response?.data?.error ?? error.message;
+          console.log(`Error ${status ?? 'no response'}: ${backendMessage}`);
+        }
+        else {
+          console.log(`An unexpected error occurred getVendorAction: ${String(error)}`);
+        }
       }
-
     }
     initDashboard();
   }, []);
@@ -106,7 +112,8 @@ export const DashboardPage = () => {
 
       setMealToDelete(null);
       setMessageErrorConfirmDelete(null);
-      toast.info('Deleted meal!');
+      console.log(data);
+      toast.info(`Deleted meal`);
     } catch (error) {
       console.log('Failed delete meal', error);
       setMessageErrorConfirmDelete(error.message! || 'Failed delete meal');

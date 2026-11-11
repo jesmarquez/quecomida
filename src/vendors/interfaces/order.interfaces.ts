@@ -24,3 +24,6 @@ export interface Images {
 }
 
 export type Status = "ORDERED" | "READY_FOR_PICKUP" | "HANDED_OVER";
+export const STATUSES: readonly Status[] = ['ORDERED', 'READY_FOR_PICKUP', 'HANDED_OVER'];
+export const isStatus = (v: unknown): v is Status =>
+  typeof v === 'string' && (STATUSES as readonly string[]).includes(v);

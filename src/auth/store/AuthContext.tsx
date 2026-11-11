@@ -8,7 +8,7 @@ type AuthState = {
 
 type AuthContextType = {
   authState: AuthState | undefined;
-  setAuthentication: (username: string | null, token: string | null) => boolean;
+  setAuthentication: (username: string | null, token: string) => boolean;
   getAuthentication: () => { username?: string | null; token?: string | null };
   isAuthenticated: () => boolean;
   logout: () => void;

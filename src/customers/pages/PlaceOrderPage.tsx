@@ -1,5 +1,4 @@
 import { useEffect, useRef, useState } from "react";
-import { useNavigate, useParams } from "react-router";
 import { getMealById } from '../../vendors/actions/get-meal-byid.action';
 import type { Meal } from "../../vendors/interfaces/meals.response.interface";
 import { validateEmail } from '../../util/validate';
@@ -8,11 +7,11 @@ import { verifyOrderAction } from '../actions/verify-order.action'
 import { toast } from "sonner";
 import { SpinButton } from "../../components/ui/SpinButton";
 import { isAxiosError } from "axios";
+import { useParams } from "react-router";
 
 export const PlaceOrderPage = () => {
-    const navigate = useNavigate();
     const { id } = useParams();
-    const inputQuantityRef = useRef(null);
+    const inputQuantityRef = useRef<HTMLInputElement>(null);
     const [meal, setMeal] = useState<Meal>();
     const [qty, setQty] = useState(1);
     const [email, setEmail] = useState('');
@@ -53,8 +52,7 @@ export const PlaceOrderPage = () => {
     }
 
     const handleEmailBlur = (e: React.ChangeEvent<HTMLInputElement>) => {
-      const {name, value } = e.target;
-      console.log('onblur');
+      const { value } = e.target;
       // console.log(name, value);
       if (value.length > 0) setEmailTouched(true);
       setEmailMsgError(validateEmail(value));
@@ -62,7 +60,9 @@ export const PlaceOrderPage = () => {
 
     const onSubmit = async (e: React.SubmitEvent<HTMLFormElement>) => {
       e.preventDefault();
-      const quantity = inputQuantityRef.current.value;
+
+      if (!inputQuantityRef.current) return;
+      const quantity = inputQuantityRef.current!.value;
       setIsSubmitting(true);
       console.log('send email', email, id, quantity);
       try {
@@ -281,7 +281,3 @@ export const PlaceOrderPage = () => {
         </main>
     );
 };
-function getToken() {
-    throw new Error("Function not implemented.");
-}
-

@@ -1,5 +1,6 @@
 import { useState } from "react";
 import type { Status } from "../interfaces/order.interfaces";
+import { isStatus } from "../interfaces/order.interfaces";
 
 interface CardStatusProps {
   stepCurrent: number,
@@ -36,7 +37,10 @@ export const CardStatus = ({ stepCurrent, onHandleStatus }: CardStatusProps) => 
   const [step, setStep] = useState(stepCurrent);
 
   const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+
     const status = e.currentTarget.dataset.status;
+    if (!isStatus(status)) return;
+
     switch (status) {
       case 'ORDERED':
         setStep(1);        
@@ -48,7 +52,7 @@ export const CardStatus = ({ stepCurrent, onHandleStatus }: CardStatusProps) => 
         setStep(3);
         break;
     }
-    onHandleStatus(status!);
+    onHandleStatus(status);
   }
 
   return (

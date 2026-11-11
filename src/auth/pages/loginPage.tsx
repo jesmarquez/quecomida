@@ -1,4 +1,4 @@
-import { useEffect, useState, type FormEvent } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate, Link } from "react-router";
 import { loginAction } from "../actions/loginAction";
 import { toast } from "sonner";
@@ -54,7 +54,7 @@ export const LoginPage = () => {
   }
 
 
-  const handleLogin = async (event: FormEvent<HTMLFormEvent>) => {
+  const handleLogin = async (event: React.SubmitEvent<HTMLFormElement>) => {
     event.preventDefault();
 
     const formData = new FormData(event.target as HTMLFormElement);

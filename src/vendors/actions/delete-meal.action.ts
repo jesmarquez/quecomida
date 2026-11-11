@@ -8,7 +8,6 @@ export const deleteMeal = async (id: string) =>  {
     console.log(data);
 
   } catch (error) {
-    console.log( error.response.data );
     if (axios.isAxiosError(error)) {
       if (error.response) {
           const backendMessage = error.response.data.error?.message || error.response.data;

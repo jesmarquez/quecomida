@@ -138,9 +138,11 @@ export const RegisterVendorPage = () => {
       const status = error.response?.data?.error ?? error.message
       const backendMessage = error.response?.data?.error ?? error.message;
       console.log(`Error ${status ?? 'no response'}: ${backendMessage}`);
+      toast(`Error ${status ?? 'no response'}: ${backendMessage}`);
     }
     else {
       console.log(`An unexpected error occurred RegisterVendorPage: ${String(error)}`);
+      toast(`An unexpected error occurred RegisterVendorPage: ${String(error)}`);
     }
     throw error;
     }

@@ -1,13 +1,10 @@
 import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router';
 import { MealCard } from '../components/MealCard';
 import { getMealsPublic } from '../actions/get-meals.action';
 import type { Meal } from '../../vendors/interfaces/meals.response.interface';
 
 export const MealsPage = () => {
     const [meals, setMeals] = useState<Meal[]>([]);
-
-    const navigate = useNavigate();
 
     useEffect(() => {
       async function getMeals() {

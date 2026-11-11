@@ -1,4 +1,4 @@
-import { useState, type FormEvent } from "react"
+import { useState } from "react"
 import { validateEmail } from "../../util/validate";
 import { forgetPasswordAction } from "../actions/forgetPassword.action";
 import { SpinButton } from "../../components/ui/SpinButton";
@@ -23,7 +23,7 @@ export const ForgetPasswordPage = () => {
   const isInvalidEmail = email.length > 0 && !!emailError;
   
   
-  const handleForget = async (event: FormEvent<HTMLFormEvent>) => {
+  const handleForget = async (event: React.SubmitEvent<HTMLFormElement>) => {
     event.preventDefault();
 
     setIsSubmitting(true);

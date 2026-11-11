@@ -1,6 +1,5 @@
-import { useEffect, useState, type FormEvent } from "react"
+import { useEffect, useState } from "react"
 import { Link, useNavigate, useSearchParams } from "react-router";
-import { validatePassword } from "../../util/validate";
 import { changePassword } from "../actions/changePassword";
 import { SpinButton } from "../../components/ui/SpinButton";
 import { validateAllInOne } from "../../util/validateAllinone";
@@ -14,9 +13,6 @@ export const ChangePasswordPage = () => {
   const navigate = useNavigate();
 
   const [searchParams] = useSearchParams();
-  // const [passwordError, setPasswordError] = useState('');
-  // const [password, setPassword] = useState('');
-  // const [repassword, setRepassword] = useState('');
   const [token, setToken] = useState('');
   const [email, setEmail] = useState('');
   const [ isSubmitting, setIsSubmitting ] = useState(false);
@@ -54,25 +50,10 @@ export const ChangePasswordPage = () => {
     return;
   }, []);
 
-  // const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-  //   const value = e.target.value;
-  //   const message = validatePassword(value);
-  //   setPasswordError(message);
-  //   setPassword(value);
-  //   return;
-  // }
-
-  // const handleRePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-  //   const value = e.target.value;
-  //   setRepassword(value);
-  //   return;
-  // }
-
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const name = e.target.name as keyof TouchedFields;
     const value = e.target.value as keyof TouchedFields;
-    
-    
+        
     setFormData((prev) => ({ ...prev, [name]: value}));
 
     if (touched[name]) {
@@ -92,7 +73,7 @@ export const ChangePasswordPage = () => {
     setErrors((prev) => ({...prev, [name] : validateAllInOne(name, value)}))
   }
 
-  const handleChangePassword = async (event: FormEvent<HtmlFormEvent>) => {
+  const handleChangePassword = async (event: React.SubmitEvent<HTMLFormElement>) => {
     event.preventDefault();
 
     console.log('handle submit change password');
@@ -107,10 +88,6 @@ export const ChangePasswordPage = () => {
     setIsSubmitted(true);
     return;
   }
-
-  // const isInvalidPassword = password.length > 0 && !!passwordError;
-  // const isInvalidRepassword = ( (repassword.length > 0) && (password != repassword) );
-  // const isValidForm = ((!isInvalidPassword && !isInvalidRepassword) && (password.length> 0 && repassword.length > 0 ));
 
   const isValid = touched.password && errors.password === '' && formData.password.length > 1 && formData.repassword === formData.password;
 
@@ -195,7 +172,7 @@ export const ChangePasswordPage = () => {
               </div>
 
               <div className="flex justify-end mt-xs">
-                <Link to="/auth/login" className="font-body-sm text-body-sm text-primary hover:text-primary-container transition-colors" href="#">Go to sign in?</Link>
+                <Link to="/auth/login" className="font-body-sm text-body-sm text-primary hover:text-primary-container transition-colors">Go to sign in?</Link>
               </div>
               </>
             )

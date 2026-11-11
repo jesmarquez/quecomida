@@ -1,4 +1,4 @@
-import { useEffect, useState, type ChangeEvent } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router";
 // import { SpinButton } from "../../components/ui/SpinButton";
 import { useAuth } from "../../auth/store/AuthContext";
@@ -66,7 +66,6 @@ export const AddMealPage = () => {
     if (!getToken()) navigate('/auth/login');
     if (id == 'new') {
       setIsNew(true);
-      console.log({ isNew });
      } else {
       setIsNew(false);
      }
@@ -78,7 +77,7 @@ export const AddMealPage = () => {
     
     async function loadMeal() {
       try {
-        const meal = await getMealById(id);
+        const meal = await getMealById(id!);
         reset({
           title: meal.title,
           description: meal.description,
@@ -149,6 +148,7 @@ export const AddMealPage = () => {
       });
 
       const res = await createUpdateMealAction(formData, isNew ? undefined : id);
+      console.log(res);
       navigate('/vendor/dashboard');
 
     } catch (err) {
@@ -222,7 +222,6 @@ export const AddMealPage = () => {
     setExistingImages(updatedExisting);
     setRemovedImageIds((prev) => [...prev, imageId]);
     // Validate using the value we just computed, not stale state
-    removedImage = true;
     const totalImages = files.length + updatedExisting.length;
     if (totalImages === 0) {
       setError('images', { type: 'manual', message: 'At least one image is required' });
@@ -234,7 +233,6 @@ export const AddMealPage = () => {
   const handleDraft = () => {
     console.log({ isSubmitting, isDirty, isValid, id });
     console.log({ files, existingImages, removedImageIds });
-    console.log({ removedImage });
   }
 
   return (
