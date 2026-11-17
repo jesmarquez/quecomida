@@ -1,4 +1,4 @@
-import { createBrowserRouter, Navigate } from 'react-router';
+import { createHashRouter, Navigate } from 'react-router';
 import { DashboardPage } from '../vendors/page/DashboardPage';
 import { LoginPage } from '../auth/pages/LoginPage';
 import { AddMealPage } from '../vendors/page/AddMealPage';
@@ -12,7 +12,7 @@ import { ForgetPasswordPage } from '../auth/pages/ForgetPasswordPage';
 import { ChangePasswordPage } from '../auth/pages/ChangePasswordPage';
 import { OrderProgressPage } from '../vendors/page/OrderProgressPage';
 
-export const appRouter = createBrowserRouter([
+export const appRouter = createHashRouter([
   {
     path: "/",
     element: <MainLayout/>,

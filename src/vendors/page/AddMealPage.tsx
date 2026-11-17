@@ -84,8 +84,10 @@ export const AddMealPage = () => {
           price: meal.price, // number from API -> string for the form field
           isAvailable: meal.isAvailable,
           images: [], // see note below on images
-          dietaryTags: meal.dietaryTags,
-          customTags: meal.customTags,
+          dietaryTags: Array.isArray(meal.dietaryTags)
+            ? (meal.dietaryTags as DietaryInfo[])
+            : [],
+          customTags: meal.customTags ?? [],
         });
 
         setFiles([]); // clear any leftover local file selection

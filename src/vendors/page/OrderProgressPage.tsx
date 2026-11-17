@@ -9,6 +9,19 @@ import { toast } from "sonner";
 import { updateOrder } from "../../customers/actions/update-order.action";
 import { SpinButton } from "../../components/ui/SpinButton";
 
+function getStepOrder(status: Status) {
+  switch (status) {
+    case 'ORDERED':
+      return 1;
+      break;
+    case 'READY_FOR_PICKUP':
+      return 2;
+      break;
+    case 'HANDED_OVER':
+      return 3;
+      break;
+  }
+}
 
 export const OrderProgressPage = () => {
   const { id } = useParams();
@@ -18,22 +31,7 @@ export const OrderProgressPage = () => {
     async function getOrderById() {
       try {
         const data = await getOrder(id!);
-        const dateOrder = new Date(data.createdAt).toDateString();
-        let stepOrder = 0;
-        switch (data.status) {
-          case 'ORDERED':
-            stepOrder = 1;
-            break;
-          case 'READY_FOR_PICKUP':
-            stepOrder = 2;
-            break;
-          case 'HANDED_OVER':
-            stepOrder = 3;
-            break;
-        }
-        const newData = {...data, dateOrder: dateOrder, stepOrder: stepOrder }
-        setOrder(newData);
-
+        setOrder(data);
       } catch (error) {
        console.log(error);
        toast('Error getting order!'); 
@@ -72,12 +70,12 @@ export const OrderProgressPage = () => {
                 >Back to Orders</span
               >
             </div>
-            { order && <CardOrder id={ order.id } date={ order.dateOrder } customer= { order.customerEmail }/>
+            { order && <CardOrder id={ order.id } date={ new Date(order.createdAt).toDateString() } customer= { order.customerEmail }/>
             }
           </div>
           <div className="col-span-1 md:col-span-8 flex flex-col gap-xl">
             {
-              order && <CardStatus stepCurrent={ order.stepOrder } onHandleStatus={ handleStatus }/>
+              order && <CardStatus stepCurrent={ getStepOrder(order.status) } onHandleStatus={ handleStatus }/>
             }
             {
               order && <CardItemsOrdered quantity= {order.quantity} image = {order.mealPost.images[0].imageUrl } title = { order.mealPost.title } price={ order.mealPost.price }/>

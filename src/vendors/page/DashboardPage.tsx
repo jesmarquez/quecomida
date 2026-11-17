@@ -89,7 +89,7 @@ export const DashboardPage = () => {
     try {
       const mealToUpdating = mealList.find((meal) => meal.id === id);
       const mealUpdated: MealAvailability = await updateMealAvailable(id, !mealToUpdating?.isAvailable);
-
+      console.log(mealUpdated);
     setMealList((prev) =>
         prev.map((meal) => 
           meal.id === id
@@ -107,19 +107,32 @@ export const DashboardPage = () => {
   const onConfirmDelete = async () => {
 
     try {
-      const data = await deleteMeal(mealToDelete.id);
-      setMealList(mealList.filter( m => m.id !== mealToDelete.id ));
+      if (mealToDelete === null) return;
+      const data = await deleteMeal(mealToDelete!.id);
+      setMealList(mealList.filter( m => m.id !== mealToDelete!.id ));
 
       setMealToDelete(null);
       setMessageErrorConfirmDelete(null);
       console.log(data);
       toast.info(`Deleted meal`);
     } catch (error) {
-      console.log('Failed delete meal', error);
-      setMessageErrorConfirmDelete(error.message! || 'Failed delete meal');
-    }
+      if (axios.isAxiosError(error)) {
+        if (error.response) {
+          const backendMessage = error.response.data?.message || error.response.data;
+          console.log(`Error ${error.response.status}: ${backendMessage}`);
+          setMessageErrorConfirmDelete(backendMessage || 'Failed delete meal');
+        } else if (error.request) {
+          console.log('Network Error: No response received from the server.');
+          
+        } else {
+          console.log(`Request Error: ${error.message}`);
+        }
+      } else {
+        console.log(`An unexpected error occurred: ${String(error)}`);
+      }
+   }
   }
-
+  
   const onDeleteMeal = (id: string) => {
     const mealFound = mealList.find((meal) => meal.id === id );
     setMealToDelete(mealFound || null);
@@ -155,10 +168,10 @@ export const DashboardPage = () => {
 
           {/* Stats */}
           <div className="grid grid-cols-1 md:grid-cols-4 gap-md mb-xl">
-            <StatCard icon="restaurant_menu" value="12" label="Active Listings" className="text-primary" bgclassName="bg-primary/5 group-hover:bg-primary/10" />
-            <StatCard icon="payments" value="$450" label="Sales This Week" className="text-secondary" bgclassName="bg-secondary/5 group-hover:bg-secondary/10" />
-            <StatCard icon="visibility" value="842" label="Menu Views" className="text-tertiary" bgclassName="bg-tertiary/5 group-hover:bg-tertiary/10" />
-            <StatCard icon="star" value="4.9" label="Average Rating" className="text-primary-container" bgclassName="bg-primary-container/5 group-hover:bg-primary-container/10" />
+            <StatCard icon="restaurant_menu" value="12" label="Active Listings" colorClass="text-primary" bgClass="bg-primary/5 group-hover:bg-primary/10" />
+            <StatCard icon="payments" value="$450" label="Sales This Week" colorClass="text-secondary" bgClass="bg-secondary/5 group-hover:bg-secondary/10" />
+            <StatCard icon="visibility" value="842" label="Menu Views" colorClass="text-tertiary" bgClass="bg-tertiary/5 group-hover:bg-tertiary/10" />
+            <StatCard icon="star" value="4.9" label="Average Rating" colorClass="text-primary-container" bgClass="bg-primary-container/5 group-hover:bg-primary-container/10" />
           </div>
 
           {/* Meal List */}
