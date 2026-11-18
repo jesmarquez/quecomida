@@ -379,7 +379,7 @@ export const AddMealPage = () => {
                 {existingImages.map((img) => (
                   <div key={img.id} className="aspect-square bg-surface rounded-lg relative">
                     <img
-                      src={`${import.meta.env.VITE_QC_API_URL}${img.imageUrl}`}
+                      src={`${img.imageUrl}`}
                       alt="Existing meal photo"
                       className="rounded-lg w-full h-full object-cover"
                     />

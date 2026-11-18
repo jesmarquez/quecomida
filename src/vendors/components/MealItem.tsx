@@ -25,7 +25,7 @@ export const MealItem = ({ meal, onToggle, onDelete }: MealItemProps) => {
         <img
           alt={meal.title}
           className={`w-full h-full object-cover ${meal.isAvailable ? 'transition-transform duration-700 group-hover:scale-105' : ''}`}
-          src={ import.meta.env.VITE_QC_API_URL + meal.images[0].imageUrl }
+          src={ meal.images[0].imageUrl }
         />
         {meal.isAvailable && <div className="absolute inset-0 bg-surface/20" />}
         <div className="absolute top-2 right-2 md:hidden">

@@ -14,7 +14,7 @@ export const MealCard = ({ id, title, images, price, dietaryTags, vendor }: Meal
     <article className="group relative cursor-pointer flex flex-col h-full bg-surface-container-lowest rounded-2xl overflow-hidden shadow-[0_4px_20px_rgba(74,66,56,0.04)] hover:shadow-[0_8px_30px_rgba(74,66,56,0.08)] transition-shadow duration-300">
         <div className="relative w-full aspect-[4/3] overflow-hidden">
             <img className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" 
-            src={ `${import.meta.env.VITE_QC_API_URL}${images[0].imageUrl}` }/>
+            src={ `${images[0].imageUrl}` }/>
             <div className="absolute top-sm left-sm flex gap-xs">
                 {
                     dietaryTags.map( (d, index) => (

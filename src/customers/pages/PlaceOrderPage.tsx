@@ -122,7 +122,7 @@ export const PlaceOrderPage = () => {
                         <div className="bg-surface-container rounded-xl shadow-[0_8px_30px_rgba(74,66,56,0.06)] overflow-hidden flex flex-col">
                             <div className="h-64 w-full relative">
                                 <div className="absolute inset-0 bg-cover bg-center" 
-                                    style={{backgroundImage: `url('${import.meta.env.VITE_QC_API_URL}${meal?.images?.[0]?.imageUrl}')`}}></div>
+                                    style={{backgroundImage: `url('${meal?.images?.[0]?.imageUrl}')`}}></div>
                                 <div className="absolute top-sm left-sm flex gap-xs">
                                     <span className="bg-secondary/15 text-secondary px-sm py-[2px] rounded-full font-label-md text-[12px] uppercase backdrop-blur-sm">Vegetarian</span>
                                 </div>
